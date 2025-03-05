@@ -9,7 +9,7 @@ const BuyerDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold">Active Orders</h3>
+              <h3 className="text-lg font-semibold">Active Orderssss</h3>
               <ShoppingBag className="text-green-600" size={24} />
             </div>
             <div className="text-3xl font-bold text-green-600">12</div>
