@@ -20,6 +20,7 @@ const HomePage = () => {
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h1 className="text-4xl font-bold mb-4">
                 Connect with Top idk & Distributors
+                Connect with Top Manufacturers & Distributors
               </h1>
               <p className="text-lg mb-6">
                 Duty Dinar brings businesses and suppliers together in one powerful B2B platform
