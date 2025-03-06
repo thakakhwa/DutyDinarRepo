@@ -22,7 +22,7 @@ const HomePage = () => {
                 Connect with Top OMG & Distributors
               </h1>
               <p className="text-lg mb-6">
-                Duty Dinar brings businesses and suppliers together in one powerful B2B platform
+                Duty Dinar brings businesses and suppliers together in one powerful B2B platform.
               </p>
               <div className="flex space-x-4">
                 <button className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
