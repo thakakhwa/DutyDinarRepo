@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 
-const CategoriesPage = () => {
+function CategoriesPage(){
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('recommended');
   const [priceRange, setPriceRange] = useState([0, 1000]);

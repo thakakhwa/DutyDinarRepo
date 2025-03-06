@@ -5,7 +5,7 @@ import { categories } from '../data/categories';
 import FeaturedProducts from '../components/products/FeaturedProducts';
 import EventPreview from '../components/events/EventPreview';
 
-const HomePage = () => {
+ function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}

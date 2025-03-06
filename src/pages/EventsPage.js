@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Package, MapPin, Users } from 'lucide-react';
 
-const EventsPage = () => {
+function EventsPage() {
   const [selectedMonth, setSelectedMonth] = useState('March');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
