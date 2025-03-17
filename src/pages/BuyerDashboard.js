@@ -1,6 +1,5 @@
 import React from 'react';
 import { ShoppingBag, Heart, Clock, Package } from 'lucide-react';
-import { div } from 'framer-motion/client';
 
 function BuyerDashboard(){
   return (

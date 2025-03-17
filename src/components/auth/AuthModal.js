@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 
@@ -7,9 +7,7 @@ const ADMIN_CREDENTIALS = {
   password: 'admin123'
 };
 
-
-
-const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
+const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserType = '' }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -17,11 +15,30 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
     password: '',
     name: '',
     companyName: '',
-    userType: ''
+    userType: initialUserType || '' // Ensure proper fallback
   });
   
   const [isAnimating, setIsAnimating] = useState(false);
   const [error, setError] = useState('');
+
+  // This useEffect had a missing dependency - we need to add initialUserType to the dependency array
+  useEffect(() => {
+    console.log('initialUserType changed to:', initialUserType);
+    
+    // Update the form data when initialUserType changes
+    setFormData(prev => ({
+      ...prev,
+      userType: initialUserType || prev.userType
+    }));
+    
+    // If user clicked "Become a Seller", automatically switch to signup form
+    if (initialUserType === 'seller') {
+      setIsLogin(false); // Directly set to false instead of using toggleForm
+    } else if (initialUserType === 'buyer') {
+      // Optional: You might want to switch to login form for buyers
+      // setIsLogin(true);
+    }
+  }, [initialUserType]); // Added initialUserType as a dependency
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +97,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
         password: '',
         name: '',
         companyName: '',
-        userType: ''
+        userType: initialUserType || '' // Preserve the initialUserType when toggling
       });
       setIsAnimating(false);
     }, 300);
@@ -148,9 +165,10 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                       id="userType"
                       name="userType"
                       value={formData.userType}
-
                       onChange={handleInputChange}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" 
+                      required
+                    >
                       <option value="" disabled>-</option>
                       <option value="buyer">Buyer</option>
                       <option value="seller">Seller</option>
@@ -242,11 +260,6 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                   {isLogin ? 'Sign Up' : 'Sign In'}
                 </button>
               </p>
-              {/* {isLogin && (
-                <p className="text-xs text-gray-500 mt-4">
-                  Admin login: admin@dutydinar.com / admin123
-                </p>
-              )} */}
             </div>
           </div>
         </div>
@@ -256,5 +269,3 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
 };
 
 export default AuthModal;
-
-
