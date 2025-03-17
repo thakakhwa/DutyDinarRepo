@@ -23,7 +23,7 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img 
-                src="/logo.jpeg" 
+                src="/logo.png" 
                 alt="Duty Dinar Logo" 
                 className="h-16 w-auto"
               />
