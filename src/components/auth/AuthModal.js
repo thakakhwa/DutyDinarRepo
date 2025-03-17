@@ -7,6 +7,8 @@ const ADMIN_CREDENTIALS = {
   password: 'admin123'
 };
 
+
+
 const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -15,7 +17,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
     password: '',
     name: '',
     companyName: '',
-    userType: 'buyer'
+    userType: ''
   });
   
   const [isAnimating, setIsAnimating] = useState(false);
@@ -78,7 +80,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
         password: '',
         name: '',
         companyName: '',
-        userType: 'buyer'
+        userType: ''
       });
       setIsAnimating(false);
     }, 300);
@@ -107,7 +109,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
 
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold text-gray-900">
-                {isLogin ? 'Welcome Back!' : 'Join Duty Dinnar'}
+                {isLogin ? 'Welcome To DutyDinar!' : 'Join DutyDinar!'}
               </h1>
               <p className="text-gray-600 mt-2">
                 {isLogin ? 'Sign in to your account' : 'Create an account to get started'}
@@ -131,7 +133,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                         id="name"
                         name="name"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Full Name"
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         value={formData.name}
                         onChange={handleInputChange}
@@ -146,14 +148,15 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                       id="userType"
                       name="userType"
                       value={formData.userType}
+
                       onChange={handleInputChange}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                      <option value="" disabled>-</option>
                       <option value="buyer">Buyer</option>
                       <option value="seller">Seller</option>
                     </select>
                   </div>
-
+                
                   {formData.userType === 'seller' && (
                     <div className="space-y-2 transition-all duration-300">
                       <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">Company Name</label>
@@ -183,7 +186,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="name@company.com"
+                    placeholder="name@email.com"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -239,11 +242,11 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                   {isLogin ? 'Sign Up' : 'Sign In'}
                 </button>
               </p>
-              {isLogin && (
+              {/* {isLogin && (
                 <p className="text-xs text-gray-500 mt-4">
                   Admin login: admin@dutydinar.com / admin123
                 </p>
-              )}
+              )} */}
             </div>
           </div>
         </div>
