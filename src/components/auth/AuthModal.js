@@ -9,36 +9,46 @@ const ADMIN_CREDENTIALS = {
 
 const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserType = '' }) => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
+  
+  // KEY FIX #1: Initialize isLogin based on initialUserType
+  // When initialUserType is 'seller', we set isLogin to false to show the signup form
+  // This ensures "Become a Seller" button immediately shows signup form
+  const [isLogin, setIsLogin] = useState(initialUserType !== 'seller');
+  
+  // Initialize form data with the initialUserType
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
     companyName: '',
-    userType: initialUserType || '' // Ensure proper fallback
+    userType: initialUserType || ''
   });
   
   const [isAnimating, setIsAnimating] = useState(false);
   const [error, setError] = useState('');
 
-  // This useEffect had a missing dependency - we need to add initialUserType to the dependency array
+  // KEY FIX #2: React to changes in initialUserType and isOpen
+  // This is important for when the modal is reopened with a different user type
   useEffect(() => {
-    console.log('initialUserType changed to:', initialUserType);
+    console.log('Modal state changed - initialUserType:', initialUserType, 'isOpen:', isOpen);
     
-    // Update the form data when initialUserType changes
-    setFormData(prev => ({
-      ...prev,
-      userType: initialUserType || prev.userType
-    }));
-    
-    // If user clicked "Become a Seller", automatically switch to signup form
-    if (initialUserType === 'seller') {
-      setIsLogin(false); // Directly set to false instead of using toggleForm
-    } else if (initialUserType === 'buyer') {
-      // Optional: You might want to switch to login form for buyers
-      // setIsLogin(true);
+    if (isOpen) {
+      // Update the form data when initialUserType changes
+      setFormData(prev => ({
+        ...prev,
+        userType: initialUserType || prev.userType
+      }));
+      
+      // If user clicked "Become a Seller", automatically switch to signup form
+      if (initialUserType === 'seller') {
+        setIsLogin(false);
+      }
+      // If user clicked "Start Buying", switch to login form
+      else if (initialUserType === 'buyer') {
+        setIsLogin(true);
+      }
     }
-  }, [initialUserType]); // Added initialUserType as a dependency
+  }, [initialUserType, isOpen]); // Added isOpen as a dependency
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,6 +97,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserTyp
     setError('');
   };
 
+  // KEY FIX #3: Preserve userType when toggling between login/signup
   const toggleForm = () => {
     setIsAnimating(true);
     setError('');
@@ -97,7 +108,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserTyp
         password: '',
         name: '',
         companyName: '',
-        userType: initialUserType || '' // Preserve the initialUserType when toggling
+        userType: formData.userType // Preserve the current userType when toggling
       });
       setIsAnimating(false);
     }, 300);
@@ -105,6 +116,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserTyp
 
   if (!isOpen) return null;
 
+  // The rest of the component renders the UI based on whether isLogin is true or false
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
       <div className="w-full max-w-md relative">

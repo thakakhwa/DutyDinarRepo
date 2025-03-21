@@ -97,7 +97,7 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                   </>
                 ) : (
                   <button 
-                    onClick={() => setIsAuthModalOpen(true)}
+                    onClick={() =>{console.log("Checking if the auth modal opens");  setIsAuthModalOpen(true) }}
                     className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                   >
                     Sign In / Register

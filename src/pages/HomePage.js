@@ -7,25 +7,19 @@ import EventPreview from '../components/events/EventPreview';
 import AuthModal from '../components/auth/AuthModal';
 
 function HomePage() {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [userTypeSelected, setUserTypeSelected] = useState('');
-  
-  // Function to handle opening the auth modal with a specific user type
-  const openAuthModal = (userType) => {
-    // Close the modal first if it's already open
-    if (isAuthModalOpen) {
-      setIsAuthModalOpen(false);
-      
-      // Use setTimeout to ensure the modal closes before reopening with new userType
-      setTimeout(() => {
-        setUserTypeSelected(userType);
-        setIsAuthModalOpen(true);
-      }, 100);
-    } else {
-      // If modal is not open, just set the userType and open it
-      setUserTypeSelected(userType);
-      setIsAuthModalOpen(true);
-    }
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState('');
+  const [authInitialType, setAuthInitialType] = useState('');
+
+  const handleBuyerClick = () => {
+    setAuthInitialType('buyer');
+    setShowAuthModal(true);
+  };
+
+  const handleSellerClick = () => {
+    setAuthInitialType('seller');
+    setShowAuthModal(true);
   };
 
   return (
@@ -48,14 +42,14 @@ function HomePage() {
               </p>
               <div className="flex space-x-4">
                 <button 
-                  onClick={() => openAuthModal('buyer')} 
-                  className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                  onClick={()=>{console.log("checking Buyers button"); handleBuyerClick()}}
+                  className="z-10 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                 >
                   Start Buying
                 </button>
                 <button  
-                  onClick={() => openAuthModal('seller')}
-                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:bg-opacity-10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" 
+                  onClick={()=>{console.log("checking Sellers button"); handleSellerClick(); }}
+                  className="z-10 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:bg-opacity-10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" 
                 >
                   Become a Seller
                 </button>
@@ -109,15 +103,14 @@ function HomePage() {
       <EventPreview />
 
       {/* Auth Modal */}
-      {isAuthModalOpen && (
-        <AuthModal 
-          isOpen={isAuthModalOpen} 
-          onClose={() => setIsAuthModalOpen(false)}
-          setIsLoggedIn={(status) => console.log('Login status:', status)}
-          setUserType={(type) => console.log('User type:', type)}
-          initialUserType={userTypeSelected}
-        />
-      )}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        setIsLoggedIn={setIsLoggedIn}
+        setUserType={setUserType}
+        initialUserType={authInitialType}
+
+      />
     </div>
   );
 }
