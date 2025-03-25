@@ -6,6 +6,8 @@ import FeaturedProducts from '../components/products/FeaturedProducts';
 import EventPreview from '../components/events/EventPreview';
 import AuthModal from '../components/auth/AuthModal';
 
+
+
 function HomePage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);

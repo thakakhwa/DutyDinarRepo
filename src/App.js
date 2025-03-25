@@ -7,6 +7,8 @@ import EventsPage from './pages/EventsPage';
 import SellerDashboard from './pages/SellerDashboard';
 import BuyerDashboard from './pages/BuyerDashboard';
 import AdminRoutes from './routes/AdminRoutes';
+import Footer from './components/layout/footer';
+import AboutUs from './pages/AboutUs';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +41,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/about" element={<AboutUs />} />
           
           {/* Protected Routes */}
           <Route 
@@ -60,6 +63,7 @@ const App = () => {
             }
           />
         </Routes>
+        <Footer/>
       </div>
     </Router>
   );
