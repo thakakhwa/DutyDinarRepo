@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import axios from "axios";
 
-const ADMIN_CREDENTIALS = {
-  email: 'admin@dutydinar.com',
-  password: 'admin123'
+const API_BASE = 'http://localhost/backend/api';
+const API_ENDPOINTS = {
+  LOGIN: `${API_BASE}/login.php`,
+  SIGNUP: `${API_BASE}/signup.php`,
+  CHECK_SESSION: `${API_BASE}/check_session.php`,
+  LOGOUT: `${API_BASE}/logout.php`
 };
 
-const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserType = '' }) => {
+const AuthModal = ({ 
+  isOpen, 
+  onClose, 
+  setIsLoggedIn, 
+  setUserType, 
+  initialUserType = '' 
+}) => {
   const navigate = useNavigate();
-  
-  // KEY FIX #1: Initialize isLogin based on initialUserType
-  // When initialUserType is 'seller', we set isLogin to false to show the signup form
-  // This ensures "Become a Seller" button immediately shows signup form
   const [isLogin, setIsLogin] = useState(initialUserType !== 'seller');
-  
-  // Initialize form data with the initialUserType
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,69 +27,88 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserTyp
     companyName: '',
     userType: initialUserType || ''
   });
-  
   const [isAnimating, setIsAnimating] = useState(false);
   const [error, setError] = useState('');
 
-  // KEY FIX #2: React to changes in initialUserType and isOpen
-  // This is important for when the modal is reopened with a different user type
   useEffect(() => {
-    console.log('Modal state changed - initialUserType:', initialUserType, 'isOpen:', isOpen);
-    
-    if (isOpen) {
-      // Update the form data when initialUserType changes
-      setFormData(prev => ({
-        ...prev,
-        userType: initialUserType || prev.userType
-      }));
-      
-      // If user clicked "Become a Seller", automatically switch to signup form
-      if (initialUserType === 'seller') {
-        setIsLogin(false);
+    const checkSession = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.CHECK_SESSION, {
+          withCredentials: true
+        });
+        
+        if (response.data.status === 'success') {
+          setIsLoggedIn(true);
+          setUserType(response.data.data.user_type);
+        }
+      } catch (error) {
+        // No active session
       }
-      // If user clicked "Start Buying", switch to login form
-      else if (initialUserType === 'buyer') {
-        setIsLogin(true);
-      }
-    }
-  }, [initialUserType, isOpen]); // Added isOpen as a dependency
+    };
+
+    if (isOpen) checkSession();
+  }, [isOpen, setIsLoggedIn, setUserType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsAnimating(true);
     setError('');
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (formData.email === ADMIN_CREDENTIALS.email && 
-          formData.password === ADMIN_CREDENTIALS.password) {
-        setIsLoggedIn(true);
-        setUserType('admin');
-        onClose();
-        navigate('/admin');
-        return;
+      let response;
+      const payload = {
+        email: formData.email,
+        password: formData.password
+      };
+
+      if (isLogin) {
+        response = await axios.post(API_ENDPOINTS.LOGIN, payload, {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } else {
+        if (!formData.name || !formData.userType) {
+          throw new Error('Please fill all required fields');
+        }
+
+        payload.name = formData.name;
+        payload.user_type = formData.userType;
+        if (formData.userType === 'seller') {
+          payload.company_name = formData.companyName;
+        }
+
+        response = await axios.post(API_ENDPOINTS.SIGNUP, payload, {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
-      if (!isLogin) {
-        // Handle registration logic
+      if (response.data.status === 'success') {
         setIsLoggedIn(true);
-        setUserType(formData.userType);
+        setUserType(response.data.data.user_type);
         onClose();
-        navigate('/dashboard');
+        navigate(response.data.data.redirect_to || '/dashboard');
       } else {
-        // Handle regular login
-        setIsLoggedIn(true);
-        setUserType(formData.email.includes('seller') ? 'seller' : 'buyer');
-        onClose();
-        navigate('/dashboard');
+        throw new Error(response.data.message);
       }
     } catch (error) {
-      setError('Authentication failed. Please try again.');
+      const errorMessage = getReadableError(error);
+      setError(errorMessage);
       console.error('Auth error:', error);
     } finally {
       setIsAnimating(false);
     }
+  };
+
+  const getReadableError = (error) => {
+    const message = error.response?.data?.message || error.message;
+    const errorMap = {
+      'invalid_credentials': 'Invalid email or password',
+      'email_exists': 'Email already registered',
+      'password_too_weak': 'Password must be at least 8 characters',
+      'missing_fields': 'Please fill all required fields'
+    };
+    return errorMap[message.toLowerCase()] || message;
   };
 
   const handleInputChange = (e) => {
@@ -97,26 +120,24 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType, initialUserTyp
     setError('');
   };
 
-  // KEY FIX #3: Preserve userType when toggling between login/signup
   const toggleForm = () => {
     setIsAnimating(true);
     setError('');
     setTimeout(() => {
       setIsLogin(!isLogin);
-      setFormData({
-        email: '',
-        password: '',
+      setFormData(prev => ({
+        ...prev,
         name: '',
         companyName: '',
-        userType: formData.userType // Preserve the current userType when toggling
-      });
+        password: '',
+        email: '',
+      }));
       setIsAnimating(false);
     }, 300);
   };
 
   if (!isOpen) return null;
 
-  // The rest of the component renders the UI based on whether isLogin is true or false
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
       <div className="w-full max-w-md relative">
