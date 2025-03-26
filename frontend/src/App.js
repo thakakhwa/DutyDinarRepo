@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
 import CategoriesPage from './pages/CategoriesPage';
@@ -9,19 +10,69 @@ import BuyerDashboard from './pages/BuyerDashboard';
 import AdminRoutes from './routes/AdminRoutes';
 import Footer from './components/layout/footer';
 import AboutUs from './pages/AboutUs';
+import AuthModal from './components/auth/AuthModal';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState('buyer');
-  const [cartItems, setCartItems] = useState(3);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('token') !== null;
+  });
+  const [userType, setUserType] = useState(() => {
+    return localStorage.getItem('userType') || 'buyer';
+  });
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [cartItems] = useState(3); // Assuming this is managed elsewhere
   const isAdmin = userType === 'admin';
 
-  const PrivateRoute = ({ children }) => {
-    return isLoggedIn ? children : <Navigate to="/" />;
+  // Session check on initial load
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get('http://localhost/backend/api/check_session.php', {
+          withCredentials: true
+        });
+        
+        if (response.data.status === 'success') {
+          handleLoginSuccess(response.data.data.user_type);
+        }
+      } catch (error) {
+        handleLogout();
+      }
+    };
+
+    if (isLoggedIn) checkSession();
+  }, []);
+
+  const handleLoginSuccess = (userType) => {
+    setIsLoggedIn(true);
+    setUserType(userType);
+    setShowAuthModal(false);
   };
 
-  const AdminRoute = ({ children }) => {
-    return isAdmin ? children : <Navigate to="/" />;
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost/backend/api/logout.php', {}, {
+        withCredentials: true
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setUserType('buyer');
+  };
+
+  const AuthProtectedRoute = ({ children, requiredRole }) => {
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return <Navigate to="/" />;
+    }
+    
+    if (requiredRole && userType !== requiredRole) {
+      return <Navigate to="/" />;
+    }
+    
+    return children;
   };
 
   return (
@@ -32,24 +83,32 @@ const App = () => {
             isLoggedIn={isLoggedIn} 
             userType={userType} 
             cartItems={cartItems}
-            setIsLoggedIn={setIsLoggedIn}
-            setUserType={setUserType}
+            onLogout={handleLogout}
+            onAuthRequest={() => setShowAuthModal(true)}
           />
         )}
+
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          setIsLoggedIn={setIsLoggedIn}
+          setUserType={setUserType}
+        />
+
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/about" element={<AboutUs />} />
-          
+
           {/* Protected Routes */}
           <Route 
             path="/dashboard" 
             element={
-              <PrivateRoute>
+              <AuthProtectedRoute>
                 {userType === 'seller' ? <SellerDashboard /> : <BuyerDashboard />}
-              </PrivateRoute>
+              </AuthProtectedRoute>
             } 
           />
 
@@ -57,13 +116,14 @@ const App = () => {
           <Route
             path="/admin/*"
             element={
-              <AdminRoute>
-                <AdminRoutes />
-              </AdminRoute>
+              <AuthProtectedRoute requiredRole="admin">
+                <AdminRoutes onLogout={handleLogout} />
+              </AuthProtectedRoute>
             }
           />
         </Routes>
-        <Footer/>
+        
+        <Footer />
       </div>
     </Router>
   );
