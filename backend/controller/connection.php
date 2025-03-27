@@ -1,15 +1,16 @@
 <?php
-$host = 'localhost';
-$user = 'root';
-$password = 'your_mysql_root_password'; // Replace with actual password
-$database = 'dutydinar';
-$port = 3306; // Default MySQL port
-$socket = '/tmp/mysql.sock'; // Common socket path for MySQL on macOS
 
-// Create connection
-$conn = new mysqli($host, $user, $password, $database, $port, $socket);
+// Database configuration
+$hostname = "localhost";
+$username = "root";
+$password = "";
+$database = "dutydinar";
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+
+// Create a database connection
+$conn = mysqli_connect($hostname, $username, $password, $database);
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
+?>

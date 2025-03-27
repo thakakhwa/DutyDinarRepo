@@ -3,16 +3,6 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-
-function print_response($success, $message, $data = null) {
-    echo json_encode([
-        "success" => $success,
-        "message" => $message,
-        "data" => $data
-    ]);
-    exit(); // Stop further execution
-}
-
 // Start the session to manage the session data
 session_start();
 
@@ -67,5 +57,3 @@ $userData = [
 print_response(true, "Login successful.", $userData);
 
 ?>
-
-
