@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import axios from "axios";
 
-const API_BASE = 'http://localhost/backend/api';
+const API_BASE = 'http://localhost/DutyDinarRepo/backend/api';
 const API_ENDPOINTS = {
   LOGIN: `${API_BASE}/login.php`,
   SIGNUP: `${API_BASE}/signup.php`,

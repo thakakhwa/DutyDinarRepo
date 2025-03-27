@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('http://localhost/backend/api/check_session.php', {
+        const response = await axios.get('http://localhost/DutyDinarRepo/backend/api/check_session.php', {
           withCredentials: true
         });
         
@@ -50,7 +50,7 @@ const App = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost/backend/api/logout.php', {}, {
+      await axios.post('http://localhost/DutyDinarRepo/backend/api/logout.php', {}, {
         withCredentials: true
       });
     } catch (error) {
