@@ -51,10 +51,10 @@ const HomePage = () => {
                 Duty Dinar brings businesses and suppliers together in one powerful B2B platform
               </p>
               <div className="flex space-x-4">
-                <button className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
+                <button className="z-10 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
                   Start Buying
                 </button>
-                <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold">
+                <button className="z-10 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold">
                   Become a Seller
                 </button>
               </div>

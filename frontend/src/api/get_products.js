@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = "http://localhost/Duty_Dinnar/backend/api"; // Adjust this URL
+const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api"; // Adjust this URL
 
 export const getProducts = async (category = '', sortBy = '', priceRange = [0, 10000], minOrderQuantity = 1) => {
   try {

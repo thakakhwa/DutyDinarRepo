@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost/Duty_Dinnar/backend/api";
+const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
 export const loginUser = async (email, password) => {
   try {

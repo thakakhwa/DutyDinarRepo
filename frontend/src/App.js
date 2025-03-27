@@ -9,6 +9,9 @@ import SellerDashboard from './pages/SellerDashboard';
 import BuyerDashboard from './pages/BuyerDashboard';
 import AdminRoutes from './routes/AdminRoutes';
 import ProductPage from './pages/ProductPage';
+import AboutUs from './pages/AboutUs';
+import Footer from './components/layout/footer';
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -62,6 +65,7 @@ const App = () => {
           <Route path="/events" element={<EventsPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/event/:eventId" element={<EventDetailsPage />} />
+          <Route path="/about" element={<AboutUs />} />
 
           {/* Protected User Dashboard */}
           <Route 
@@ -86,6 +90,7 @@ const App = () => {
           {/* Redirect unknown routes to Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );
