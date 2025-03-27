@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
-import { Package, Star, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { categories } from '../data/categories';
+import { getCategories } from '../api/get_categories'; // Import API function
+import { getProducts } from '../api/get_products'; // Import the API for fetching products
 import FeaturedProducts from '../components/products/FeaturedProducts';
 import EventPreview from '../components/events/EventPreview';
-import AuthModal from '../components/auth/AuthModal';
 
+const HomePage = () => {
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
 
+  // Fetch categories on mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await getCategories();
+      if (response.success) {
+        setCategories(response.categories);
+      }
+    };
+    fetchCategories();
+  }, []);
 
-function HomePage() {
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState('');
-  const [authInitialType, setAuthInitialType] = useState('');
-
-  const handleBuyerClick = () => {
-    setAuthInitialType('buyer');
-    setShowAuthModal(true);
-  };
-
-  const handleSellerClick = () => {
-    setAuthInitialType('seller');
-    setShowAuthModal(true);
-  };
+  // Fetch products on mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getProducts(); // Assuming this is a function that fetches the products
+      if (response.success) {
+        setProducts(response.products);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,19 +48,13 @@ function HomePage() {
                 Connect with Top Manufacturers & Distributors
               </h1>
               <p className="text-lg mb-6">
-                Duty Dinar brings businesses and suppliers together in one powerful B2B platform.
+                Duty Dinar brings businesses and suppliers together in one powerful B2B platform
               </p>
               <div className="flex space-x-4">
-                <button 
-                  onClick={()=>{console.log("checking Buyers button"); handleBuyerClick()}}
-                  className="z-10 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                >
+                <button className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
                   Start Buying
                 </button>
-                <button  
-                  onClick={()=>{console.log("checking Sellers button"); handleSellerClick(); }}
-                  className="z-10 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:bg-opacity-10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" 
-                >
+                <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold">
                   Become a Seller
                 </button>
               </div>
@@ -88,33 +90,20 @@ function HomePage() {
       <div className="max-w-7xl mx-auto mt-16 px-4">
         <h2 className="text-2xl font-semibold mb-8">Browse Categories</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          {categories.map(({ name, icon: Icon, gradient }) => (
-            <div key={name} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden group">
-              <div className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-              <Icon className="text-green-600 mb-2" size={32} />
+          {categories.map(({ id, name }) => (
+            <div key={id} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl">
+              <Package className="text-green-600 mb-2" size={32} />
               <span className="text-sm text-center">{name}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Featured Products */}
+
       <FeaturedProducts />
-
-      {/* Events Preview */}
       <EventPreview />
-
-      {/* Auth Modal */}
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserType={setUserType}
-        initialUserType={authInitialType}
-
-      />
     </div>
   );
-}
+};
 
 export default HomePage;

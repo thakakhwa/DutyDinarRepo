@@ -11,7 +11,7 @@ const AdminLayout = ({ children }) => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Dashboard', icon: Home, path: '/admin' },
+    { name: 'Dashboard', icon: Home, path: '/admin/' },
     { name: 'Users', icon: Users, path: '/admin/users' },
     { name: 'Products', icon: Package, path: '/admin/products' },
     { name: 'Events', icon: Calendar, path: '/admin/events' },
@@ -52,7 +52,7 @@ const AdminLayout = ({ children }) => {
 <div className="flex items-center justify-between h-16 px-4 border-b">
   <Link to="/admin" className="flex items-center space-x-2">
     <img 
-      src="/logo.png" 
+      src="/logo.jpeg" 
       alt="Duty Dinar Logo" 
       className="h-12 w-auto object-contain"
     />

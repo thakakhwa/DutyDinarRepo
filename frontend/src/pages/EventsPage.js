@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { Calendar, Package, MapPin, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-function EventsPage() {
+const EventsPage = () => {
   const [selectedMonth, setSelectedMonth] = useState('March');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  // Function to handle "Details" button click
+  const handleDetailsClick = (eventId) => {
+    navigate(`/event/${eventId}`); // Navigate to EventDetailsPage with eventId
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -115,7 +122,10 @@ function EventsPage() {
                   <button className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
                     Book Now
                   </button>
-                  <button className="flex-1 border border-green-600 text-green-600 py-2 rounded-lg hover:bg-green-50">
+                  <button
+                    onClick={() => handleDetailsClick(event)} // Navigate to EventDetailsPage
+                    className="flex-1 border border-green-600 text-green-600 py-2 rounded-lg hover:bg-green-50"
+                  >
                     Details
                   </button>
                 </div>

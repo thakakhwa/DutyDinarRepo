@@ -1,38 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser, signupUser } from "../../api/auth_modal"; // Import API functions
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
-import axios from "axios";
 
-const API_BASE = 'http://localhost/DutyDinarRepo/backend/api';
-const API_ENDPOINTS = {
-  LOGIN: `${API_BASE}/login.php`,
-  SIGNUP: `${API_BASE}/signup.php`,
-  CHECK_SESSION: `${API_BASE}/check_session.php`,
-  LOGOUT: `${API_BASE}/logout.php`
-};
-
-const AuthModal = ({ 
-  isOpen, 
-  onClose, 
-  setIsLoggedIn, 
-  setUserType, 
-  initialUserType = '' 
-}) => {
+const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
   const navigate = useNavigate();
   const emailRef = useRef(null);
-  const [isLogin, setIsLogin] = useState(initialUserType !== 'seller');
+  const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [error, setError] = useState('');
-  const [lastAttempt, setLastAttempt] = useState(0);
+  const [error, setError] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    company_name: '', // Matches MySQL column name exactly
-    user_type: initialUserType || '' // Matches MySQL column name
+    email: "",
+    password: "",
+    name: "",
+    companyName: "",
+    userType: "buyer",
   });
 
   // Auto-focus email field on open
@@ -56,133 +41,66 @@ const AuthModal = ({
     }
   }, [formData.password]);
 
-  const checkSession = async () => {
-    try {
-      const response = await axios.get(API_ENDPOINTS.CHECK_SESSION, {
-        withCredentials: true,
-        timeout: 5000
-      });
-      
-      if (response.data.status === 'success') {
-        setIsLoggedIn(true);
-        setUserType(response.data.data.user_type);
-      }
-    } catch (error) {
-      console.error('Session check:', error.message);
-    }
-  };
-
-  const validateForm = () => {
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email');
-      return false;
-    }
-    if (!isLogin && formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return false;
-    }
-    if (!isLogin && !formData.name) {
-      setError('Full name is required');
-      return false;
-    }
-    if (!isLogin && !formData.user_type) {
-      setError('Please select account type');
-      return false;
-    }
-    if (formData.user_type === 'seller' && !formData.company_name) {
-      setError('Company name is required for sellers');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (Date.now() - lastAttempt < 2000) {
-      setError('Please wait before trying again');
-      return;
-    }
-    
-    if (!validateForm()) return;
-    
     setIsAnimating(true);
-    setError('');
-    setLastAttempt(Date.now());
+    setError("");
 
     try {
-      const payload = {
-        email: formData.email,
-        password: formData.password
-      };
-
-      if (!isLogin) {
-        payload.name = formData.name;
-        payload.user_type = formData.user_type;
-        if (formData.user_type === 'seller') {
-          payload.company_name = formData.company_name;
+      let response;
+      if (isLogin) {
+        response = await loginUser(formData.email, formData.password);
+      } else {
+        response = await signupUser(formData);
+        if (response.status === "success") {
+          response = await loginUser(formData.email, formData.password); // Auto-login after signup
         }
       }
 
-      const endpoint = isLogin ? API_ENDPOINTS.LOGIN : API_ENDPOINTS.SIGNUP;
-      const response = await axios.post(endpoint, payload, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      console.log("API Response:", response); // Debugging log
 
-      if (response.data.status === 'success') {
+      if (response.success) {
+        // Save authentication data
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userType", response.data.userType);
+
         setIsLoggedIn(true);
-        setUserType(response.data.data.user_type);
+        setUserType(response.data.userType);
         onClose();
-        navigate(response.data.data.redirect_to || '/dashboard');
+
+        // Redirect user to appropriate dashboard
+        navigate(response.data.userType === "admin" ? "/admin" : "/dashboard");
       } else {
-        throw new Error(response.data.message || 'Authentication failed');
+        setError(response.message);
       }
-    } catch (error) {
-      const errorMessage = getReadableError(error);
-      setError(errorMessage);
-      console.error('Auth error:', error);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsAnimating(false);
     }
   };
 
-  const getReadableError = (error) => {
-    if (error.response) {
-      switch (error.response.data?.message) {
-        case 'invalid_credentials': return 'Invalid email or password';
-        case 'email_exists': return 'Email already registered';
-        case 'password_too_weak': return 'Password needs 8+ chars with numbers/symbols';
-        case 'missing_fields': return 'Please fill all required fields';
-        default: return error.response.data?.message || 'Request failed';
-      }
-    }
-    return error.message;
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    setError('');
+    setError("");
   };
 
   const toggleForm = () => {
     setIsAnimating(true);
-    setError('');
+    setError("");
     setTimeout(() => {
       setIsLogin(!isLogin);
-      setFormData(prev => ({
-        ...prev,
-        password: '',
-        ...(isLogin ? { 
-          name: '',
-          company_name: '',
-          user_type: ''
-        } : {})
-      }));
+      setFormData({
+        email: "",
+        password: "",
+        name: "",
+        companyName: "",
+        userType: "buyer",
+      });
       setIsAnimating(false);
     }, 300);
   };
@@ -190,14 +108,14 @@ const AuthModal = ({
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50"
     >
       <div className="w-full max-w-md relative">
-        <button 
+        <button
           onClick={onClose}
           className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 z-50"
           aria-label="Close authentication modal"
@@ -206,7 +124,7 @@ const AuthModal = ({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        
+
         <div className={`bg-white rounded-lg shadow-xl relative overflow-hidden transition-all duration-300 transform ${isAnimating ? 'scale-95 opacity-80' : 'scale-100 opacity-100'}`}>
           <div className="p-6">
             <div className="flex justify-center mb-6">
@@ -356,27 +274,26 @@ const AuthModal = ({
                     <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin mr-2" />
                     Processing...
                   </>
-                ) : (
-                  <>
-                    {isLogin ? 'Sign In' : 'Create Account'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
+                ) : isLogin ? 'Sign In' : 'Sign Up'}
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                {isLogin ? "Don't have an account? " : "Already have an account? "}
-                <button
-                  type="button"
-                  onClick={toggleForm}
-                  className="text-green-600 hover:text-green-700 font-medium focus:outline-none"
-                  disabled={isAnimating}
-                >
-                  {isLogin ? 'Sign Up' : 'Sign In'}
-                </button>
-              </p>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              {isLogin ? (
+                <>
+                  Don’t have an account?{" "}
+                  <button onClick={toggleForm} className="text-green-600 hover:text-green-700 font-semibold">
+                    Sign up
+                  </button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <button onClick={toggleForm} className="text-green-600 hover:text-green-700 font-semibold">
+                    Sign in
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
