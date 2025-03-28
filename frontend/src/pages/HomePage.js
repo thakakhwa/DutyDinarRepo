@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getCategories } from '../api/get_categories'; // Import API function
-import { getProducts } from '../api/get_products'; // Import the API for fetching products
+import { getCategories } from '../api/get_categories';
+import { getProducts } from '../api/get_products';
 import FeaturedProducts from '../components/products/FeaturedProducts';
 import EventPreview from '../components/events/EventPreview';
+import AuthModal from '../components/auth/AuthModal'; // Import the AuthModal component
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  
+  // New state for managing AuthModal
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(null);
+  const [initialUserType, setInitialUserType] = useState('buyer');
 
   // Fetch categories on mount
   useEffect(() => {
@@ -19,18 +26,37 @@ const HomePage = () => {
       }
     };
     fetchCategories();
+
+    // Check if user is already logged in
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (loggedIn) {
+      setIsLoggedIn(true);
+      setUserType(localStorage.getItem('userType'));
+    }
   }, []);
 
   // Fetch products on mount
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await getProducts(); // Assuming this is a function that fetches the products
+      const response = await getProducts();
       if (response.success) {
         setProducts(response.products);
       }
     };
     fetchProducts();
   }, []);
+
+  // Handler for "Start Buying" button
+  const handleStartBuying = () => {
+    setInitialUserType('buyer');
+    setIsAuthModalOpen(true);
+  };
+
+  // Handler for "Become a Seller" button
+  const handleBecomeSeller = () => {
+    setInitialUserType('seller');
+    setIsAuthModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -45,16 +71,22 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h1 className="text-4xl font-bold mb-4">
-                Connect with Top Manufacturerss & Distributors
+                Connect with Top Manufacturers & Distributors
               </h1>
               <p className="text-lg mb-6">
                 Duty Dinar brings businesses and suppliers together in one powerful B2B platform
               </p>
               <div className="flex space-x-4">
-                <button className="z-10 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
+                <button 
+                  onClick={handleStartBuying}
+                  className="z-10 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold"
+                >
                   Start Buying
                 </button>
-                <button className="z-10 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold">
+                <button 
+                  onClick={handleBecomeSeller}
+                  className="z-10 border-2 border-white text-white px-6 py-3 rounded-lg font-semibold"
+                >
                   Become a Seller
                 </button>
               </div>
@@ -99,6 +131,14 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* AuthModal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)}
+        setIsLoggedIn={setIsLoggedIn}
+        setUserType={setUserType}
+        initialUserType={initialUserType}
+      />
 
       <FeaturedProducts />
       <EventPreview />

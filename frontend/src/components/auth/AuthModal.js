@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser, signupUser } from "../../api/auth_modal"; // Import API functions
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
-const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
+const AuthModal = ({ 
+  isOpen, 
+  onClose, 
+  setIsLoggedIn, 
+  setUserType, 
+  initialUserType = 'buyer' 
+}) => {
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const [isLogin, setIsLogin] = useState(true);
@@ -17,7 +23,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
     password: "",
     name: "",
     companyName: "",
-    userType: "buyer",
+    userType: initialUserType,
   });
 
   // Auto-focus email field on open
@@ -26,6 +32,14 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
       emailRef.current.focus();
     }
   }, [isOpen]);
+
+  // Update form data when initialUserType changes
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      userType: initialUserType
+    }));
+  }, [initialUserType]);
 
   // Password strength calculator
   useEffect(() => {
@@ -53,7 +67,8 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
       } else {
         response = await signupUser(formData);
         if (response.status === "success") {
-          response = await loginUser(formData.email, formData.password); // Auto-login after signup
+          response = await loginUser(formData.email, formData.password); 
+          // Auto-login after signup
         }
       }
 
@@ -68,8 +83,10 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
         setUserType(response.data.userType);
         onClose();
 
-        // Redirect user to appropriate dashboard
-        navigate(response.data.userType === "admin" ? "/admin" : "/dashboard");
+        // Refresh the page to reset the entire application state
+        window.location.href = response.data.userType === "admin" 
+          ? "/admin" 
+          : "/dashboard";
       } else {
         setError(response.message);
       }
@@ -99,7 +116,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
         password: "",
         name: "",
         companyName: "",
-        userType: "buyer",
+        userType: initialUserType,
       });
       setIsAnimating(false);
     }, 300);
@@ -167,33 +184,32 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="user_type" className="block text-sm font-medium text-gray-700">Account Type</label>
+                    <label htmlFor="userType" className="block text-sm font-medium text-gray-700">Account Type</label>
                     <select
-                      id="user_type"
-                      name="user_type"
-                      value={formData.user_type}
+                      id="userType"
+                      name="userType"
+                      value={formData.userType}
                       onChange={handleInputChange}
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" 
                       required
                     >
-                      <option value="" disabled>- Select -</option>
                       <option value="buyer">Buyer</option>
                       <option value="seller">Seller</option>
                     </select>
                   </div>
                 
-                  {formData.user_type === 'seller' && (
+                  {formData.userType === 'seller' && (
                     <div className="space-y-2 animate-fadeIn">
-                      <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">Company Name</label>
+                      <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">Company Name</label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                         <input
-                          id="company_name"
-                          name="company_name"
+                          id="companyName"
+                          name="companyName"
                           type="text"
                           placeholder="Your Company"
                           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                          value={formData.company_name}
+                          value={formData.companyName}
                           onChange={handleInputChange}
                           required
                         />
@@ -281,7 +297,7 @@ const AuthModal = ({ isOpen, onClose, setIsLoggedIn, setUserType }) => {
             <div className="mt-4 text-center text-sm text-gray-600">
               {isLogin ? (
                 <>
-                  Don’t have an account?{" "}
+                  Don't have an account?{" "}
                   <button onClick={toggleForm} className="text-green-600 hover:text-green-700 font-semibold">
                     Sign up
                   </button>
