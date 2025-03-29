@@ -14,8 +14,9 @@ import Footer from './components/layout/footer';
 import AddEvents from './pages/addEvents'; // Import the AddEvents page
 import FAQ from "./pages/FAQ"
 import TOS from "./pages/TOS"
-import ContactUs from "./pages/ContactUs"
 import Privacypolicy from "./pages/Privacy"
+import ContactUs from "./pages/ContactUs"
+
 
 
 const App = () => {
