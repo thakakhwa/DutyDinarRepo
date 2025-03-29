@@ -79,7 +79,7 @@ const HomePage = () => {
                 Connect with Trusted Local Manufacturers & Distributors
               </h1>
               <p className="text-lg mb-6">
-                Duty Dinar brings businesses and suppliers together in one powerful B2B platform
+                Duty Dinar connects Jordanian businesses in one platform, and offers innovative business solutions!
               </p>
               <div className="flex space-x-4">
                 <button 

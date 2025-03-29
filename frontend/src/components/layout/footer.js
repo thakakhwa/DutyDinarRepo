@@ -24,7 +24,7 @@ const Footer = () => {
                 target="_blank"
               ><Facebook className="hover:text-green-200 cursor-pointer transition-colors" /></a>
               <a 
-                //href="https://twitter.com/dutydinar" fix ur link buddy
+                href="https://twitter.com/dutydinar"
                 target="_blank"
               ><Twitter className="hover:text-green-200 cursor-pointer transition-colors" /></a>
               <a 

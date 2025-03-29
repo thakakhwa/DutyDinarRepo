@@ -98,11 +98,11 @@ const FAQ = () => {
                 Chat Support
               </a>
               <a
-                href="tel:+962780000000"
+                href="tel:+962795039189"
                 className="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 flex items-center justify-center"
               >
                 <Phone className="mr-2" size={20} />
-                +962 78 000 0000
+                +962 795039189
               </a>
             </div>
           </div>
@@ -114,7 +114,7 @@ const FAQ = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Start Your Journey Today</h2>
           <p className="mb-8 max-w-xl mx-auto">
-            Join thousands of businesses growing with Duty Dinar
+            Join the future of Jordanian business.
           </p>
           <div className="flex justify-center space-x-4">
             <Link
