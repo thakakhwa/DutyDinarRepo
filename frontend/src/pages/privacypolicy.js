@@ -39,7 +39,7 @@ const Privacypolicy = () => {
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-green-600 mb-4">2. Data Usage</h2>
             <p>
-              Your data is used solely for service delivery and platform improvements...
+              Your data is used solely for service delivery and platform improvements..
             </p>
           </section>
 
