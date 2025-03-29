@@ -11,6 +11,7 @@ import AdminRoutes from './routes/AdminRoutes';
 import ProductPage from './pages/ProductPage';
 import AboutUs from './pages/AboutUs';
 import Footer from './components/layout/footer';
+import ContactUs from './pages/ContactUs';
 
 
 const App = () => {
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/event/:eventId" element={<EventDetailsPage />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />}/>
 
           {/* Protected User Dashboard */}
           <Route 

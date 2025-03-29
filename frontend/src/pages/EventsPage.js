@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Package, MapPin, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
+
 
 const EventsPage = () => {
   const [selectedMonth, setSelectedMonth] = useState('March');
@@ -11,6 +13,13 @@ const EventsPage = () => {
   const handleDetailsClick = (eventId) => {
     navigate(`/event/${eventId}`); // Navigate to EventDetailsPage with eventId
   };
+
+    useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">

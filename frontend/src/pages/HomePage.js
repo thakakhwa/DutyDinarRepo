@@ -57,7 +57,12 @@ const HomePage = () => {
     setInitialUserType('seller');
     setIsAuthModalOpen(true);
   };
-
+      useEffect(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }, []);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
