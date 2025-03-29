@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Package } from 'lucide-react';
 
@@ -17,6 +17,13 @@ const EventDetailsPage = () => {
     description: 'Join the largest B2B trade event in the region. Connect with manufacturers, suppliers, and industry experts from around the world.',
     price: '$299',
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
