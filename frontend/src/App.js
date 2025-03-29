@@ -12,6 +12,11 @@ import ProductPage from './pages/ProductPage';
 import AboutUs from './pages/AboutUs';
 import Footer from './components/layout/footer';
 import AddEvents from './pages/addEvents'; // Import the AddEvents page
+import FAQ from "./pages/FAQ"
+import TOS from "./pages/TOS"
+import ContactUs from "./pages/ContactUs"
+import privacypolicy from "./pages/privacypolicy"
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -82,6 +87,10 @@ const App = () => {
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/event/:eventId" element={<EventDetailsPage />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/tos" element={<TOS />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/privacy" element={<privacy />} />
 
           Protected User Dashboard
           <Route 

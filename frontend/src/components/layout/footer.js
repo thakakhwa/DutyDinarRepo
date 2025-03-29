@@ -43,7 +43,7 @@ const Footer = () => {
             <Link to="/about" className="block text-sm hover:text-green-200 transition-colors">About Us</Link>
             <Link to="/contact" className="block text-sm hover:text-green-200 transition-colors">Contact</Link>
             <Link to="/faq" className="block text-sm hover:text-green-200 transition-colors">FAQ</Link>
-            <Link to="/terms" className="block text-sm hover:text-green-200 transition-colors">Terms of Service</Link>
+            <Link to="/tos" className="block text-sm hover:text-green-200 transition-colors">Terms of Service</Link>
           </div>
 
           {/* Categories */}
