@@ -79,8 +79,6 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} Duty Dinar. All rights reserved.</p>
           <div className="mt-2 flex justify-center space-x-4">
             <Link to="/Privacy" className="hover:text-green-200 transition-colors">Privacy Policy</Link>
-            <span>|</span>
-            <Link to="/cookies" className="hover:text-green-200 transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>
