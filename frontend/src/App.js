@@ -16,7 +16,7 @@ import FAQ from "./pages/FAQ"
 import TOS from "./pages/TOS"
 import Privacypolicy from "./pages/Privacy"
 import ContactUs from "./pages/ContactUs"
-
+import AccountProfile from './pages/AccountProfile';
 
 
 const App = () => {
@@ -92,6 +92,7 @@ const App = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
+          <Route path="/profile" element={<AccountProfile />} />
 
           Protected User Dashboard
           <Route 
