@@ -22,7 +22,7 @@ const Privacy = () => {
             <h1 className="text-4xl font-bold">Privacy Policy</h1>
           </div>
           <p className="text-lg mt-4 max-w-2xl mx-auto">
-            Last Updated: September 2023 | Effective Date: January 2024
+            Last Updated: September 2023 | Effective Date: January 2025
           </p>
         </div>
       </div>
