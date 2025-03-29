@@ -15,7 +15,7 @@ import AddEvents from './pages/addEvents'; // Import the AddEvents page
 import FAQ from "./pages/FAQ"
 import TOS from "./pages/TOS"
 import ContactUs from "./pages/ContactUs"
-import privacypolicy from "./pages/privacypolicy"
+import Privacy from "./pages/privacypolicy"
 
 
 const App = () => {
@@ -90,7 +90,7 @@ const App = () => {
           <Route path="/tos" element={<TOS />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/privacy" element={<privacy />} />
+          <Route path="/Privacy" element={<privacy />} />
 
           Protected User Dashboard
           <Route 

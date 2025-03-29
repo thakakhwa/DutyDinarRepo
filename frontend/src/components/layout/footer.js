@@ -78,7 +78,7 @@ const Footer = () => {
         <div className="border-t border-green-700 mt-8 pt-6 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} Duty Dinar. All rights reserved.</p>
           <div className="mt-2 flex justify-center space-x-4">
-            <Link to="/privacy" className="hover:text-green-200 transition-colors">Privacy Policy</Link>
+            <Link to="/Privacy" className="hover:text-green-200 transition-colors">Privacy Policy</Link>
             <span>|</span>
             <Link to="/cookies" className="hover:text-green-200 transition-colors">Cookie Policy</Link>
           </div>
