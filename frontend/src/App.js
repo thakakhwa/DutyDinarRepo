@@ -15,7 +15,7 @@ import AddEvents from './pages/addEvents'; // Import the AddEvents page
 import FAQ from "./pages/FAQ"
 import TOS from "./pages/TOS"
 import ContactUs from "./pages/ContactUs"
-import Privacypolicy from "./pages/Privacypolicy"
+import Privacypolicy from "./pages/Privacy"
 
 
 const App = () => {
