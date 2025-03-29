@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Eye, EyeOff, Edit, Save, LogOut } from 'lucide-react';
+import { getUserCredentials } from '../api/get_usercredentials'; 
 
 const AccountProfile = ({ setIsLoggedIn, setUserType }) => {
   const navigate = useNavigate();
