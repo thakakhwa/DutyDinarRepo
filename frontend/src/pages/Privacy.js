@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ShieldCheck } from 'lucide-react';
 
-const Privacypolicy = () => {
+const Privacy = () => {
 
 
     useEffect(() => {
@@ -57,4 +57,4 @@ const Privacypolicy = () => {
   );
 };
 
-export default Privacypolicy;
+export default Privacy;
