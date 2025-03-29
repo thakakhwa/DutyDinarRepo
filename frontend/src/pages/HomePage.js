@@ -16,7 +16,12 @@ const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
   const [initialUserType, setInitialUserType] = useState('buyer');
-
+    useEffect(() => {
+       window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+        }, []);
   // Fetch categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
@@ -26,6 +31,8 @@ const HomePage = () => {
       }
     };
     fetchCategories();
+
+    
 
     // Check if user is already logged in
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';

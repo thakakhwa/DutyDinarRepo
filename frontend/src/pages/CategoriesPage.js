@@ -23,6 +23,13 @@ const CategoriesPage = () => {
     fetchCategories();
   }, []);
 
+      useEffect(() => {
+         window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+          });
+          }, []);
+
   useEffect(() => {
     const fetchProducts = async () => {
       const productList = await getProducts(selectedCategory, sortBy, priceRange, minOrderQuantity);
