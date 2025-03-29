@@ -14,7 +14,7 @@ import Footer from './components/layout/footer';
 import ContactUs from './pages/ContactUs';
 import FAQ from './pages/FAQ';
 import TOS from './pages/TOS';
-import privacypolicy from './pages/privacypolicy';
+import Privacypolicy from './pages/Privacypolicy';
 
 
 const App = () => {
@@ -73,7 +73,8 @@ const App = () => {
           <Route path="/contact" element={<ContactUs />}/>
           <Route path="/faq" element={<FAQ />}/>
           <Route path="/tos" element={<TOS />}/>
-          <Route path="/privacypolicy" element={<privacypolicy />}/>
+          <Route path="/Privacypolicy" element={<Privacypolicy />}/>
+          
 
           {/* Protected User Dashboard */}
           <Route 

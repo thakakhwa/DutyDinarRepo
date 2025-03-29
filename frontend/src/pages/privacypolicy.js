@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { ShieldCheck } from 'lucide-react';
 
-const privacypolicy = () => {
+const Privacypolicy = () => {
+
+
+    useEffect(() => {
+       window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+        }, []);
+
+
+
   return (
     <div className="min-h-screen bg-white">
       <div className="bg-green-600 text-white py-20 px-4">
@@ -46,4 +57,4 @@ const privacypolicy = () => {
   );
 };
 
-export default privacypolicy;
+export default Privacypolicy;
