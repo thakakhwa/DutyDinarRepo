@@ -12,6 +12,8 @@ import ProductPage from './pages/ProductPage';
 import AboutUs from './pages/AboutUs';
 import Footer from './components/layout/footer';
 import ContactUs from './pages/ContactUs';
+import FAQ from './pages/FAQ';
+import TOS from './pages/TOS';
 
 
 const App = () => {
@@ -68,6 +70,8 @@ const App = () => {
           <Route path="/event/:eventId" element={<EventDetailsPage />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />}/>
+          <Route path="/faq" element={<FAQ />}/>
+          <Route path="/tos" element={<TOS />}/>
 
           {/* Protected User Dashboard */}
           <Route 
