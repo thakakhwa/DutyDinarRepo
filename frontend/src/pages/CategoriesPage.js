@@ -13,13 +13,6 @@ const CategoriesPage = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
-      useEffect(() => {
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
-        }, []);
-
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await getCategories();

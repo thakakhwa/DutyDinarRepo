@@ -57,12 +57,7 @@ const HomePage = () => {
     setInitialUserType('seller');
     setIsAuthModalOpen(true);
   };
-      useEffect(() => {
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
-        }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -76,10 +71,10 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h1 className="text-4xl font-bold mb-4">
-                Connect with Trusted Local Manufacturers & Distributors
+                Connect with Top Manufacturers & Distributors
               </h1>
               <p className="text-lg mb-6">
-                Duty Dinar connects Jordanian businesses in one platform, and offers innovative business solutions!
+                Duty Dinar brings businesses and suppliers together in one powerful B2B platform
               </p>
               <div className="flex space-x-4">
                 <button 

@@ -83,10 +83,10 @@ const AuthModal = ({
         setUserType(response.data.userType);
         onClose();
 
-        // Refresh the page to reset the entire application state
-        window.location.href = response.data.userType === "admin" 
-          ? "/admin" 
-          : "/dashboard";
+        // // Refresh the page to reset the entire application state
+        // window.location.href = response.data.userType === "admin" 
+        //   ? "/admin" 
+        //   : "/dashboard";
       } else {
         setError(response.message);
       }

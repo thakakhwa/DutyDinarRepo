@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Star, ChevronLeft, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ProductPage = () => {
   const navigate = useNavigate();
-
-    useEffect(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }, []);
 
   // Sample product data
   const product = {

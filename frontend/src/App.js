@@ -11,11 +11,7 @@ import AdminRoutes from './routes/AdminRoutes';
 import ProductPage from './pages/ProductPage';
 import AboutUs from './pages/AboutUs';
 import Footer from './components/layout/footer';
-import ContactUs from './pages/ContactUs';
-import FAQ from './pages/FAQ';
-import TOS from './pages/TOS';
-import Privacypolicy from './pages/privacypolicy';
-
+import AddEvents from './pages/addEvents'; // Import the AddEvents page
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +48,22 @@ const App = () => {
     return children;
   };
 
+  // Seller Route to restrict seller pages
+  const SellerRoute = ({ children }) => {
+    if (!isLoggedIn || userType !== 'seller') {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
+  // Buyer Route to restrict buyer pages
+  const BuyerRoute = ({ children }) => {
+    if (!isLoggedIn || userType !== 'buyer') {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
@@ -70,19 +82,24 @@ const App = () => {
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/event/:eventId" element={<EventDetailsPage />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactUs />}/>
-          <Route path="/faq" element={<FAQ />}/>
-          <Route path="/tos" element={<TOS />}/>
-          <Route path="/Privacypolicy" element={<Privacypolicy />}/>
-          
 
-          {/* Protected User Dashboard */}
+          Protected User Dashboard
           <Route 
             path="/dashboard" 
             element={
               <PrivateRoute>
                 {userType === 'seller' ? <SellerDashboard /> : <BuyerDashboard />}
               </PrivateRoute>
+            } 
+          />
+
+          {/* Protected Seller Add Event Page */}
+          <Route 
+            path="/add-events" 
+            element={
+              <SellerRoute>
+                <AddEvents />
+              </SellerRoute>
             } 
           />
 

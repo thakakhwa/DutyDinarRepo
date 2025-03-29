@@ -4,13 +4,6 @@ import { getProducts } from '../../api/get_products'; // Import the function
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
   
   useEffect(() => {
     const fetchProducts = async () => {

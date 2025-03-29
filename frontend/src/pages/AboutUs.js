@@ -5,14 +5,12 @@ import { Users, Globe, Shield, Package, ArrowRight } from "lucide-react";
 // Rest of your component...
 
 const AboutUs = () => {
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }, []);
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}

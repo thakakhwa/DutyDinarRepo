@@ -5,7 +5,6 @@ import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 
 
-
 const Footer = () => {
   return (
     <footer className="bg-green-600 text-white py-12 mt-16">
@@ -24,7 +23,7 @@ const Footer = () => {
                 target="_blank"
               ><Facebook className="hover:text-green-200 cursor-pointer transition-colors" /></a>
               <a 
-                href="https://twitter.com/dutydinar"
+                //href="https://twitter.com/dutydinar" fix ur link buddy
                 target="_blank"
               ><Twitter className="hover:text-green-200 cursor-pointer transition-colors" /></a>
               <a 
@@ -44,7 +43,7 @@ const Footer = () => {
             <Link to="/about" className="block text-sm hover:text-green-200 transition-colors">About Us</Link>
             <Link to="/contact" className="block text-sm hover:text-green-200 transition-colors">Contact</Link>
             <Link to="/faq" className="block text-sm hover:text-green-200 transition-colors">FAQ</Link>
-            <Link to="/tos" className="block text-sm hover:text-green-200 transition-colors">Terms of Service</Link>
+            <Link to="/terms" className="block text-sm hover:text-green-200 transition-colors">Terms of Service</Link>
           </div>
 
           {/* Categories */}
@@ -79,7 +78,9 @@ const Footer = () => {
         <div className="border-t border-green-700 mt-8 pt-6 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} Duty Dinar. All rights reserved.</p>
           <div className="mt-2 flex justify-center space-x-4">
-            <Link to="/Privacypolicy" className="hover:text-green-200 transition-colors">Privacy Policy</Link>
+            <Link to="/privacy" className="hover:text-green-200 transition-colors">Privacy Policy</Link>
+            <span>|</span>
+            <Link to="/cookies" className="hover:text-green-200 transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>

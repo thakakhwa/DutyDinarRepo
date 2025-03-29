@@ -1,7 +1,15 @@
 import React from 'react';
 import { Package, Calendar } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const SellerDashboard = () => {
+  const navigate = useNavigate(); // Hook to navigate to another page
+
+  // Function to handle "Add New Events" button click
+  const handleAddEventClick = () => {
+    navigate('/add-events'); // Navigate to the AddEvents page
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -64,8 +72,14 @@ const SellerDashboard = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg">
+                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
                   Add New Product
+                </button>
+                <button
+                  className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
+                  onClick={handleAddEventClick} // Add click handler
+                >
+                  Add New Events
                 </button>
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
                   View Messages
