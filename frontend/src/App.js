@@ -14,6 +14,7 @@ import Footer from './components/layout/footer';
 import ContactUs from './pages/ContactUs';
 import FAQ from './pages/FAQ';
 import TOS from './pages/TOS';
+import privacypolicy from "./components/popups/privacypolicy";
 
 
 const App = () => {
