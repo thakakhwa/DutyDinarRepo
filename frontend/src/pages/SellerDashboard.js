@@ -9,6 +9,10 @@ const SellerDashboard = () => {
   const handleAddEventClick = () => {
     navigate('/add-events'); // Navigate to the AddEvents page
   };
+  const handleAddProductClick = () => {
+    navigate('/add-products'); // Navigate to the Add Products
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -72,7 +76,8 @@ const SellerDashboard = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
+                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
+                onClick={handleAddProductClick}>
                   Add New Product
                 </button>
                 <button

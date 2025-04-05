@@ -17,6 +17,7 @@ import TOS from "./pages/TOS"
 import Privacypolicy from "./pages/Privacy"
 import ContactUs from "./pages/ContactUs"
 import AccountProfile from './pages/AccountProfile';
+import AddProducts from './pages/addProducts';
 
 
 const App = () => {
@@ -93,6 +94,7 @@ const App = () => {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
           <Route path="/profile" element={<AccountProfile />} />
+          
 
           Protected User Dashboard
           <Route 
@@ -113,6 +115,18 @@ const App = () => {
               </SellerRoute>
             } 
           />
+
+
+                    {/* Protected Seller Add Products Page */}
+                    <Route 
+            path="/add-products" 
+            element={
+              <SellerRoute>
+                <AddProducts />
+              </SellerRoute>
+            } 
+          />
+
 
           {/* Protected Admin Routes */}
           <Route 
