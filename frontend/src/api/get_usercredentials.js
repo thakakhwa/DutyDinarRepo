@@ -8,7 +8,7 @@ export const getUserCredentials = async () => {
     // Prevent caching with timestamp
     const timestamp = new Date().getTime();
     const response = await axios.get(
-      `${API_BASE_URL}/get_usercredentials.php`,
+      `${API_BASE_URL}/get_usercredentails.php`,
       {
         withCredentials: true,
         timeout: 10000,
