@@ -1,8 +1,12 @@
 <?php
-session_start();
+require_once 'session_config.php';
 
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Credentials: true");
+// Set CORS headers first (before any output)
+set_session_cors_headers();
+
+// Configure and start session
+configure_session();
+
 header("Content-Type: application/json");
 
 // Check if session exists

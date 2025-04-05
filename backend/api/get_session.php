@@ -1,6 +1,11 @@
 <?php
-// Start the session to access session variables
-session_start();
+require_once 'session_config.php';
+
+// Set CORS headers first
+set_session_cors_headers();
+
+// Configure and start session
+configure_session();
 
 header('Content-Type: application/json');
 
