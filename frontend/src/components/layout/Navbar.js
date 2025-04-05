@@ -15,6 +15,14 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
     localStorage.setItem('userType', 'buyer');
     setIsProfileOpen(false);
     navigate('/');
+        
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userType');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('email');
+        
+        
+        window.location.href = '/';
   };
 
   return (

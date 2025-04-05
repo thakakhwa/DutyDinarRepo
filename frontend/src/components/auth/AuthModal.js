@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, signupUser } from "../../api/auth_modal"; // Import API functions
+import { loginUser, signupUser } from "../../api/auth_modal";
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 const AuthModal = ({ 
@@ -26,14 +26,12 @@ const AuthModal = ({
     userType: initialUserType,
   });
 
-  // Auto-focus email field on open
   useEffect(() => {
     if (isOpen && emailRef.current) {
       emailRef.current.focus();
     }
   }, [isOpen]);
 
-  // Update form data when initialUserType changes
   useEffect(() => {
     setFormData(prev => ({
       ...prev,
@@ -41,7 +39,6 @@ const AuthModal = ({
     }));
   }, [initialUserType]);
 
-  // Password strength calculator
   useEffect(() => {
     if (formData.password.length > 0) {
       let strength = 0;
@@ -67,26 +64,20 @@ const AuthModal = ({
       } else {
         response = await signupUser(formData);
         if (response.status === "success") {
-          response = await loginUser(formData.email, formData.password); 
-          // Auto-login after signup
+          response = await loginUser(formData.email, formData.password);
         }
       }
 
-      console.log("API Response:", response); // Debugging log
-
       if (response.success) {
-        // Save authentication data
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userType", response.data.userType);
 
-        setIsLoggedIn(true);
-        setUserType(response.data.userType);
-        onClose();
-
-        // // Refresh the page to reset the entire application state
-        // window.location.href = response.data.userType === "admin" 
-        //   ? "/admin" 
-        //   : "/dashboard";
+        // Force full page refresh with redirect
+        if (response.data.userType === "admin") {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/dashboard";
+        }
       } else {
         setError(response.message);
       }
@@ -317,6 +308,5 @@ const AuthModal = ({
     </div>
   );
 };
-
 
 export default AuthModal;
