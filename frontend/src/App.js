@@ -106,6 +106,7 @@ const App = () => {
             } 
           />
 
+
           {/* Protected Seller Add Event Page */}
           <Route 
             path="/add-events" 

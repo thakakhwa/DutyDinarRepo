@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShoppingBag, Heart, Clock, Package } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const BuyerDashboard = () => {
   return (
@@ -80,9 +81,12 @@ const BuyerDashboard = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg">
-                  Browse Categories
-                </button>
+              <Link 
+    to="/categories" 
+    className="flex items-center justify-center w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
+  >
+    Browse Categories
+  </Link>
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
                   View Wishlist
                 </button>
