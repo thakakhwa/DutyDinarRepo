@@ -6,12 +6,14 @@ import axios from "axios";
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
 const AddProducts = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [stock, setStock] = useState('');
-  const [minOrderQuantity, setMinOrderQuantity] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    minOrderQuantity: '',
+    imageUrl: ''
+  });
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,16 +28,21 @@ const AddProducts = () => {
           setCategories(result.categories);
         } else {
           setError(result.message || 'Failed to load categories');
-          setCategories([]);
         }
       } catch (err) {
         console.error('Category fetch error:', err);
         setError('Failed to load categories');
-        setCategories([]);
       }
     };
     fetchCategories();
   }, []);
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,18 +50,19 @@ const AddProducts = () => {
     setError('');
 
     const productData = {
-      name,
-      description,
-      price: parseFloat(price),
-      stock: parseInt(stock),
-      minOrderQuantity: parseInt(minOrderQuantity),
-      image_url: imageUrl,
+      ...formData,
+      price: parseFloat(formData.price),
+      stock: parseInt(formData.stock),
+      minOrderQuantity: parseInt(formData.minOrderQuantity),
+      image_url: formData.imageUrl,
       categories: selectedCategories
     };
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/add_product.php`, productData);
-      
+      const response = await axios.post(`${API_BASE_URL}/add_products.php`, productData, {
+        withCredentials: true
+      });
+
       if (response.data.success) {
         alert('Product added successfully');
         navigate('/seller-dashboard');
@@ -62,8 +70,9 @@ const AddProducts = () => {
         setError(response.data.message || 'Failed to add product');
       }
     } catch (err) {
-      console.error('Submission error:', err);
-      setError(err.response?.data?.message || 'Network error. Please try again.');
+      const errorMessage = err.response?.data?.message || err.message || 'Network error';
+      console.error('Submission error:', err.response || err);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -73,15 +82,22 @@ const AddProducts = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-6">Add New Product</h2>
-        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
         
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
+          {/* Form Fields */}
           <div className="space-y-2">
             <label className="text-lg font-semibold">Product Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -90,8 +106,9 @@ const AddProducts = () => {
           <div className="space-y-2">
             <label className="text-lg font-semibold">Description</label>
             <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -102,8 +119,9 @@ const AddProducts = () => {
             <input
               type="number"
               step="0.01"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -113,8 +131,9 @@ const AddProducts = () => {
             <label className="text-lg font-semibold">Stock Quantity</label>
             <input
               type="number"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
+              name="stock"
+              value={formData.stock}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -124,8 +143,9 @@ const AddProducts = () => {
             <label className="text-lg font-semibold">Minimum Order Quantity</label>
             <input
               type="number"
-              value={minOrderQuantity}
-              onChange={(e) => setMinOrderQuantity(e.target.value)}
+              name="minOrderQuantity"
+              value={formData.minOrderQuantity}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -135,8 +155,9 @@ const AddProducts = () => {
             <label className="text-lg font-semibold">Image URL</label>
             <input
               type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -159,7 +180,9 @@ const AddProducts = () => {
               ))}
             </select>
             <p className="text-sm text-gray-500">
-              {categories.length === 0 ? 'No categories available' : 'Hold CTRL/CMD to select multiple'}
+              {categories.length === 0 
+                ? 'No categories available' 
+                : 'Hold CTRL/CMD to select multiple categories'}
             </p>
           </div>
 

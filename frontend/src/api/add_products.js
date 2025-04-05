@@ -1,6 +1,6 @@
 export const addProduct = async (productData) => {
     try {
-      const response = await fetch('/api/add_products.php', {
+      const response = await fetch('/api/add_product.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

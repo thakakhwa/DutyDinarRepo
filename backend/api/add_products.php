@@ -1,28 +1,50 @@
 <?php
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
 
-require_once './config.php';
+require_once '../config/database.php';
 
-// Enable error reporting
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $response = ['success' => false, 'message' => ''];
 
 try {
+    // Session configuration
+    session_set_cookie_params([
+        'lifetime' => 86400,
+        'path' => '/',
+        'domain' => 'localhost',
+        'secure' => false,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    session_start();
+
+    // Validate session
+    if (!isset($_SESSION['user_id'])) {
+        throw new Exception("User authentication required. Please login.");
+    }
+    $sellerId = $_SESSION['user_id'];
+
     // Get and validate input
     $data = json_decode(file_get_contents('php://input'), true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception("Invalid JSON input");
+    if ($data === null) {
+        throw new Exception("Invalid JSON input: " . json_last_error_msg());
     }
 
     // Validate required fields
     $required = ['name', 'description', 'price', 'stock', 'minOrderQuantity', 'image_url'];
     foreach ($required as $field) {
-        if (!isset($data[$field]) || empty(trim($data[$field]))) {
+        if (empty($data[$field])) {
             throw new Exception("Missing required field: $field");
         }
     }
@@ -34,13 +56,6 @@ try {
             throw new Exception("Invalid value for $field: must be numeric");
         }
     }
-
-    // Start session and get seller ID
-    session_start();
-    if (!isset($_SESSION['user_id'])) {
-        throw new Exception("User not authenticated");
-    }
-    $sellerId = $_SESSION['user_id'];
 
     // Start transaction
     $pdo->beginTransaction();
@@ -62,19 +77,19 @@ try {
     
     $productId = $pdo->lastInsertId();
 
-    // Insert categories if provided
+    // Handle categories
     if (!empty($data['categories'])) {
-        // Validate categories exist
-        $placeholders = rtrim(str_repeat('?,', count($data['categories'])), ',');
+        // Validate categories
+        $placeholders = implode(',', array_fill(0, count($data['categories']), '?'));
         $stmt = $pdo->prepare("SELECT id FROM categories WHERE id IN ($placeholders)");
         $stmt->execute($data['categories']);
         $validCategories = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
         if (count($validCategories) !== count($data['categories'])) {
-            throw new Exception("One or more invalid category IDs");
+            throw new Exception("Invalid category IDs detected");
         }
 
-        // Insert valid categories
+        // Insert categories
         $stmt = $pdo->prepare("INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)");
         foreach ($validCategories as $categoryId) {
             $stmt->execute([$productId, $categoryId]);
@@ -82,9 +97,16 @@ try {
     }
 
     $pdo->commit();
-    $response['success'] = true;
-    $response['message'] = 'Product added successfully';
+    $response = [
+        'success' => true,
+        'message' => 'Product added successfully',
+        'productId' => $productId
+    ];
 
+} catch (PDOException $e) {
+    $pdo->rollBack();
+    $response['message'] = "Database error: " . $e->getMessage();
+    http_response_code(500);
 } catch (Exception $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
