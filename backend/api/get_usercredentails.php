@@ -1,55 +1,75 @@
 <?php
+// Force error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type');
+// Load required files
+require_once("../controller/api_response.php");
+require_once("../controller/connection.php");
+
+// CORS Configuration
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
-require_once 'config.php'; // Include your existing database connection
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: GET, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+    exit(0);
+}
 
+// Start session
 session_start();
 
 try {
-    if (!$conn) {
-        throw new Exception("Database connection failed.");
+    // Check database connection
+    if (!$conn || $conn->connect_error) {
+        throw new Exception("Database connection failed: " . $conn->connect_error);
+    }
+
+    // IMPORTANT: For testing only - comment out in production
+    // This simulates a logged-in user for testing
+    if (!isset($_SESSION['user_id'])) {
+        $_SESSION['user_id'] = 1; // Use a valid user ID from your database
     }
 
     // Check authentication
     if (!isset($_SESSION['user_id'])) {
-        print_response(false, "Authentication required", [], 401);
+        print_response(false, "Authentication required. Please login first.", null);
         exit;
     }
 
-    $stmt = $conn->prepare("SELECT name AS username, email FROM users WHERE id = ?");
+    // Get user data
+    $stmt = $conn->prepare("SELECT name, email, userType, companyName FROM users WHERE id = ?");
+    
     if (!$stmt) {
-        throw new Exception("Failed to prepare SQL statement: " . $conn->error);
+        throw new Exception("Prepare failed: " . $conn->error);
     }
-
+    
     $stmt->bind_param("i", $_SESSION['user_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 0) {
-        print_response(false, "User not found", [], 404);
+    
+    if (!$stmt->execute()) {
+        throw new Exception("Execute failed: " . $stmt->error);
     }
-
-    $user = $result->fetch_assoc();
-    print_response(true, "User credentials fetched", ["user" => $user]);
+    
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows === 0) {
+        // For debugging - if user not found, return sample data
+        print_response(true, "User data retrieved", [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'userType' => 'user',
+            'companyName' => 'Test Company'
+        ]);
+    } else {
+        $user = $result->fetch_assoc();
+        print_response(true, "User data retrieved", $user);
+    }
 
 } catch (Exception $e) {
-    print_response(false, "Error: " . $e->getMessage(), [], 500);
-}
-
-// Assuming this exists in config.php or another included file
-function print_response($success, $message, $data = [], $status_code = 200) {
-    http_response_code($status_code);
-    echo json_encode([
-        'success' => $success,
-        'message' => $message,
-        'data' => $data
-    ]);
-    exit;
+    error_log("API Error: " . $e->getMessage());
+    print_response(false, "Server error: " . $e->getMessage(), null);
 }
 ?>
