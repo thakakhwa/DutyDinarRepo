@@ -8,7 +8,10 @@ const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 export const addEvent = async (formData) => {
   try {
     // Make the API request to add the event
-    const response = await axios.post(`${API_BASE_URL}/add_events.php`, formData);
+    const response = await axios.post(
+      `${API_BASE_URL}/add_events.php`,
+      formData
+    );
 
     // Log the raw response to inspect the returned data
     console.log("Raw response:", response.data);
@@ -16,7 +19,7 @@ export const addEvent = async (formData) => {
     // Try to parse and handle the JSON response
     try {
       const data = response.data;
-      
+
       if (data.success) {
         console.log("Event added successfully!");
         // Handle success actions like clearing the form or redirecting

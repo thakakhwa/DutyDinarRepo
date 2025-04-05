@@ -1,6 +1,6 @@
-import React from 'react';
-import { ShoppingBag, Heart, Clock, Package } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { ShoppingBag, Heart, Clock, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BuyerDashboard = () => {
   return (
@@ -16,7 +16,7 @@ const BuyerDashboard = () => {
             <div className="text-3xl font-bold text-green-600">12</div>
             <div className="text-sm text-gray-600">In progress</div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold">Wishlist</h3>
@@ -25,7 +25,7 @@ const BuyerDashboard = () => {
             <div className="text-3xl font-bold text-green-600">24</div>
             <div className="text-sm text-gray-600">Saved items</div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold">Pending</h3>
@@ -34,7 +34,7 @@ const BuyerDashboard = () => {
             <div className="text-3xl font-bold text-green-600">3</div>
             <div className="text-sm text-gray-600">Awaiting delivery</div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold">Completed</h3>
@@ -55,17 +55,26 @@ const BuyerDashboard = () => {
               <div className="p-4">
                 <div className="space-y-4">
                   {[1, 2, 3, 4].map((order) => (
-                    <div key={order} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={order}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex items-center space-x-4">
                         <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
                         <div>
                           <h3 className="font-medium">Product Name {order}</h3>
-                          <div className="text-sm text-gray-600">Quantity: 100</div>
-                          <div className="text-sm text-gray-600">Order #: {order.toString().padStart(4, '0')}</div>
+                          <div className="text-sm text-gray-600">
+                            Quantity: 100
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Order #: {order.toString().padStart(4, "0")}
+                          </div>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-medium text-green-600">${(Math.random() * 1000).toFixed(2)}</div>
+                        <div className="font-medium text-green-600">
+                          ${(Math.random() * 1000).toFixed(2)}
+                        </div>
                         <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                           Delivered
                         </span>
@@ -81,12 +90,12 @@ const BuyerDashboard = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-2">
-              <Link 
-    to="/categories" 
-    className="flex items-center justify-center w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
-  >
-    Browse Categories
-  </Link>
+                <Link
+                  to="/categories"
+                  className="flex items-center justify-center w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Browse Categories
+                </Link>
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
                   View Wishlist
                 </button>
@@ -97,7 +106,9 @@ const BuyerDashboard = () => {
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Recommended Suppliers</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Recommended Suppliers
+              </h3>
               <div className="space-y-4">
                 {[1, 2, 3].map((supplier) => (
                   <div key={supplier} className="flex items-center space-x-3">
@@ -118,5 +129,3 @@ const BuyerDashboard = () => {
 };
 
 export default BuyerDashboard;
-
-
