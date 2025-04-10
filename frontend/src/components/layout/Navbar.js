@@ -1,28 +1,41 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search } from 'lucide-react';
-import AuthModal from '../auth/AuthModal';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ShoppingCart,
+  Calendar,
+  User,
+  LogOut,
+  Bell,
+  ChevronDown,
+  Search,
+} from "lucide-react";
+import AuthModal from "../auth/AuthModal";
 
-const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType }) => {
+const Navbar = ({
+  isLoggedIn,
+  userType,
+  cartItems,
+  setIsLoggedIn,
+  setUserType,
+}) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUserType('buyer');
-    localStorage.setItem('isLoggedIn', 'false');
-    localStorage.setItem('userType', 'buyer');
+    setUserType("buyer");
+    localStorage.setItem("isLoggedIn", "false");
+    localStorage.setItem("userType", "buyer");
     setIsProfileOpen(false);
-    navigate('/');
-        
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userType');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('email');
-        
-        
-        window.location.href = '/';
+    navigate("/");
+
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userType");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("email");
+
+    window.location.href = "/";
   };
 
   return (
@@ -32,28 +45,43 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2">
-                <img 
-                  src="/logo.png" 
-                  alt="Duty Dinar Logo" 
+                <img
+                  src="/logo.png"
+                  alt="Duty Dinar Logo"
                   className="h-16 w-auto"
                 />
               </Link>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-600 hover:text-green-600">Home</Link>
-              <Link to="/categories" className="text-gray-600 hover:text-green-600">Categories</Link>
-              <Link to="/events" className="text-gray-600 hover:text-green-600">Events</Link>
+              <Link to="/" className="text-gray-600 hover:text-green-600">
+                Home
+              </Link>
+              <Link
+                to="/categories"
+                className="text-gray-600 hover:text-green-600"
+              >
+                Categories
+              </Link>
+              <Link to="/events" className="text-gray-600 hover:text-green-600">
+                Events
+              </Link>
               {isLoggedIn && (
-                <Link to="/dashboard" className="text-gray-600 hover:text-green-600">
-                  {userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                <Link
+                  to="/dashboard"
+                  className="text-gray-600 hover:text-green-600"
+                >
+                  {userType === "admin" ? "Admin Dashboard" : "Dashboard"}
                 </Link>
               )}
             </div>
 
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Search..."
@@ -64,15 +92,24 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
               {isLoggedIn ? (
                 <>
                   <Bell className="text-gray-600 cursor-pointer" size={24} />
-                  {userType !== 'admin' && (
-                    <div className="relative">
-                      <ShoppingCart className="text-gray-600 cursor-pointer" size={24} />
-                      {cartItems > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                          {cartItems}
-                        </span>
-                      )}
-                    </div>
+                  {userType !== "admin" && (
+                    <Link
+                      to="/cart"
+                      className="text-gray-600 hover:text-green-600"
+                    >
+                      <div className="relative">
+                        <ShoppingCart
+                          className="text-gray-600 cursor-pointer"
+                          size={24}
+                        />
+
+                        {cartItems > 0 && (
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {cartItems}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
                   )}
                   <div className="relative">
                     <button
@@ -89,10 +126,22 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={() => setIsProfileOpen(false)}
                         >
-                          {userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                          {userType === "admin"
+                            ? "Admin Dashboard"
+                            : "Dashboard"}
                         </Link>
-                        <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
-                        <Link to="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</Link>
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        >
+                          Profile
+                        </Link>
+                        <Link
+                          to="/settings"
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        >
+                          Settings
+                        </Link>
                         <hr className="my-2" />
                         <button
                           onClick={handleLogout}
@@ -106,7 +155,7 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                   </div>
                 </>
               ) : (
-                <button 
+                <button
                   onClick={() => setIsAuthModalOpen(true)}
                   className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                 >
@@ -117,8 +166,8 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
           </div>
         </div>
       </nav>
-  
-      <AuthModal 
+
+      <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         setIsLoggedIn={setIsLoggedIn}

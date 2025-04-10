@@ -18,7 +18,7 @@ import Privacypolicy from "./pages/Privacy"
 import ContactUs from "./pages/ContactUs"
 import AccountProfile from './pages/AccountProfile';
 import AddProducts from './pages/addProducts';
-
+import Cart from './pages/cart';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -94,6 +94,7 @@ const App = () => {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
           <Route path="/profile" element={<AccountProfile />} />
+          <Route path="/cart" element={<Cart />} />
           
 
           Protected User Dashboard

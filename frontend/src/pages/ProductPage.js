@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Star, ChevronLeft, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ProductPage = () => {
   const navigate = useNavigate();
+  const [inWishlist, setInWishlist] = useState(false);
 
   // Sample product data
   const product = {
@@ -25,6 +26,20 @@ const ProductPage = () => {
       sizes: ['S', 'M', 'L', 'XL'],
       colors: ['White', 'Black', 'Gray', 'Blue'],
     },
+  };
+
+  // Function to handle adding to wishlist
+  const handleWishlist = () => {
+    // In a real app, you would make an API call to add/remove from wishlist
+    // For demo purposes, we'll just toggle the state
+    setInWishlist(!inWishlist);
+    
+    // Show confirmation message
+    if (!inWishlist) {
+      alert(`${product.name} added to wishlist!`);
+    } else {
+      alert(`${product.name} removed from wishlist!`);
+    }
   };
 
   return (
@@ -73,8 +88,12 @@ const ProductPage = () => {
                   {product.rating} ({product.reviews} reviews)
                 </span>
               </div>
-              <button className="ml-4 text-gray-600 hover:text-red-500">
-                <Heart size={20} />
+              <button 
+                onClick={handleWishlist}
+                className="ml-4 text-gray-600 hover:text-red-500"
+                aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              >
+                <Heart size={20} fill={inWishlist ? "currentColor" : "none"} color={inWishlist ? "#ef4444" : "currentColor"} />
               </button>
             </div>
 
@@ -102,9 +121,17 @@ const ProductPage = () => {
               {product.description}
             </div>
 
-            <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              Contact Supplier
-            </button>
+            <div className="flex gap-4">
+              <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                Contact Supplier
+              </button>
+              <button 
+                onClick={() => navigate('/cart')}
+                className="flex-1 border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50"
+              >
+                View Cart
+              </button>
+            </div>
           </div>
         </div>
 
