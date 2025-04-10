@@ -3,51 +3,58 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: GET, POST'); // Allow GET for single product
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once 'config.php'; // Include database connection
+require_once 'config.php';
 
 try {
-    // Check if the database connection exists
     if (!$conn) {
         throw new Exception("Database connection failed.");
     }
 
-    // SQL query to fetch all products (no filters)
-    $sql = "SELECT id, name, description, price, stock, category, image_url, minOrderQuantity FROM products";
+    // Check if a product ID is provided in the request
+    $productId = isset($_GET['id']) ? $_GET['id'] : null;
 
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("Failed to prepare SQL statement.");
+    if ($productId) {
+        // Fetch a single product by ID
+        $sql = "SELECT id, name, description, price, stock, category, image_url, minOrderQuantity FROM products WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Failed to prepare SQL statement.");
+        }
+        $stmt->bind_param("i", $productId);
+    } else {
+        // Fetch all products (original behavior)
+        $sql = "SELECT id, name, description, price, stock, category, image_url, minOrderQuantity FROM products";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Failed to prepare SQL statement.");
+        }
     }
 
-    // Execute query
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if no products are found
-    if ($result->num_rows === 0) {
-        print_response(false, "No products found.");
+    // Handle single product response
+    if ($productId) {
+        if ($result->num_rows === 0) {
+            print_response(false, "Product not found.");
+        }
+        $product = $result->fetch_assoc();
+        print_response(true, "Product fetched successfully.", ["product" => $product]);
+    } 
+    // Handle all products response
+    else {
+        if ($result->num_rows === 0) {
+            print_response(false, "No products found.");
+        }
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
+        print_response(true, "Products fetched successfully.", ["products" => $products]);
     }
-
-    // Fetch products from the result
-    $products = [];
-    while ($row = $result->fetch_assoc()) {
-        $products[] = [
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'description' => $row['description'],
-            'price' => $row['price'],
-            'stock' => $row['stock'],
-            'category' => $row['category'],
-            'image_url' => $row['image_url'],
-            'minOrderQuantity' => $row['minOrderQuantity'] // Include minOrderQuantity
-        ];
-    }
-
-    // Return the products in the response
-    print_response(true, "Products fetched successfully.", ["products" => $products]);
 
 } catch (Exception $e) {
     print_response(false, "Error: " . $e->getMessage());

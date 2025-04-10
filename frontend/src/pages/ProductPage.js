@@ -1,59 +1,54 @@
-import React, { useState } from 'react';
-import { Star, ChevronLeft, Heart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
+import { getProductById } from '../api/get_products';
 
 const ProductPage = () => {
   const navigate = useNavigate();
-  const [inWishlist, setInWishlist] = useState(false);
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-
-        useEffect(() => {
-           window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-            });
-            }, []);
-  // Sample product data
-  const product = {
-    id: 1,
-    name: 'Premium Quality Cotton T-Shirt',
-    description: 'This premium quality cotton t-shirt is perfect for everyday wear. Made from 100% organic cotton, it offers exceptional comfort and durability. Available in various sizes and colors.',
-    price: 25.0,
-    discountedPrice: 20.0,
-    rating: 4.5,
-    reviews: 245,
-    moq: 100,
-    images: [
-      'https://via.placeholder.com/400x400',
-      'https://via.placeholder.com/400x400',
-      'https://via.placeholder.com/400x400',
-    ],
-    specifications: {
-      material: '100% Organic Cotton',
-      sizes: ['S', 'M', 'L', 'XL'],
-      colors: ['White', 'Black', 'Gray', 'Blue'],
-    },
-  };
-
-  // Function to handle adding to wishlist
-  const handleWishlist = () => {
-    // In a real app, you would make an API call to add/remove from wishlist
-    // For demo purposes, we'll just toggle the state
-    setInWishlist(!inWishlist);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     
-    // Show confirmation message
-    if (!inWishlist) {
-      alert(`${product.name} added to wishlist!`);
-    } else {
-      alert(`${product.name} removed from wishlist!`);
-    }
-  };
+    const fetchProduct = async () => {
+      try {
+        const response = await getProductById(productId);
+        if (response.success) {
+          setProduct({
+            ...response.product,
+            // Convert numeric fields explicitly
+            price: Number(response.product.price),
+            stock: Number(response.product.stock),
+            minOrderQuantity: Number(response.product.minOrderQuantity)
+          });
+        } else {
+          alert(response.message || "Product not found");
+          navigate(-1);
+        }
+      } catch (error) {
+        alert("Failed to fetch product");
+        navigate(-1);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId, navigate]);
+
+  if (loading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!product) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Product not found.</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
           className="flex items-center text-gray-600 hover:text-gray-800 mb-6"
@@ -62,71 +57,40 @@ const ProductPage = () => {
           Back to Products
         </button>
 
-        {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Images */}
-          <div className="space-y-4">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {/* Product Image */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            {product.image_url && (
               <img
-                src={product.images[0]}
+                src={product.image_url}
                 alt={product.name}
                 className="w-full h-96 object-cover"
               />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {product.images.slice(1).map((image, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <img
-                    src={image}
-                    alt={`Product ${index + 1}`}
-                    className="w-full h-32 object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+            )}
           </div>
 
-          {/* Product Information */}
+          {/* Product Details */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h1 className="text-2xl font-semibold mb-4">{product.name}</h1>
-            <div className="flex items-center mb-4">
-              <div className="flex items-center">
-                <Star className="text-yellow-400" size={16} fill="currentColor" />
-                <span className="text-sm text-gray-600 ml-1">
-                  {product.rating} ({product.reviews} reviews)
-                </span>
-              </div>
-              <button 
-                onClick={handleWishlist}
-                className="ml-4 text-gray-600 hover:text-red-500"
-                aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
-              >
-                <Heart size={20} fill={inWishlist ? "currentColor" : "none"} color={inWishlist ? "#ef4444" : "currentColor"} />
-              </button>
-            </div>
-
+            
             <div className="text-lg font-semibold text-green-600 mb-4">
-              ${product.discountedPrice} <span className="text-sm text-gray-400 line-through">${product.price}</span>
+              ${product.price?.toFixed(2) || '00.00'}
             </div>
 
             <div className="text-sm text-gray-600 mb-4">
-              <strong>MOQ:</strong> {product.moq} pieces
+              <strong>MOQ:</strong> {product.minOrderQuantity || 'Not specified'}
             </div>
 
             <div className="text-sm text-gray-600 mb-4">
-              <strong>Material:</strong> {product.specifications.material}
+              <strong>Stock:</strong> {product.stock} units available
             </div>
 
             <div className="text-sm text-gray-600 mb-4">
-              <strong>Sizes:</strong> {product.specifications.sizes.join(', ')}
-            </div>
-
-            <div className="text-sm text-gray-600 mb-4">
-              <strong>Colors:</strong> {product.specifications.colors.join(', ')}
+              <strong>Category:</strong> {product.category || 'Uncategorized'}
             </div>
 
             <div className="text-sm text-gray-600 mb-6">
-              {product.description}
+              {product.description || 'No description available'}
             </div>
 
             <div className="flex gap-4">
@@ -140,25 +104,6 @@ const ProductPage = () => {
                 View Cart
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Reviews Section */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold mb-6">Customer Reviews</h2>
-          <div className="space-y-4">
-            {[1, 2, 3].map((review) => (
-              <div key={review} className="bg-white rounded-lg shadow-md p-4">
-                <div className="flex items-center mb-2">
-                  <Star className="text-yellow-400" size={16} fill="currentColor" />
-                  <span className="text-sm text-gray-600 ml-1">4.5</span>
-                </div>
-                <p className="text-sm text-gray-600">
-                  "This is a great product! The quality is excellent and it fits perfectly. Highly recommend!"
-                </p>
-                <div className="text-xs text-gray-400 mt-2">By John Doe on October 10, 2023</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
