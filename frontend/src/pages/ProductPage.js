@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { Star, ChevronLeft, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const ProductPage = () => {
   const navigate = useNavigate();
   const [inWishlist, setInWishlist] = useState(false);
 
+
+        useEffect(() => {
+           window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+            }, []);
   // Sample product data
   const product = {
     id: 1,
