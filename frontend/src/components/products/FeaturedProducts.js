@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
-import { getProducts } from '../../api/get_products'; // Import the function
+import { getProducts } from '../../api/get_products';
+import { useNavigate } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getProducts();
       if (response.success) {
-        setProducts(response.products); // Update the state with fetched products
+        setProducts(response.products);
       } else {
         console.error('Error fetching products:', response.message);
       }
@@ -17,6 +19,15 @@ const FeaturedProducts = () => {
 
     fetchProducts();
   }, []);
+
+  const handleSeeProduct = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
+  const handleContactSupplier = (e) => {
+    e.stopPropagation(); // Prevent navigation when clicking contact button
+    // Add contact supplier logic here
+  };
 
   return (
     <div className="max-w-7xl mx-auto mt-16 px-4">
@@ -26,7 +37,11 @@ const FeaturedProducts = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div 
+            key={product.id} 
+            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+            onClick={() => handleSeeProduct(product.id)}
+          >
             <div
               className="h-48 bg-cover bg-center"
               style={{ backgroundImage: `url(${product.image_url})` }}
@@ -42,7 +57,10 @@ const FeaturedProducts = () => {
               <div className="text-sm text-gray-600 mb-2">MOQ: {product.minOrderQuantity} pieces</div>
               <div className="flex justify-between items-center">
                 <div className="text-green-600 font-semibold">${product.price}</div>
-                <button className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm">
+                <button 
+                  className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
+                  onClick={handleContactSupplier}
+                >
                   Contact Supplier
                 </button>
               </div>
