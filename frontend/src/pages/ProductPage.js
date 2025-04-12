@@ -1,32 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Heart } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { getProductById } from '../api/get_products';
+import axios from 'axios';
 
 const ProductPage = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    
     const fetchProduct = async () => {
       try {
         const response = await getProductById(productId);
         if (response.success) {
           setProduct({
             ...response.product,
-            // Convert numeric fields explicitly
             price: Number(response.product.price),
             stock: Number(response.product.stock),
             minOrderQuantity: Number(response.product.minOrderQuantity)
           });
-          
-          // Check if this product is in favorites
-          checkIfFavorite(productId);
         } else {
           alert(response.message || "Product not found");
           navigate(-1);
@@ -42,103 +36,21 @@ const ProductPage = () => {
     fetchProduct();
   }, [productId, navigate]);
 
-  const checkIfFavorite = async (productId) => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    
+  const handleAddToCart = async () => {
     try {
-      console.log("Checking favorite status for product ID:", productId);
-      
-      // Use explicit API URL
-      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_check.php?buyer_id=${userId}&product_id=${productId}`);
-      const data = await response.json();
-      
-      console.log("Favorite check response:", data);
-      setIsFavorite(data.isFavorite);
-    } catch (error) {
-      console.error('Error checking favorite status:', error);
-    }
-  };
-
-  const addToFavorites = async () => {
-    // Check if user is logged in
-    const userId = localStorage.getItem('userId');
-    
-    if (!userId) {
-      navigate('/login');
-      return;
-    }
-    
-    try {
-      console.log("Adding to favorites - userId:", userId, "productId:", productId);
-      
-      // Use explicit API URL
-      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_add.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          buyer_id: userId,
-          product_id: productId,
-          event_id: null
-        }),
+      const response = await axios.post('../api/cart.php', {
+        product_id: productId,
+        quantity: product.minOrderQuantity || 1
       });
       
-      const data = await response.json();
-      console.log("Add to favorites response:", data);
-      
-      if (data.success) {
-        setIsFavorite(true);
-        alert('Added to favorites!');
+      if (response.data.success) {
+        alert('Product added to cart!');
       } else {
-        alert(data.message || 'Failed to add to favorites');
+        alert('Failed to add to cart');
       }
     } catch (error) {
-      console.error('Error adding to favorites:', error);
-      alert('Failed to add to favorites');
-    }
-  };
-
-  const removeFromFavorites = async () => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    
-    try {
-      console.log("Removing from favorites - userId:", userId, "productId:", productId);
-      
-      // Use explicit API URL
-      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_remove.php`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          buyer_id: userId,
-          product_id: productId
-        }),
-      });
-      
-      const data = await response.json();
-      console.log("Remove from favorites response:", data);
-      
-      if (data.success) {
-        setIsFavorite(false);
-        alert('Removed from favorites');
-      } else {
-        alert(data.message || 'Failed to remove from favorites');
-      }
-    } catch (error) {
-      console.error('Error removing from favorites:', error);
-      alert('Failed to remove from favorites');
-    }
-  };
-
-  const toggleFavorite = () => {
-    if (isFavorite) {
-      removeFromFavorites();
-    } else {
-      addToFavorites();
+      console.error('Add to cart error:', error);
+      alert('Error adding to cart. Please try again.');
     }
   };
 
@@ -162,7 +74,6 @@ const ProductPage = () => {
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Image */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             {product.image_url && (
               <img
@@ -173,10 +84,8 @@ const ProductPage = () => {
             )}
           </div>
 
-          {/* Product Details */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h1 className="text-2xl font-semibold mb-4">{product.name}</h1>
-            
             <div className="text-lg font-semibold text-green-600 mb-4">
               ${product.price?.toFixed(2) || '00.00'}
             </div>
@@ -189,27 +98,16 @@ const ProductPage = () => {
               <strong>Stock:</strong> {product.stock} units available
             </div>
 
-            <div className="text-sm text-gray-600 mb-4">
-              <strong>Category:</strong> {product.category || 'Uncategorized'}
-            </div>
-
             <div className="text-sm text-gray-600 mb-6">
               {product.description || 'No description available'}
             </div>
 
-            <div className="flex gap-4 mb-6">
-              <button 
-                onClick={toggleFavorite}
-                className={`flex items-center border ${isFavorite ? 'border-red-600 text-red-600 hover:bg-red-50' : 'border-green-600 text-green-600 hover:bg-green-50'} px-4 py-2 rounded-lg`}
-              >
-                <Heart size={20} className={`mr-2 ${isFavorite ? 'fill-red-600' : ''}`} />
-                {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-              </button>
-            </div>
-
             <div className="flex gap-4">
-              <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                Contact Supplier
+              <button 
+                onClick={handleAddToCart}
+                className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+              >
+                Add to Cart
               </button>
               <button 
                 onClick={() => navigate('/cart')}

@@ -16,15 +16,15 @@ import AdminRoutes from "./routes/AdminRoutes";
 import ProductPage from "./pages/ProductPage";
 import AboutUs from "./pages/AboutUs";
 import Footer from "./components/layout/footer";
-import AddEvents from "./pages/addEvents"; // Import the AddEvents page
+import AddEvents from "./pages/addEvents";
 import FAQ from "./pages/FAQ";
 import TOS from "./pages/TOS";
 import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
 import AccountProfile from "./pages/AccountProfile";
 import AddProducts from "./pages/addProducts";
-import Cart from "./pages/cart";
-import FavoritesPage from "./pages/FavoritesPage";
+import Cart from "./pages/Cart";
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -100,9 +100,18 @@ const App = () => {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
           <Route path="/profile" element={<AccountProfile />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/my-favorites" element={<FavoritesPage />} />
-          Protected User Dashboard
+
+          {/* Protected Cart Route for Buyers */}
+          <Route
+            path="/cart"
+            element={
+              <BuyerRoute>
+                <Cart />
+              </BuyerRoute>
+            }
+          />
+
+          {/* Protected User Dashboard */}
           <Route
             path="/dashboard"
             element={
