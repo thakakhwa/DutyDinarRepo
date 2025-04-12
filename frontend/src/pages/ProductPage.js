@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Heart } from 'lucide-react';
 import { getProductById } from '../api/get_products';
 
 const ProductPage = () => {
@@ -8,6 +8,7 @@ const ProductPage = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -23,6 +24,9 @@ const ProductPage = () => {
             stock: Number(response.product.stock),
             minOrderQuantity: Number(response.product.minOrderQuantity)
           });
+          
+          // Check if this product is in favorites
+          checkIfFavorite(productId);
         } else {
           alert(response.message || "Product not found");
           navigate(-1);
@@ -37,6 +41,106 @@ const ProductPage = () => {
 
     fetchProduct();
   }, [productId, navigate]);
+
+  const checkIfFavorite = async (productId) => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    
+    try {
+      console.log("Checking favorite status for product ID:", productId);
+      
+      // Use explicit API URL
+      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_check.php?buyer_id=${userId}&product_id=${productId}`);
+      const data = await response.json();
+      
+      console.log("Favorite check response:", data);
+      setIsFavorite(data.isFavorite);
+    } catch (error) {
+      console.error('Error checking favorite status:', error);
+    }
+  };
+
+  const addToFavorites = async () => {
+    // Check if user is logged in
+    const userId = localStorage.getItem('userId');
+    
+    if (!userId) {
+      navigate('/login');
+      return;
+    }
+    
+    try {
+      console.log("Adding to favorites - userId:", userId, "productId:", productId);
+      
+      // Use explicit API URL
+      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_add.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          buyer_id: userId,
+          product_id: productId,
+          event_id: null
+        }),
+      });
+      
+      const data = await response.json();
+      console.log("Add to favorites response:", data);
+      
+      if (data.success) {
+        setIsFavorite(true);
+        alert('Added to favorites!');
+      } else {
+        alert(data.message || 'Failed to add to favorites');
+      }
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      alert('Failed to add to favorites');
+    }
+  };
+
+  const removeFromFavorites = async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    
+    try {
+      console.log("Removing from favorites - userId:", userId, "productId:", productId);
+      
+      // Use explicit API URL
+      const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/favorites_remove.php`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          buyer_id: userId,
+          product_id: productId
+        }),
+      });
+      
+      const data = await response.json();
+      console.log("Remove from favorites response:", data);
+      
+      if (data.success) {
+        setIsFavorite(false);
+        alert('Removed from favorites');
+      } else {
+        alert(data.message || 'Failed to remove from favorites');
+      }
+    } catch (error) {
+      console.error('Error removing from favorites:', error);
+      alert('Failed to remove from favorites');
+    }
+  };
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      removeFromFavorites();
+    } else {
+      addToFavorites();
+    }
+  };
 
   if (loading) {
     return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
@@ -91,6 +195,16 @@ const ProductPage = () => {
 
             <div className="text-sm text-gray-600 mb-6">
               {product.description || 'No description available'}
+            </div>
+
+            <div className="flex gap-4 mb-6">
+              <button 
+                onClick={toggleFavorite}
+                className={`flex items-center border ${isFavorite ? 'border-red-600 text-red-600 hover:bg-red-50' : 'border-green-600 text-green-600 hover:bg-green-50'} px-4 py-2 rounded-lg`}
+              >
+                <Heart size={20} className={`mr-2 ${isFavorite ? 'fill-red-600' : ''}`} />
+                {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+              </button>
             </div>
 
             <div className="flex gap-4">

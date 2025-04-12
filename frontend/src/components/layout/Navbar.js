@@ -8,6 +8,7 @@ import {
   Bell,
   ChevronDown,
   Search,
+  Heart,
 } from "lucide-react";
 import AuthModal from "../auth/AuthModal";
 
@@ -36,6 +37,11 @@ const Navbar = ({
     localStorage.removeItem("email");
 
     window.location.href = "/";
+  };
+
+  const goToFavorites = () => {
+    console.log("Navigating to favorites page");
+    navigate('/favorites');
   };
 
   return (
@@ -93,23 +99,34 @@ const Navbar = ({
                 <>
                   <Bell className="text-gray-600 cursor-pointer" size={24} />
                   {userType !== "admin" && (
-                    <Link
-                      to="/cart"
-                      className="text-gray-600 hover:text-green-600"
-                    >
-                      <div className="relative">
-                        <ShoppingCart
-                          className="text-gray-600 cursor-pointer"
+                    <>
+                      <div
+                        onClick={goToFavorites}
+                        className="text-gray-600 hover:text-green-600 cursor-pointer"
+                      >
+                        <Heart
+                          className="text-gray-600"
                           size={24}
                         />
-
-                        {cartItems > 0 && (
-                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            {cartItems}
-                          </span>
-                        )}
                       </div>
-                    </Link>
+                      <Link
+                        to="/cart"
+                        className="text-gray-600 hover:text-green-600"
+                      >
+                        <div className="relative">
+                          <ShoppingCart
+                            className="text-gray-600 cursor-pointer"
+                            size={24}
+                          />
+
+                          {cartItems > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                              {cartItems}
+                            </span>
+                          )}
+                        </div>
+                      </Link>
+                    </>
                   )}
                   <div className="relative">
                     <button

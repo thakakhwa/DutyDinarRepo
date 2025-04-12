@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { getCategories } from '../api/get_categories';
-import { getProducts } from '../api/get_products';
-import { Star } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { getCategories } from "../api/get_categories";
+import { getProducts } from "../api/get_products";
+import { Star, Package } from "lucide-react"; 
+import { useNavigate } from "react-router-dom";
+import { getCategoryIcon } from "../data/categories"; // Import the function instead of direct categories
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [sortBy, setSortBy] = useState('recommended');
+  const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 99999 });
   const [minOrderQuantity, setMinOrderQuantity] = useState(0);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await getCategories();
-      if (response.success) {
-        setCategories(response.categories);
+      try {
+        const response = await getCategories();
+        if (response.success) {
+          setCategories(response.categories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
       }
     };
     fetchCategories();
@@ -32,22 +38,34 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const filters = {
-        categoryId: selectedCategory,  // Changed to categoryId
-        sortBy,
-        minPrice: priceRange.min,
-        maxPrice: priceRange.max,
-        minOrderQuantity
-      };
-      
-      const productList = await getProducts(filters);
-      if (productList.success) {
-        setProducts(productList.products);
+      setLoading(true);
+      try {
+        // We fetch all products and filter them client-side
+        // This is because the products in the database use category string names
+        // rather than category IDs
+        const filters = {
+          sortBy,
+          minPrice: priceRange.min,
+          maxPrice: priceRange.max,
+          minOrderQuantity,
+        };
+
+        const productList = await getProducts(filters);
+        if (productList.success) {
+          setProducts(productList.products);
+        } else {
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
       }
     };
-    
+
     fetchProducts();
-  }, [selectedCategory, sortBy, priceRange, minOrderQuantity]);
+  }, [sortBy, priceRange, minOrderQuantity]);
 
   const handleSeeProduct = (productId) => {
     navigate(`/product/${productId}`);
@@ -55,8 +73,43 @@ const CategoriesPage = () => {
 
   const handlePriceChange = (e) => {
     const value = parseInt(e.target.value);
-    setPriceRange(prev => ({ ...prev, max: value }));
+    setPriceRange((prev) => ({ ...prev, max: value }));
   };
+
+  // Get the selected category name
+  const selectedCategoryName = selectedCategory 
+    ? categories.find(c => c.id === selectedCategory)?.name 
+    : null;
+
+  // Filter products based on all criteria
+  const filteredProducts = products.filter(product => {
+    // Check if product matches the selected category
+    const categoryMatches = !selectedCategory || 
+      // Match by category ID if product.categoryId exists
+      (product.categoryId && product.categoryId === selectedCategory) ||
+      // Match by category name string (since some products may use string category)
+      (product.category && categories.find(c => c.id === selectedCategory)?.name === product.category);
+    
+    // Check other filters
+    const priceMatches = product.price >= priceRange.min && product.price <= priceRange.max;
+    const moqMatches = product.minOrderQuantity >= minOrderQuantity;
+    
+    return categoryMatches && priceMatches && moqMatches;
+  });
+
+  // Sort the filtered products
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case "price_asc":
+        return a.price - b.price;
+      case "price_desc":
+        return b.price - a.price;
+      case "rating":
+        return (b.rating || 0) - (a.rating || 0);
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,7 +123,9 @@ const CategoriesPage = () => {
                 <button
                   onClick={() => setSelectedCategory(null)}
                   className={`block w-full text-left px-2 py-1 rounded ${
-                    !selectedCategory ? 'bg-green-50 text-green-600' : 'text-gray-600'
+                    !selectedCategory
+                      ? "bg-green-50 text-green-600"
+                      : "text-gray-600"
                   }`}
                 >
                   All Categories
@@ -80,7 +135,9 @@ const CategoriesPage = () => {
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
                     className={`block w-full text-left px-2 py-1 rounded ${
-                      selectedCategory === category.id ? 'bg-green-50 text-green-600' : 'text-gray-600'
+                      selectedCategory === category.id
+                        ? "bg-green-50 text-green-600"
+                        : "text-gray-600"
                     }`}
                   >
                     {category.name}
@@ -112,7 +169,11 @@ const CategoriesPage = () => {
               <input
                 type="number"
                 value={minOrderQuantity}
-                onChange={(e) => setMinOrderQuantity(Math.max(0, parseInt(e.target.value) || 0))}
+                onChange={(e) =>
+                  setMinOrderQuantity(
+                    Math.max(0, parseInt(e.target.value) || 0)
+                  )
+                }
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="Enter MOQ"
                 min="0"
@@ -124,9 +185,9 @@ const CategoriesPage = () => {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">
-                {selectedCategory 
-                  ? categories.find(c => c.id === selectedCategory)?.name + ' Products'
-                  : 'All Products'}
+                {selectedCategoryName
+                  ? `${selectedCategoryName} Products`
+                  : "All Products"}
               </h2>
               <select
                 value={sortBy}
@@ -141,43 +202,51 @@ const CategoriesPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {products.length > 0 ? (
-                products
-                  .filter(product => 
-                    (!selectedCategory || product.categoryId === selectedCategory) && // Category filter
-                    product.price >= priceRange.min &&
-                    product.price <= priceRange.max &&
-                    product.minOrderQuantity >= minOrderQuantity
-                  )
-                  .sort((a, b) => {
-                    switch(sortBy) {
-                      case 'price_asc': return a.price - b.price;
-                      case 'price_desc': return b.price - a.price;
-                      case 'rating': return b.rating - a.rating;
-                      default: return 0;
-                    }
-                  })
-                  .map((product) => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                      <div 
+              {loading ? (
+                <div className="col-span-full text-center py-10">
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-500 border-r-transparent"></div>
+                  <p className="mt-2 text-gray-600">Loading products...</p>
+                </div>
+              ) : sortedProducts.length > 0 ? (
+                sortedProducts.map((product) => {
+                  const CategoryIcon = getCategoryIcon(product.category)?.icon || Package;
+                  return (
+                    <div
+                      key={product.id}
+                      className="bg-white rounded-lg shadow-md overflow-hidden"
+                    >
+                      <div
                         className="h-48 bg-gray-200 bg-cover bg-center"
                         style={{ backgroundImage: `url(${product.image_url})` }}
                       />
                       <div className="p-4">
-                        <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+                        <h3 className="font-semibold text-lg mb-2">
+                          {product.name}
+                        </h3>
                         <div className="flex items-center mb-2">
-                          <Star className="text-yellow-400" size={16} fill="currentColor" />
+                          <Star
+                            className="text-yellow-400"
+                            size={16}
+                            fill="currentColor"
+                          />
                           <span className="text-sm text-gray-600 ml-1">
-                            {product.rating} ({product.reviews} reviews)
+                            {product.rating || 4.5} ({product.reviews || 10} reviews)
                           </span>
                         </div>
-                        <div className="text-sm text-gray-600 mb-2">
-                          Category: {categories.find(c => c.id === product.categoryId)?.name || 'N/A'}
+                        <div className="text-sm text-gray-600 mb-2 flex items-center">
+                          <CategoryIcon size={16} className="mr-1" />
+                          Category: {product.category || "N/A"}
                         </div>
-                        <div className="text-sm text-gray-600 mb-2">Stock: {product.stock} units</div>
-                        <div className="text-sm text-gray-600 mb-2">MOQ: {product.minOrderQuantity} pieces</div>
+                        <div className="text-sm text-gray-600 mb-2">
+                          Stock: {product.stock} units
+                        </div>
+                        <div className="text-sm text-gray-600 mb-2">
+                          MOQ: {product.minOrderQuantity} pieces
+                        </div>
                         <div className="flex justify-between items-center">
-                          <div className="text-green-600 font-semibold">${product.price}</div>
+                          <div className="text-green-600 font-semibold">
+                            ${product.price}
+                          </div>
                           <button
                             onClick={() => handleSeeProduct(product.id)}
                             className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700"
@@ -187,9 +256,12 @@ const CategoriesPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))
+                  );
+                })
               ) : (
-                <div className="col-span-full text-center text-gray-600">No products available</div>
+                <div className="col-span-full text-center py-10 text-gray-600">
+                  No products available matching your criteria
+                </div>
               )}
             </div>
           </div>
