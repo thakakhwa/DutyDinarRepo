@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
-import { getProductById } from '../api/get_products';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { getProductById } from "../api/get_products";
+import axios from "axios";
 
 const ProductPage = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -19,7 +24,7 @@ const ProductPage = () => {
             ...response.product,
             price: Number(response.product.price),
             stock: Number(response.product.stock),
-            minOrderQuantity: Number(response.product.minOrderQuantity)
+            minOrderQuantity: Number(response.product.minOrderQuantity),
           });
         } else {
           alert(response.message || "Product not found");
@@ -38,28 +43,36 @@ const ProductPage = () => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post('../api/cart.php', {
+      const response = await axios.post("../api/cart.php", {
         product_id: productId,
-        quantity: product.minOrderQuantity || 1
+        quantity: product.minOrderQuantity || 1,
       });
-      
+
       if (response.data.success) {
-        alert('Product added to cart!');
+        alert("Product added to cart!");
       } else {
-        alert('Failed to add to cart');
+        alert("Failed to add to cart");
       }
     } catch (error) {
-      console.error('Add to cart error:', error);
-      alert('Error adding to cart. Please try again.');
+      console.error("Add to cart error:", error);
+      alert("Error adding to cart. Please try again.");
     }
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!product) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Product not found.</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        Product not found.
+      </div>
+    );
   }
 
   return (
@@ -87,11 +100,12 @@ const ProductPage = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h1 className="text-2xl font-semibold mb-4">{product.name}</h1>
             <div className="text-lg font-semibold text-green-600 mb-4">
-              ${product.price?.toFixed(2) || '00.00'}
+              ${product.price?.toFixed(2) || "00.00"}
             </div>
 
             <div className="text-sm text-gray-600 mb-4">
-              <strong>MOQ:</strong> {product.minOrderQuantity || 'Not specified'}
+              <strong>MOQ:</strong>{" "}
+              {product.minOrderQuantity || "Not specified"}
             </div>
 
             <div className="text-sm text-gray-600 mb-4">
@@ -99,18 +113,18 @@ const ProductPage = () => {
             </div>
 
             <div className="text-sm text-gray-600 mb-6">
-              {product.description || 'No description available'}
+              {product.description || "No description available"}
             </div>
 
             <div className="flex gap-4">
-              <button 
+              <button
                 onClick={handleAddToCart}
                 className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
                 Add to Cart
               </button>
-              <button 
-                onClick={() => navigate('/cart')}
+              <button
+                onClick={() => navigate("/cart")}
                 className="flex-1 border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50"
               >
                 View Cart

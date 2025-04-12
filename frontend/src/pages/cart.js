@@ -11,7 +11,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get('../api/cart.php');
+        const response = await axios.get('./backend/api/cart.php');
         if (response.data.success) {
           setCartItems(response.data.data || []);
         }
@@ -34,7 +34,7 @@ const Cart = () => {
 
   const removeItem = async (itemId) => {
     try {
-      await axios.delete(`../api/cart.php?id=${itemId}`);
+      await axios.delete(`../backend/api/cart.php'?id=${itemId}`);
       setCartItems(cartItems.filter(item => item.id !== itemId));
     } catch (error) {
       console.error('Remove item error:', error);
@@ -46,7 +46,7 @@ const Cart = () => {
     if (newQuantity < 1) return;
     
     try {
-      await axios.put('../api/cart.php', {
+      await axios.put('./backend/api/cart.php', {
         id: itemId,
         quantity: newQuantity
       });
