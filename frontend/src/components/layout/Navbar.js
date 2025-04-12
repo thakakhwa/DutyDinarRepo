@@ -39,10 +39,10 @@ const Navbar = ({
     window.location.href = "/";
   };
 
-  const goToFavorites = () => {
-    console.log("Navigating to favorites page");
-    navigate('/favorites');
-  };
+const goToFavorites = () => {
+  console.log("Navigating to favorites page");
+  navigate('/my-favorites');
+};
 
   return (
     <>

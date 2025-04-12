@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/layout/Navbar';
-import HomePage from './pages/HomePage';
-import CategoriesPage from './pages/CategoriesPage';
-import EventsPage from './pages/EventsPage';
-import EventDetailsPage from './pages/EventDetailsPage';
-import SellerDashboard from './pages/SellerDashboard';
-import BuyerDashboard from './pages/BuyerDashboard';
-import AdminRoutes from './routes/AdminRoutes';
-import ProductPage from './pages/ProductPage';
-import AboutUs from './pages/AboutUs';
-import Footer from './components/layout/footer';
-import AddEvents from './pages/addEvents'; // Import the AddEvents page
-import FAQ from "./pages/FAQ"
-import TOS from "./pages/TOS"
-import Privacypolicy from "./pages/Privacy"
-import ContactUs from "./pages/ContactUs"
-import AccountProfile from './pages/AccountProfile';
-import AddProducts from './pages/addProducts';
-import Cart from './pages/cart';
-import FavoritesPage from './pages/FavoritesPage';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import HomePage from "./pages/HomePage";
+import CategoriesPage from "./pages/CategoriesPage";
+import EventsPage from "./pages/EventsPage";
+import EventDetailsPage from "./pages/EventDetailsPage";
+import SellerDashboard from "./pages/SellerDashboard";
+import BuyerDashboard from "./pages/BuyerDashboard";
+import AdminRoutes from "./routes/AdminRoutes";
+import ProductPage from "./pages/ProductPage";
+import AboutUs from "./pages/AboutUs";
+import Footer from "./components/layout/footer";
+import AddEvents from "./pages/addEvents"; // Import the AddEvents page
+import FAQ from "./pages/FAQ";
+import TOS from "./pages/TOS";
+import Privacypolicy from "./pages/Privacy";
+import ContactUs from "./pages/ContactUs";
+import AccountProfile from "./pages/AccountProfile";
+import AddProducts from "./pages/addProducts";
+import Cart from "./pages/cart";
+import FavoritesPage from "./pages/FavoritesPage";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,8 +33,8 @@ const App = () => {
 
   useEffect(() => {
     // Load authentication status from localStorage
-    const savedIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const savedUserType = localStorage.getItem('userType');
+    const savedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedUserType = localStorage.getItem("userType");
 
     if (savedIsLoggedIn && savedUserType) {
       setIsLoggedIn(true);
@@ -50,7 +55,7 @@ const App = () => {
 
   // Admin Route to restrict admin pages
   const AdminRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== 'admin') {
+    if (!isLoggedIn || userType !== "admin") {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -58,7 +63,7 @@ const App = () => {
 
   // Seller Route to restrict seller pages
   const SellerRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== 'seller') {
+    if (!isLoggedIn || userType !== "seller") {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -66,7 +71,7 @@ const App = () => {
 
   // Buyer Route to restrict buyer pages
   const BuyerRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== 'buyer') {
+    if (!isLoggedIn || userType !== "buyer") {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -96,52 +101,47 @@ const App = () => {
           <Route path="/Privacy" element={<Privacypolicy />} />
           <Route path="/profile" element={<AccountProfile />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-          
-
+          <Route path="/my-favorites" element={<FavoritesPage />} />
           Protected User Dashboard
-          <Route 
-            path="/dashboard" 
+          <Route
+            path="/dashboard"
             element={
               <PrivateRoute>
-                {userType === 'seller' ? <SellerDashboard /> : <BuyerDashboard />}
+                {userType === "seller" ? (
+                  <SellerDashboard />
+                ) : (
+                  <BuyerDashboard />
+                )}
               </PrivateRoute>
-            } 
+            }
           />
-
-
           {/* Protected Seller Add Event Page */}
-          <Route 
-            path="/add-events" 
+          <Route
+            path="/add-events"
             element={
               <SellerRoute>
                 <AddEvents />
               </SellerRoute>
-            } 
+            }
           />
-
-
-                    {/* Protected Seller Add Products Page */}
-                    <Route 
-            path="/add-products" 
+          {/* Protected Seller Add Products Page */}
+          <Route
+            path="/add-products"
             element={
               <SellerRoute>
                 <AddProducts />
               </SellerRoute>
-            } 
+            }
           />
-
-
           {/* Protected Admin Routes */}
-          <Route 
-            path="/admin/*" 
+          <Route
+            path="/admin/*"
             element={
               <AdminRoute>
                 <AdminRoutes />
               </AdminRoute>
-            } 
+            }
           />
-
           {/* Redirect unknown routes to Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
