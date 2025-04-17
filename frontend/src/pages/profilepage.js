@@ -11,25 +11,32 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   // Hard-coded user ID for testing
-  // Change this to the ID of the user you want to display
   const OVERRIDE_USER_ID = 6; // Example: Set to ID 6 for "Anas Ghazal"
 
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        // Pass the override user ID to the getUserData function
+        console.log("Fetching data for user ID:", OVERRIDE_USER_ID);
         const response = await getUserData(OVERRIDE_USER_ID);
-        if (response.success) {
+        console.log("API Response in component:", response);
+        
+        if (response && response.success) {
           setUserData(response.data);
+          setError(null);
         } else {
-          setError(response.message || "Failed to fetch user data");
+          // Handle error response from API
+          const errorMessage = response?.message || "Failed to fetch user data";
+          console.error("API Error:", errorMessage);
+          setError(errorMessage);
+          
           // If not authenticated, redirect to login
-          if (response.message.includes("Authentication required")) {
+          if (errorMessage.includes("Authentication required")) {
             navigate("/login");
           }
         }
       } catch (err) {
+        console.error("Exception caught:", err);
         setError("Error fetching user data. Please try again later.");
       } finally {
         setLoading(false);
@@ -38,21 +45,20 @@ const ProfilePage = () => {
 
     fetchUserData();
   }, [navigate]);
-
-  // Rest of your component remains the same...
   
   const handleDeleteAccount = async () => {
     if (showDeleteConfirm) {
       try {
         const response = await deleteUser();
-        if (response.success) {
+        if (response && response.success) {
           // Show success message and redirect to home/login
           alert("Account deleted successfully");
           navigate("/login");
         } else {
-          setError(response.message || "Failed to delete account");
+          setError(response?.message || "Failed to delete account");
         }
       } catch (err) {
+        console.error("Delete account error:", err);
         setError("Error deleting account. Please try again later.");
       }
     } else {
@@ -106,6 +112,7 @@ const ProfilePage = () => {
     );
   }
 
+  // Rest of your component remains the same...
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4">

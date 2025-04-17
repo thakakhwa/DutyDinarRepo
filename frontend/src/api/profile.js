@@ -2,7 +2,7 @@
 
 export const updateProfile = async (profileData) => {
     try {
-      const response = await fetch('http://localhost/your-php-api/update_profile.php', {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/update_profile.php', {
         method: 'POST',
         credentials: 'include',
         headers: {

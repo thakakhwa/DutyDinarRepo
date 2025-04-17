@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 // Load required files
 require_once("../controller/api_response.php");
 require_once("../controller/connection.php");
-require_once("session_config.php");
+require_once("config.php");
 
 // CORS Configuration
 header('Access-Control-Allow-Origin: http://localhost:3000');
