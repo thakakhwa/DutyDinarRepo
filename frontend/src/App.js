@@ -21,9 +21,10 @@ import FAQ from "./pages/FAQ";
 import TOS from "./pages/TOS";
 import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
-import AccountProfile from "./pages/AccountProfile";
+import ProfilePage from "./pages/profilepage";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/Cart";
+
 
 
 const App = () => {
@@ -99,7 +100,7 @@ const App = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
-          <Route path="/profile" element={<AccountProfile />} />
+          <Route path="/profile" element={<ProfilePage />} />
 
           {/* Protected Cart Route for Buyers */}
           <Route
