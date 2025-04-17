@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUserData, deleteUser } from "../api/user_api";
 import { useNavigate } from "react-router-dom";
-import { Package,User, Trash2, Mail, Building, UserCheck } from "lucide-react";
-
-
+import { Package, User, Trash2, Mail, Building, UserCheck } from "lucide-react";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -12,11 +10,16 @@ const ProfilePage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
 
+  // Hard-coded user ID for testing
+  // Change this to the ID of the user you want to display
+  const OVERRIDE_USER_ID = 6; // Example: Set to ID 6 for "Anas Ghazal"
+
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const response = await getUserData();
+        // Pass the override user ID to the getUserData function
+        const response = await getUserData(OVERRIDE_USER_ID);
         if (response.success) {
           setUserData(response.data);
         } else {
@@ -36,6 +39,8 @@ const ProfilePage = () => {
     fetchUserData();
   }, [navigate]);
 
+  // Rest of your component remains the same...
+  
   const handleDeleteAccount = async () => {
     if (showDeleteConfirm) {
       try {

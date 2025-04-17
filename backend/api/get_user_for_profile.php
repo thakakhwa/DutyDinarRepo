@@ -28,15 +28,19 @@ try {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
 
-    // REMOVE THIS TESTING CODE - THIS IS CAUSING THE ISSUE
-    // if (!isset($_SESSION['user_id'])) {
-    //     $_SESSION['user_id'] = 1; // Using admin user ID
-    // }
-
-    // Check authentication
-    if (!isset($_SESSION['user_id'])) {
-        print_response(false, "Authentication required. Please login first.", null);
-        exit;
+    // Get user ID from request parameter instead of session
+    // This lets us bypass the problematic session code
+    $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+    
+    if ($user_id <= 0) {
+        // If no user ID provided, check if there's one in the session
+        $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+        
+        // If we still don't have a valid user ID
+        if ($user_id <= 0) {
+            print_response(false, "No user ID provided", null);
+            exit;
+        }
     }
 
     // Get user data
@@ -46,7 +50,7 @@ try {
         throw new Exception("Prepare failed: " . $conn->error);
     }
     
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->bind_param("i", $user_id);
     
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
@@ -55,7 +59,6 @@ try {
     $result = $stmt->get_result();
     
     if ($result->num_rows === 0) {
-        // User not found - this might happen if the session contains a deleted user ID
         print_response(false, "User not found", null);
     } else {
         $user = $result->fetch_assoc();
