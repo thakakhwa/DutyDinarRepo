@@ -23,7 +23,7 @@ import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
 import ProfilePage from "./pages/profilepage";
 import AddProducts from "./pages/addProducts";
-import Cart from "./pages/Cart";
+import Cart from "./pages/cart";
 
 
 
