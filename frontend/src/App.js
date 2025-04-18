@@ -23,11 +23,8 @@ import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
-<<<<<<< HEAD
-=======
 import Profile from "./pages/Profile";
 
->>>>>>> 1346270aceb4508fc03a55a0a8c20fa32c61e1d5
 
 
 const App = () => {
