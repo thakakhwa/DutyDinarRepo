@@ -21,16 +21,16 @@ import FAQ from "./pages/FAQ";
 import TOS from "./pages/TOS";
 import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
-import ProfilePage from "./pages/profilepage";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
+import Profile from "./pages/Profile";
 
 
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
-  const [cartItems, setCartItems] = useState(3);
+  const [cartItems] = useState(3);
 
   useEffect(() => {
     // Load authentication status from localStorage
@@ -100,7 +100,8 @@ const App = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/Privacy" element={<Privacypolicy />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/Profile" element={<Profile />} />
+          
 
           {/* Protected Cart Route for Buyers */}
           <Route
