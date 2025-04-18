@@ -1,70 +1,41 @@
 <?php
-session_start();
-header("Content-Type: application/json");
-require_once '../config.php';
+require_once 'session_config.php';
+require_once 'config.php'; // Database connection
 
-$method = $_SERVER['REQUEST_METHOD'];
+// Configure and start session
+configure_session();
+set_local_cors_headers();
+header('Content-Type: application/json');
 
-try {
-    $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Check if the user is logged in by validating the session
+$user = check_authentication();
+$seller_id = $user['id'];
 
-    $buyer_id = $_SESSION['user_id'] ?? null;
-    if (!$buyer_id) {
-        throw new Exception("Authentication required");
-    }
+// Get JSON input
+$inputData = json_decode(file_get_contents("php://input"), true);
 
-    switch ($method) {
-        case 'GET':
-            $stmt = $conn->prepare("
-                SELECT c.id, c.product_id, c.quantity, 
-                       p.name, p.price, p.image_url 
-                FROM cart c
-                JOIN products p ON c.product_id = p.id
-                WHERE c.buyer_id = ?
-            ");
-            $stmt->execute([$buyer_id]);
-            $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode(["success" => true, "data" => $cartItems]);
-            break;
-
-        case 'POST':
-            $data = json_decode(file_get_contents("php://input"), true);
-            $product_id = (int)$data['product_id'];
-            $quantity = (int)($data['quantity'] ?? 1);
-
-            $stmt = $conn->prepare("
-                INSERT INTO cart (buyer_id, product_id, quantity)
-                VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE quantity = quantity + ?
-            ");
-            $stmt->execute([$buyer_id, $product_id, $quantity, $quantity]);
-            echo json_encode(["success" => true]);
-            break;
-
-        case 'PUT':
-            $data = json_decode(file_get_contents("php://input"), true);
-            $stmt = $conn->prepare("
-                UPDATE cart SET quantity = ?
-                WHERE id = ? AND buyer_id = ?
-            ");
-            $stmt->execute([$data['quantity'], $data['id'], $buyer_id]);
-            echo json_encode(["success" => true]);
-            break;
-
-        case 'DELETE':
-            $id = (int)$_GET['id'];
-            $stmt = $conn->prepare("DELETE FROM cart WHERE id = ? AND buyer_id = ?");
-            $stmt->execute([$id, $buyer_id]);
-            echo json_encode(["success" => true]);
-            break;
-
-        default:
-            http_response_code(405);
-            echo json_encode(["success" => false, "message" => "Method not allowed"]);
-    }
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => $e->getMessage()]);
+// Check if required fields are provided
+if (empty($inputData['product_id']) || empty($inputData['quantity'])) {
+    echo json_encode(['success' => false, 'message' => 'Product ID and quantity are required.']);
+    exit;
 }
+
+// Prepare the SQL query to add to cart
+$stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)");
+if (!$stmt) {
+    echo json_encode(['success' => false, 'message' => 'Failed to prepare SQL statement.']);
+    exit;
+}
+
+// Bind parameters and execute the statement
+$stmt->bind_param("iii", $seller_id, $inputData['product_id'], $inputData['quantity']);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Product added to cart successfully.']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Failed to add product to cart.']);
+}
+
+// Close the statement
+$stmt->close();
 ?>

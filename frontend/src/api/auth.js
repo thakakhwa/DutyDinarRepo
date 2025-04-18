@@ -1,33 +1,60 @@
-const API_URL = "http://localhost:5000"; // Update this based on your backend
+import axios from "axios";
 
-// Login function
-export const loginUser = async (email, password) => {
+const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
+axios.defaults.withCredentials = true;
+
+export const login = async (email, password) => {
   try {
-    const response = await fetch(`${API_URL}/login.php`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // Ensures session cookies are sent
-      body: JSON.stringify({ email, password }),
-    });
+    const response = await axios.post(
+      `${API_BASE_URL}/login.php`, 
+      { email, password },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
 
-    const data = await response.json();
-    return data;
+    if (response.data.success) {
+      // Store user data and type
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userType', response.data.userType);
+      return {
+        ...response.data.data,
+        userType: response.data.userType
+      };
+    } else {
+      throw new Error(response.data.message);
+    }
   } catch (error) {
-    return { success: false, message: "Error connecting to server." };
+    console.error("Login error:", error);
+    throw error;
   }
 };
 
-// Check session function
-export const checkSession = async () => {
+export const checkAuth = async () => {
   try {
-    const response = await fetch(`${API_URL}/check-session.php`, {
-      method: "GET",
-      credentials: "include", // Ensures cookies are included
-    });
-
-    const data = await response.json();
-    return data;
+    const response = await axios.get(
+      `${API_BASE_URL}/check_session.php`,
+      { withCredentials: true }
+    );
+    return response.data;
   } catch (error) {
-    return { success: false, message: "Error checking session." };
+    console.error("Auth check error:", error);
+    throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    await axios.post(
+      `${API_BASE_URL}/logout.php`,
+      {},
+      { withCredentials: true }
+    );
+  } catch (error) {
+    console.error("Logout error:", error);
+    throw error;
   }
 };

@@ -23,7 +23,7 @@ import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
 import AccountProfile from "./pages/AccountProfile";
 import AddProducts from "./pages/addProducts";
-import Cart from "./pages/Cart";
+import Cart from "./pages/cart";
 
 
 const App = () => {
@@ -116,7 +116,9 @@ const App = () => {
             path="/dashboard"
             element={
               <PrivateRoute>
-                {userType === "seller" ? (
+                {userType === "admin" ? (
+                  <Navigate to="/admin" replace />
+                ) : userType === "seller" ? (
                   <SellerDashboard />
                 ) : (
                   <BuyerDashboard />

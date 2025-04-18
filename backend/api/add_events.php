@@ -1,75 +1,59 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
-
-// Start the session to access session data
-session_start();
-
-// Include your database connection
 require_once 'config.php';
+require_once 'cors.php';
 
-// Get JSON input
-$inputData = json_decode(file_get_contents("php://input"), true);
+session_start();
+header('Content-Type: application/json');
 
-// Check if required fields are provided
-if (empty($inputData['name']) || empty($inputData['description']) || empty($inputData['event_date']) || empty($inputData['location']) || empty($inputData['price']) || empty($inputData['available_tickets']) || empty($inputData['image_url'])) {
+try {
+    // Verify seller session
+    error_log("Session data: " . print_r($_SESSION, true)); // Log session data
+    if (!isset($_SESSION['userId']) || !isset($_SESSION['userType']) || $_SESSION['userType'] !== 'seller') {
+        throw new Exception('Only authenticated sellers can add events', 403);
+    }
+
+    // Validate input
+    $input = json_decode(file_get_contents('php://input'), true);
+    $requiredFields = ['name', 'description', 'event_date'];
+    foreach ($requiredFields as $field) {
+        if (empty($input[$field])) {
+            throw new Exception("Missing required field: $field", 400);
+        }
+    }
+
+    // Prepare database query
+    $stmt = $conn->prepare("INSERT INTO events 
+        (seller_id, name, description, event_date, location, price, available_tickets, image_url) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    
+    $stmt->bind_param(
+        "issssdii",
+        $_SESSION['userId'],
+        $input['name'],
+        $input['description'],
+        $input['event_date'],
+        $input['location'] ?? '',
+        $input['price'] ?? 0,
+        $input['available_tickets'] ?? 0,
+        $input['image_url'] ?? ''
+    );
+
+    if ($stmt->execute()) {
+        error_log("Event added successfully: " . $stmt->insert_id); // Log successful event addition
+        echo json_encode([
+            'status' => true, 
+            'message' => 'Event added successfully',
+            'eventId' => $stmt->insert_id
+        ]);
+    } else {
+        error_log("Database error: " . $stmt->error); // Log database error
+        throw new Exception('Failed to add event: ' . $stmt->error, 500);
+    }
+} catch (Exception $e) {
+    http_response_code($e->getCode() ?: 500);
     echo json_encode([
-        'success' => false,
-        'message' => 'All fields are required.'
-    ]);
-    exit;
-}
-
-// Check if the user is logged in by validating the session
-if (!isset($_SESSION['user'])) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'User is not logged in. Please log in first.'
-    ]);
-    exit;
-}
-
-// Retrieve seller_id (user id) from the session
-$seller_id = $_SESSION['user']['id'];
-
-// Prepare the event data from the input
-$name = $inputData['name'];
-$description = $inputData['description'];
-$event_date = $inputData['event_date'];
-$location = $inputData['location'];
-$price = $inputData['price'];
-$available_tickets = $inputData['available_tickets'];
-$image_url = $inputData['image_url'];
-
-// Prepare the SQL query to insert the event
-$stmt = $conn->prepare("INSERT INTO events (seller_id, name, description, event_date, location, price, available_tickets, image_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
-if (!$stmt) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Failed to prepare SQL statement.'
-    ]);
-    exit;
-}
-
-// Bind parameters and execute the statement
-$stmt->bind_param("issssdis", $seller_id, $name, $description, $event_date, $location, $price, $available_tickets, $image_url);
-
-if ($stmt->execute()) {
-    // Success response
-    echo json_encode([
-        'success' => true,
-        'message' => 'Event added successfully.'
-    ]);
-} else {
-    // Failure response
-    echo json_encode([
-        'success' => false,
-        'message' => 'Failed to add event.'
+        'status' => false,
+        'message' => $e->getMessage()
     ]);
 }
-
-// Close the statement
-$stmt->close();
-
 ?>
