@@ -121,7 +121,7 @@ const HomePage = () => {
 
       {/* Categories Section (Always Visible) */}
       <div className="max-w-7xl mx-auto mt-16 px-4">
-        <h2 className="text-2xl font-semibold mb-8">Browse Categoriesss</h2>
+        <h2 className="text-2xl font-semibold mb-8">Browse Categoriess</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {categories.map(({ id, name }) => (
             <div key={id} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl">
