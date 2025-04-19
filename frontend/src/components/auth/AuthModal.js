@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, signupUser } from "../../api/auth_modal";
+import { login, signupUser } from "../../api/auth";
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 const AuthModal = ({ 
@@ -60,23 +60,43 @@ const AuthModal = ({
     try {
       let response;
       if (isLogin) {
-        response = await loginUser(formData.email, formData.password);
+        response = await login(formData.email, formData.password);
       } else {
         response = await signupUser(formData);
         if (response.status === "success") {
-          response = await loginUser(formData.email, formData.password);
+          response = await login(formData.email, formData.password);
         }
       }
 
       if (response.success) {
+        console.log("Login response data:", response.data);
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userType", response.data.userType);
 
-        // Force full page refresh with redirect
+        // Update auth state and close modal
+        setIsLoggedIn(true);
+        setUserType(response.data.userType);
+        onClose();
+
+        // Delay fetching session data to allow cookie to be set
+        setTimeout(() => {
+          fetch("http://localhost/DutyDinarRepo/backend/api/get_session.php", {
+            credentials: "include",
+          })
+            .then((res) => res.json())
+            .then((sessionData) => {
+              console.log("Session data:", sessionData);
+            })
+            .catch((err) => {
+              console.error("Error fetching session data:", err);
+            });
+        }, 500);
+
+        // Redirect without full page refresh
         if (response.data.userType === "admin") {
-          window.location.href = "/admin";
+          navigate("/admin");
         } else {
-          window.location.href = "/dashboard";
+          navigate("/dashboard");
         }
       } else {
         setError(response.message);

@@ -21,16 +21,16 @@ import FAQ from "./pages/FAQ";
 import TOS from "./pages/TOS";
 import Privacypolicy from "./pages/Privacy";
 import ContactUs from "./pages/ContactUs";
+import AccountProfile from "./pages/AccountProfile";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
-import Profile from "./pages/Profile";
-
-
+import FavoritesPage from "./pages/FavoritesPage";
+import { WishlistProvider } from "./context/WishlistContext";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
-  const [cartItems] = useState(3);
+  const [cartItems, setCartItems] = useState(3);
 
   useEffect(() => {
     // Load authentication status from localStorage
@@ -80,84 +80,105 @@ const App = () => {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          userType={userType}
-          cartItems={cartItems}
-          setIsLoggedIn={setIsLoggedIn}
-          setUserType={setUserType}
-        />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/product/:productId" element={<ProductPage />} />
-          <Route path="/event/:eventId" element={<EventDetailsPage />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/tos" element={<TOS />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/Privacy" element={<Privacypolicy />} />
-          <Route path="/Profile" element={<Profile />} />
-          
+      <WishlistProvider>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            userType={userType}
+            cartItems={cartItems}
+            setIsLoggedIn={setIsLoggedIn}
+            setUserType={setUserType}
+          />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/event/:eventId" element={<EventDetailsPage />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/tos" element={<TOS />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/Privacy" element={<Privacypolicy />} />
+            <Route
+              path="/profile"
+              element={
+                <AccountProfile
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUserType={setUserType}
+                />
+              }
+            />
 
-          {/* Protected Cart Route for Buyers */}
-          <Route
-            path="/cart"
-            element={
-              <BuyerRoute>
-                <Cart />
-              </BuyerRoute>
-            }
-          />
+            {/* Protected Cart Route for Buyers */}
+            <Route
+              path="/cart"
+              element={
+                <BuyerRoute>
+                  <Cart />
+                </BuyerRoute>
+              }
+            />
 
-          {/* Protected User Dashboard */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                {userType === "seller" ? (
-                  <SellerDashboard />
-                ) : (
-                  <BuyerDashboard />
-                )}
-              </PrivateRoute>
-            }
-          />
-          {/* Protected Seller Add Event Page */}
-          <Route
-            path="/add-events"
-            element={
-              <SellerRoute>
-                <AddEvents />
-              </SellerRoute>
-            }
-          />
-          {/* Protected Seller Add Products Page */}
-          <Route
-            path="/add-products"
-            element={
-              <SellerRoute>
-                <AddProducts />
-              </SellerRoute>
-            }
-          />
-          {/* Protected Admin Routes */}
-          <Route
-            path="/admin/*"
-            element={
-              <AdminRoute>
-                <AdminRoutes />
-              </AdminRoute>
-            }
-          />
-          {/* Redirect unknown routes to Home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Footer />
-      </div>
+            {/* Protected Favorites Route for Buyers */}
+            <Route
+              path="/favorites"
+              element={
+                <BuyerRoute>
+                  <FavoritesPage />
+                </BuyerRoute>
+              }
+            />
+
+            {/* Protected User Dashboard */}
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  {userType === "admin" ? (
+                    <Navigate to="/admin" replace />
+                  ) : userType === "seller" ? (
+                    <SellerDashboard />
+                  ) : (
+                    <BuyerDashboard />
+                  )}
+                </PrivateRoute>
+              }
+            />
+            {/* Protected Seller Add Event Page */}
+            <Route
+              path="/add-events"
+              element={
+                <SellerRoute>
+                  <AddEvents />
+                </SellerRoute>
+              }
+            />
+            {/* Protected Seller Add Products Page */}
+            <Route
+              path="/add-products"
+              element={
+                <SellerRoute>
+                  <AddProducts />
+                </SellerRoute>
+              }
+            />
+            {/* Protected Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <AdminRoute>
+                  <AdminRoutes />
+                </AdminRoute>
+              }
+            />
+            {/* Redirect unknown routes to Home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <Footer />
+        </div>
+      </WishlistProvider>
     </Router>
   );
 };

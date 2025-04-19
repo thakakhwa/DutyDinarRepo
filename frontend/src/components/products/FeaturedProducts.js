@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { getProducts } from '../../api/get_products';
 import { useNavigate } from 'react-router-dom';
+import FavoriteButton from './FavoriteButton';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,7 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getProducts();
+      console.log("FeaturedProducts fetched products:", response.products);
       if (response.success) {
         setProducts(response.products);
       } else {
@@ -39,7 +41,7 @@ const FeaturedProducts = () => {
         {products.map((product) => (
           <div 
             key={product.id} 
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer relative"
             onClick={() => handleSeeProduct(product.id)}
           >
             <div
@@ -48,6 +50,7 @@ const FeaturedProducts = () => {
             />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+              <div className="text-sm text-gray-600 mb-1">Company: {product.companyName || "N/A"}</div>
               <div className="flex items-center mb-2">
                 <Star className="text-yellow-400" size={16} fill="currentColor" />
                 <span className="text-sm text-gray-600 ml-1">4.5 (245 reviews)</span>
@@ -57,12 +60,15 @@ const FeaturedProducts = () => {
               <div className="text-sm text-gray-600 mb-2">MOQ: {product.minOrderQuantity} pieces</div>
               <div className="flex justify-between items-center">
                 <div className="text-green-600 font-semibold">${product.price}</div>
-                <button 
-                  className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
-                  onClick={handleContactSupplier}
-                >
-                  Contact Supplier
-                </button>
+                <div className="flex items-center">
+                  <button 
+                    className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
+                    onClick={handleContactSupplier}
+                  >
+                    Contact Supplier
+                  </button>
+                  <FavoriteButton productId={product.id} />
+                </div>
               </div>
             </div>
           </div>

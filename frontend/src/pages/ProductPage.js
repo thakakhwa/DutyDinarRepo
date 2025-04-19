@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { getProductById } from "../api/get_products";
 import axios from "axios";
+import FavoriteButton from "../components/products/FavoriteButton";
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -97,8 +98,11 @@ const ProductPage = () => {
             )}
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-2xl font-semibold mb-4">{product.name}</h1>
+          <div className="bg-white rounded-lg shadow-md p-6 relative">
+            <h1 className="text-2xl font-semibold mb-1 flex items-center justify-between">
+              {product.name}
+            </h1>
+            <div className="text-sm text-gray-600 mb-4">Company: {product.companyName || "N/A"}</div>
             <div className="text-lg font-semibold text-green-600 mb-4">
               ${product.price?.toFixed(2) || "00.00"}
             </div>
@@ -116,7 +120,7 @@ const ProductPage = () => {
               {product.description || "No description available"}
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <button
                 onClick={handleAddToCart}
                 className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
@@ -129,6 +133,7 @@ const ProductPage = () => {
               >
                 View Cart
               </button>
+              <FavoriteButton productId={product.id} />
             </div>
           </div>
         </div>

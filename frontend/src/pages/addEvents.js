@@ -29,7 +29,7 @@ const AddEventPage = () => {
 
     const result = await addEvent(eventData); // Call the API utility function
 
-    if (result.success) {
+    if (result.status) {
         alert('Event added successfully');
         navigate('/seller-dashboard'); // Redirect to dashboard
     } else {

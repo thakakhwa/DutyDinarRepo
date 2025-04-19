@@ -5,9 +5,8 @@ if (headers_sent($file, $line)) {
 }
 
 // Force CORS headers
-header("Access-Control-Allow-Origin: *");
+require_once 'cors.php';
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 session_start();
 

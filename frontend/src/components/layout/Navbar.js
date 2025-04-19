@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search } from 'lucide-react';
+import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search, Heart } from 'lucide-react';
 import AuthModal from '../auth/AuthModal';
 
 const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType }) => {
@@ -59,8 +59,11 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                 <>
                   <Bell className="text-gray-600 cursor-pointer" size={24} />
                   {userType === 'buyer' && (
-                    <div className="relative">
-                      <Link to="/cart">
+                    <div className="relative flex items-center space-x-4">
+                      <Link to="/favorites" className="text-gray-600 hover:text-green-600 relative">
+                        <Heart className="cursor-pointer" size={24} />
+                      </Link>
+                      <Link to="/cart" className="relative">
                         <ShoppingCart className="text-gray-600 cursor-pointer" size={24} />
                         {cartItems > 0 && (
                           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">

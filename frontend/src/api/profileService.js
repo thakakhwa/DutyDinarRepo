@@ -1,57 +1,40 @@
-import axios from "axios";
+const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
-
-const API_BASE_URL = ""; 
-
+// Fetch user profile data
 export const getUserProfile = async () => {
   try {
-    const userId = localStorage.getItem("userId");
-    
-    if (!userId) {
-      return {
-        success: false,
-        message: "User not authenticated - please login again"
-      };
-    }
-
-    const response = await axios.get("get_user_profile.php", {
-      params: { userId }
+    const response = await fetch(`${API_BASE_URL}/get_usercredentials.php`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    
-    return response.data;
-    
+    return await response.json();
   } catch (error) {
-    console.error("Profile fetch error:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "Failed to fetch profile"
+      message: 'Network error. Please check your connection.'
     };
   }
 };
 
+// Update user profile data
 export const updateUserProfile = async (profileData) => {
   try {
-    const userId = localStorage.getItem("userId");
-    
-    if (!userId) {
-      return {
-        success: false,
-        message: "User not authenticated - please login again"
-      };
-    }
-
-    const response = await axios.post("update_user_profile.php", {
-      ...profileData,
-      userId
+    const response = await fetch(`${API_BASE_URL}/update_profile.php`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profileData)
     });
-    
-    return response.data;
-    
+    return await response.json();
   } catch (error) {
-    console.error("Profile update error:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "Failed to update profile"
+      message: 'Network error. Please check your connection.'
     };
   }
 };
