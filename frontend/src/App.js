@@ -24,12 +24,8 @@ import ContactUs from "./pages/ContactUs";
 import AccountProfile from "./pages/AccountProfile";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
-<<<<<<< HEAD
-
-=======
 import FavoritesPage from "./pages/FavoritesPage";
 import { WishlistProvider } from "./context/WishlistContext";
->>>>>>> fixedbranchfsfs
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -125,55 +121,6 @@ const App = () => {
               }
             />
 
-<<<<<<< HEAD
-          {/* Protected User Dashboard */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                {userType === "admin" ? (
-                  <Navigate to="/admin" replace />
-                ) : userType === "seller" ? (
-                  <SellerDashboard />
-                ) : (
-                  <BuyerDashboard />
-                )}
-              </PrivateRoute>
-            }
-          />
-          {/* Protected Seller Add Event Page */}
-          <Route
-            path="/add-events"
-            element={
-              <SellerRoute>
-                <AddEvents />
-              </SellerRoute>
-            }
-          />
-          {/* Protected Seller Add Products Page */}
-          <Route
-            path="/add-products"
-            element={
-              <SellerRoute>
-                <AddProducts />
-              </SellerRoute>
-            }
-          />
-          {/* Protected Admin Routes */}
-          <Route
-            path="/admin/*"
-            element={
-              <AdminRoute>
-                <AdminRoutes />
-              </AdminRoute>
-            }
-          />
-          {/* Redirect unknown routes to Home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Footer />
-      </div>
-=======
             {/* Protected Favorites Route for Buyers */}
             <Route
               path="/favorites"
@@ -232,7 +179,6 @@ const App = () => {
           <Footer />
         </div>
       </WishlistProvider>
->>>>>>> fixedbranchfsfs
     </Router>
   );
 };

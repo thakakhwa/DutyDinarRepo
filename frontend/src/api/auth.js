@@ -21,30 +21,6 @@ export const login = async (email, password) => {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userType', response.data.userType);
       return {
-<<<<<<< HEAD
-        ...response.data.data,
-        userType: response.data.userType
-      };
-    } else {
-      throw new Error(response.data.message);
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    throw error;
-  }
-};
-
-export const checkAuth = async () => {
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/check_session.php`,
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Auth check error:", error);
-    throw error;
-=======
         success: true,
         data: response.data.data,
         userType: response.data.userType
@@ -106,20 +82,6 @@ export const checkAuth = async () => {
   } catch (error) {
     console.error("Auth check error:", error);
     throw error;
-  }
-};
-
-export const logout = async () => {
-  try {
-    await axios.post(
-      `${API_BASE_URL}/logout.php`,
-      {},
-      { withCredentials: true }
-    );
-  } catch (error) {
-    console.error("Logout error:", error);
-    throw error;
->>>>>>> fixedbranchfsfs
   }
 };
 

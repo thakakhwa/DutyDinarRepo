@@ -70,17 +70,10 @@ try {
         [
             'expires' => $expires,
             'path' => '/',
-<<<<<<< HEAD
-            'domain' => $cookieParams['domain'],
-            'secure' => $cookieParams['secure'],
-            'httponly' => $cookieParams['httponly'],
-            'samesite' => 'Lax'
-=======
             'domain' => null,
             'secure' => false, // Force false for local dev to allow cookie over HTTP
             'httponly' => $cookieParams['httponly'],
             'samesite' => 'None',
->>>>>>> fixedbranchfsfs
         ]
     );
     
