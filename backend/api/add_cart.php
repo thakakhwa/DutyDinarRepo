@@ -59,8 +59,8 @@ try {
     $moq_stmt->close();
 
     if ($quantity < $moq) {
-        echo json_encode(['success' => false, 'message' => "Quantity must be at least the minimum order quantity ($moq)."]);
-        exit;
+        // Automatically set quantity to MOQ if less
+        $quantity = $moq;
     }
 
     // Check if item already in cart

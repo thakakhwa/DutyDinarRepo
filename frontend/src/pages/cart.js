@@ -63,10 +63,11 @@ const Cart = () => {
       return;
     }
     try {
-      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/cart.php', {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/update_cart.php', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update', product_id: productId, quantity: newQuantity }),
+        body: JSON.stringify({ product_id: productId, quantity: newQuantity }),
       });
       const data = await response.json();
       if (data.success) {
@@ -128,14 +129,14 @@ const Cart = () => {
 
                     <div className="flex items-center mt-2">
               <button
-                onClick={() => updateQuantity(item.id, item.product_id, item.quantity - 1, item.min_order_quantity)}
+                onClick={() => updateQuantity(item.id, item.product_id, parseInt(item.quantity, 10) - 1, item.min_order_quantity)}
                 className="bg-gray-200 text-gray-600 px-2 py-1 rounded-l-md"
               >
                 -
               </button>
               <span className="bg-gray-100 px-4 py-1">{item.quantity}</span>
               <button
-                onClick={() => updateQuantity(item.id, item.product_id, item.quantity + 1, item.min_order_quantity)}
+                onClick={() => updateQuantity(item.id, item.product_id, parseInt(item.quantity, 10) + 1, item.min_order_quantity)}
                 className="bg-gray-200 text-gray-600 px-2 py-1 rounded-r-md"
               >
                 +

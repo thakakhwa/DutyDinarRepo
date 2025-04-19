@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/delete_cart_error.log');
+ini_set('error_log', __DIR__ . '/update_cart_error.log');
 
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
@@ -34,13 +34,14 @@ try {
 
     $inputData = json_decode(file_get_contents("php://input"), true);
 
-    if (empty($inputData['product_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Product ID is required for removing from cart.']);
+    if (empty($inputData['product_id']) || !isset($inputData['quantity'])) {
+        echo json_encode(['success' => false, 'message' => 'Product ID and quantity are required for updating cart.']);
         exit;
     }
     $product_id = $inputData['product_id'];
+    $quantity = $inputData['quantity'];
 
-    // Check MOQ before removing - allow removal only if MOQ is 0 or no MOQ restriction
+    // Check MOQ from products table
     $moq_stmt = $conn->prepare("SELECT minOrderQuantity FROM products WHERE id = ?");
     if (!$moq_stmt) {
         echo json_encode(['success' => false, 'message' => 'Failed to prepare MOQ query.']);
@@ -57,26 +58,27 @@ try {
     $moq = (int)$moq_row['minOrderQuantity'];
     $moq_stmt->close();
 
-    if ($moq > 0) {
-        echo json_encode(['success' => false, 'message' => "Cannot remove product with MOQ requirement."]);
+    if ($quantity < $moq) {
+        echo json_encode(['success' => false, 'message' => "Quantity must be at least the minimum order quantity ($moq)."]);
         exit;
     }
 
-    $delete_stmt = $conn->prepare("DELETE FROM cart WHERE buyer_id = ? AND product_id = ?");
-    if (!$delete_stmt) {
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare delete cart query.']);
+    $update_stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE buyer_id = ? AND product_id = ?");
+    if (!$update_stmt) {
+        echo json_encode(['success' => false, 'message' => 'Failed to prepare update cart query.']);
         exit;
     }
-    $delete_stmt->bind_param("ii", $user_id, $product_id);
-    if ($delete_stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Product removed from cart successfully.']);
+    $update_stmt->bind_param("iii", $quantity, $user_id, $product_id);
+    if ($update_stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Cart updated successfully.']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to remove product from cart.']);
+        error_log("Update Cart Error: " . $update_stmt->error);
+        echo json_encode(['success' => false, 'message' => 'Failed to update cart.']);
     }
-    $delete_stmt->close();
+    $update_stmt->close();
 
 } catch (Exception $e) {
-    error_log("Delete Cart API error: " . $e->getMessage());
+    error_log("Update Cart API error: " . $e->getMessage());
     echo json_encode(['success' => false, 'message' => 'Internal server error.']);
 }
 ?>

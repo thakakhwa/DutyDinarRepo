@@ -46,7 +46,7 @@ const ProductPage = () => {
       try {
       const response = await axios.post("http://localhost/DutyDinarRepo/backend/api/add_cart.php", {
         product_id: productId,
-        quantity: product.minOrderQuantity || 1
+        quantity: 1
       }, { withCredentials: true });
 
       if (response.data.success) {
