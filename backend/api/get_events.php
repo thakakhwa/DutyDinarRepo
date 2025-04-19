@@ -34,20 +34,58 @@ try {
         throw new Exception("Database connection failed: " . mysqli_connect_error());
     }
 
-    $query = "SELECT id, seller_id, name, description, event_date, location, price, available_tickets, image_url FROM events ORDER BY event_date ASC";
-    $result = $conn->query($query);
+    $event_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-    if (!$result) {
-        throw new Exception("Query failed: " . $conn->error);
+    if ($event_id) {
+        $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, price, available_tickets, image_url FROM events WHERE id = ?");
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if (!$result) {
+            throw new Exception("Query failed: " . $conn->error);
+        }
+
+        $event = $result->fetch_assoc();
+
+        if (!$event) {
+            json_response(false, "Event not found");
+        }
+
+        // Add booking status if user logged in
+        $booked_quantity = 0;
+        if (isset($_SESSION['userId'])) {
+            $user_id = $_SESSION['userId'];
+            $booking_stmt = $conn->prepare("SELECT quantity FROM event_bookings WHERE user_id = ? AND event_id = ?");
+            if ($booking_stmt) {
+                $booking_stmt->bind_param("ii", $user_id, $event_id);
+                $booking_stmt->execute();
+                $booking_result = $booking_stmt->get_result();
+                if ($booking_result && $booking_result->num_rows > 0) {
+                    $booking_row = $booking_result->fetch_assoc();
+                    $booked_quantity = (int)$booking_row['quantity'];
+                }
+                $booking_stmt->close();
+            }
+        }
+        $event['booked_quantity'] = $booked_quantity;
+
+        json_response(true, "Event fetched", ['events' => [$event]]);
+    } else {
+        $query = "SELECT id, seller_id, name, description, event_date, location, price, available_tickets, image_url FROM events ORDER BY event_date ASC";
+        $result = $conn->query($query);
+
+        if (!$result) {
+            throw new Exception("Query failed: " . $conn->error);
+        }
+
+        $events = [];
+        while ($row = $result->fetch_assoc()) {
+            $events[] = $row;
+        }
+
+        json_response(true, "Events fetched", ['events' => $events]);
     }
-
-    $events = [];
-    while ($row = $result->fetch_assoc()) {
-        $events[] = $row;
-    }
-
-    json_response(true, "Events fetched", ['events' => $events]);
-
 } catch (Exception $e) {
     json_response(false, "Server Error: " . $e->getMessage());
 }
