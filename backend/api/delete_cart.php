@@ -40,27 +40,7 @@ try {
     }
     $product_id = $inputData['product_id'];
 
-    // Check MOQ before removing - allow removal only if MOQ is 0 or no MOQ restriction
-    $moq_stmt = $conn->prepare("SELECT minOrderQuantity FROM products WHERE id = ?");
-    if (!$moq_stmt) {
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare MOQ query.']);
-        exit;
-    }
-    $moq_stmt->bind_param("i", $product_id);
-    $moq_stmt->execute();
-    $moq_result = $moq_stmt->get_result();
-    if ($moq_result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'Product not found.']);
-        exit;
-    }
-    $moq_row = $moq_result->fetch_assoc();
-    $moq = (int)$moq_row['minOrderQuantity'];
-    $moq_stmt->close();
-
-    if ($moq > 0) {
-        echo json_encode(['success' => false, 'message' => "Cannot remove product with MOQ requirement."]);
-        exit;
-    }
+    // Removed MOQ check to allow removal regardless of MOQ
 
     $delete_stmt = $conn->prepare("DELETE FROM cart WHERE buyer_id = ? AND product_id = ?");
     if (!$delete_stmt) {

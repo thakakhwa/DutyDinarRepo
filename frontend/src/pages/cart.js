@@ -12,13 +12,11 @@ const Cart = () => {
     const fetchCart = async () => {
       try {
         const response = await getCart();
-        console.log('Cart API response data:', response.data);
         if (response.success) {
           setCartItems(response.data || []);
         }
         setLoading(false);
       } catch (error) {
-        console.error('Cart fetch error:', error);
         setLoading(false);
         alert('Failed to load cart');
       }
@@ -33,11 +31,7 @@ const Cart = () => {
     ).toFixed(2);
   };
 
-  const removeItem = async (itemId, productId, minOrderQuantity) => {
-    if (minOrderQuantity > 0) {
-      alert(`Cannot remove product with minimum order quantity of ${minOrderQuantity}.`);
-      return;
-    }
+  const removeItem = async (itemId, productId) => {
     try {
       const response = await fetch('http://localhost/DutyDinarRepo/backend/api/delete_cart.php', {
         method: 'POST',
@@ -89,22 +83,22 @@ const Cart = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-gray-800 mb-6"
+          className="flex items-center text-green-700 hover:text-emerald-700 mb-6"
         >
           <ChevronLeft size={20} className="mr-2" />
           Back to Shopping
         </button>
 
-        <h1 className="text-2xl font-semibold mb-6">Shopping Cart</h1>
+        <h1 className="text-2xl font-semibold mb-6 text-gray-800">Shopping Cart</h1>
 
         {loading ? (
-          <div className="text-center py-8">Loading your cart...</div>
+          <div className="text-center py-8 text-gray-700">Loading your cart...</div>
         ) : cartItems.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <h2 className="text-xl font-medium mb-4">Your cart is empty</h2>
+          <div className="bg-white rounded-lg shadow-card p-8 text-center">
+            <h2 className="text-xl font-medium mb-4 text-gray-800">Your cart is empty</h2>
             <button
               onClick={() => navigate('/products')}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700"
             >
               Continue Shopping
             </button>
@@ -113,7 +107,7 @@ const Cart = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-4">
               {cartItems.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex items-center">
+                <div key={item.id} className="bg-white rounded-lg shadow-card p-4 flex items-center">
                   <img
                     src={item.product_image_url || item.event_image_url || ''}
                     alt={item.product_name || item.event_name || 'Item'}
@@ -121,23 +115,23 @@ const Cart = () => {
                   />
 
                   <div className="flex-grow">
-                    <h3 className="font-medium">{item.product_name || item.event_name || 'Unnamed Item'}</h3>
-                    <p className="text-gray-600 text-sm">${!isNaN(Number(item.product_price ?? item.event_price)) ? Number(item.product_price ?? item.event_price).toFixed(2) : 'N/A'}</p>
-                    <span className="inline-block text-xs font-semibold text-white bg-blue-600 rounded-full px-2 py-0.5 ml-2">
+                    <h3 className="font-medium text-gray-800">{item.product_name || item.event_name || 'Unnamed Item'}</h3>
+                    <p className="text-gray-700 text-sm">${!isNaN(Number(item.product_price ?? item.event_price)) ? Number(item.product_price ?? item.event_price).toFixed(2) : 'N/A'}</p>
+                    <span className="inline-block text-xs font-semibold text-white bg-green-600 rounded-full px-2 py-0.5 ml-2">
                       {item.product_id ? 'Product' : item.event_id ? 'Event' : 'Unknown'}
                     </span>
 
                     <div className="flex items-center mt-2">
               <button
                 onClick={() => updateQuantity(item.id, item.product_id, parseInt(item.quantity, 10) - 1, item.min_order_quantity)}
-                className="bg-gray-200 text-gray-600 px-2 py-1 rounded-l-md"
+                className="bg-green-200 text-green-700 px-2 py-1 rounded-l-md"
               >
                 -
               </button>
-              <span className="bg-gray-100 px-4 py-1">{item.quantity}</span>
+              <span className="bg-green-100 px-4 py-1 text-green-800">{item.quantity}</span>
               <button
                 onClick={() => updateQuantity(item.id, item.product_id, parseInt(item.quantity, 10) + 1, item.min_order_quantity)}
-                className="bg-gray-200 text-gray-600 px-2 py-1 rounded-r-md"
+                className="bg-green-200 text-green-700 px-2 py-1 rounded-r-md"
               >
                 +
               </button>
@@ -145,12 +139,12 @@ const Cart = () => {
                   </div>
 
                   <div className="text-right ml-4">
-                    <p className="font-semibold">
+                    <p className="font-semibold text-gray-800">
                       ${!isNaN(Number(item.product_price ?? item.event_price)) ? (Number(item.product_price ?? item.event_price) * item.quantity).toFixed(2) : 'N/A'}
                     </p>
                     <button
-                      onClick={() => removeItem(item.id, item.product_id, item.min_order_quantity)}
-                      className="mt-2 text-gray-600 hover:text-red-500"
+                      onClick={() => removeItem(item.id, item.product_id)}
+                      className="mt-2 text-green-700 hover:text-emerald-700"
                     >
                       <Trash2 size={20} />
                     </button>
@@ -159,19 +153,19 @@ const Cart = () => {
               ))}
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6 h-fit">
-              <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+            <div className="bg-white rounded-lg shadow-card p-6 h-fit">
+              <h2 className="text-lg font-semibold mb-4 text-gray-800">Order Summary</h2>
 
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
-                  <span>Subtotal:</span>
-                  <span>${calculateTotal()}</span>
+                  <span className="text-gray-700">Subtotal:</span>
+                  <span className="text-gray-700">${calculateTotal()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Shipping:</span>
-                  <span>Free</span>
+                  <span className="text-gray-700">Shipping:</span>
+                  <span className="text-gray-700">Free</span>
                 </div>
-                <div className="border-t pt-3 flex justify-between font-semibold">
+                <div className="border-t border-gray-300 pt-3 flex justify-between font-semibold text-gray-800">
                   <span>Total:</span>
                   <span className="text-green-600">${calculateTotal()}</span>
                 </div>
@@ -188,7 +182,7 @@ const Cart = () => {
                   }
                   navigate('/checkout');
                 }}
-                className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mb-3"
+                className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 mb-3"
               >
                 Proceed to Checkout
               </button>
