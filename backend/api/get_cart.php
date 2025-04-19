@@ -2,7 +2,15 @@
 require_once 'cors.php';
 session_start();
 
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 if (!isset($_SESSION['userId'])) {
     http_response_code(401);
@@ -27,6 +35,7 @@ $stmt = $conn->prepare("
         p.name AS product_name,
         p.price AS product_price,
         p.image_url AS product_image_url,
+        p.minOrderQuantity AS min_order_quantity,
         NULL AS event_name,
         NULL AS event_price,
         NULL AS event_image_url

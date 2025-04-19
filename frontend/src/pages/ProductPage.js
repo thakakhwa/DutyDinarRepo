@@ -42,12 +42,12 @@ const ProductPage = () => {
     fetchProduct();
   }, [productId, navigate]);
 
-  const handleAddToCart = async () => {
-    try {
-      const response = await axios.post("../api/cart.php", {
+    const handleAddToCart = async () => {
+      try {
+      const response = await axios.post("http://localhost/DutyDinarRepo/backend/api/add_cart.php", {
         product_id: productId,
-        quantity: product.minOrderQuantity || 1,
-      });
+        quantity: product.minOrderQuantity || 1
+      }, { withCredentials: true });
 
       if (response.data.success) {
         alert("Product added to cart!");

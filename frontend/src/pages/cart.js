@@ -33,13 +33,54 @@ const Cart = () => {
     ).toFixed(2);
   };
 
-  const removeItem = async (itemId) => {
-    alert('Remove item functionality not implemented yet.');
+  const removeItem = async (itemId, productId, minOrderQuantity) => {
+    if (minOrderQuantity > 0) {
+      alert(`Cannot remove product with minimum order quantity of ${minOrderQuantity}.`);
+      return;
+    }
+    try {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/delete_cart.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: productId }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setCartItems((prev) => prev.filter((item) => item.product_id !== productId));
+        alert('Product removed from cart successfully.');
+      } else {
+        alert(data.message || 'Failed to remove product from cart.');
+      }
+    } catch (error) {
+      alert('Error removing product from cart.');
+    }
   };
 
-  const updateQuantity = async (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
-    alert('Update quantity functionality not implemented yet.');
+  const updateQuantity = async (itemId, productId, newQuantity, minOrderQuantity) => {
+    if (newQuantity < minOrderQuantity) {
+      alert(`Quantity must be at least the minimum order quantity (${minOrderQuantity}).`);
+      return;
+    }
+    try {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/cart.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', product_id: productId, quantity: newQuantity }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item.product_id === productId ? { ...item, quantity: newQuantity } : item
+          )
+        );
+      } else {
+        alert(data.message || 'Failed to update cart.');
+      }
+    } catch (error) {
+      alert('Error updating cart.');
+    }
   };
 
   return (
@@ -86,19 +127,19 @@ const Cart = () => {
                     </span>
 
                     <div className="flex items-center mt-2">
-                      <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="bg-gray-200 text-gray-600 px-2 py-1 rounded-l-md"
-                      >
-                        -
-                      </button>
-                      <span className="bg-gray-100 px-4 py-1">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="bg-gray-200 text-gray-600 px-2 py-1 rounded-r-md"
-                      >
-                        +
-                      </button>
+              <button
+                onClick={() => updateQuantity(item.id, item.product_id, item.quantity - 1, item.min_order_quantity)}
+                className="bg-gray-200 text-gray-600 px-2 py-1 rounded-l-md"
+              >
+                -
+              </button>
+              <span className="bg-gray-100 px-4 py-1">{item.quantity}</span>
+              <button
+                onClick={() => updateQuantity(item.id, item.product_id, item.quantity + 1, item.min_order_quantity)}
+                className="bg-gray-200 text-gray-600 px-2 py-1 rounded-r-md"
+              >
+                +
+              </button>
                     </div>
                   </div>
 
@@ -107,7 +148,7 @@ const Cart = () => {
                       ${!isNaN(Number(item.product_price ?? item.event_price)) ? (Number(item.product_price ?? item.event_price) * item.quantity).toFixed(2) : 'N/A'}
                     </p>
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.id, item.product_id, item.min_order_quantity)}
                       className="mt-2 text-gray-600 hover:text-red-500"
                     >
                       <Trash2 size={20} />
@@ -136,7 +177,16 @@ const Cart = () => {
               </div>
 
               <button
-                onClick={() => navigate('/checkout')}
+                onClick={() => {
+                  const hasInvalidQty = cartItems.some(
+                    (item) => item.quantity < (item.min_order_quantity || 0)
+                  );
+                  if (hasInvalidQty) {
+                    alert('You cannot proceed to checkout with items below minimum order quantity.');
+                    return;
+                  }
+                  navigate('/checkout');
+                }}
                 className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mb-3"
               >
                 Proceed to Checkout
