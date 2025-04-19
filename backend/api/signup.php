@@ -1,8 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
-
+require_once 'cors.php';
 require_once 'config.php'; // Include your database connection
 
 // Get JSON input

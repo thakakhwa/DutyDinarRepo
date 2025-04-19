@@ -2,9 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-header('Access-Control-Allow-Origin: *');
+require_once 'cors.php';
 header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type');
 
 require_once 'config.php'; // Include database connection
 

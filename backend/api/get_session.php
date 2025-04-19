@@ -1,4 +1,8 @@
 <?php
+<<<<<<< HEAD
+=======
+require_once 'cors.php';
+>>>>>>> fixedbranchfsfs
 session_start();
 
 // Check if session exists and return user data

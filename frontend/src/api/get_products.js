@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
 // Get all products
-export const getProducts = async (category = '', sortBy = '', priceRange = [0, 10000], minOrderQuantity = 1) => {
+export const getProducts = async (category = '', sortBy = '', priceRange = [0, 9999999], minOrderQuantity = 0) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/get_products.php`, {
       params: {

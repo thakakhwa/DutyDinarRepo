@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { getCart } from '../api/get_cart';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -11,9 +11,10 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get('./backend/api/cart.php');
-        if (response.data.success) {
-          setCartItems(response.data.data || []);
+        const response = await getCart();
+        console.log('Cart API response data:', response.data);
+        if (response.success) {
+          setCartItems(response.data || []);
         }
         setLoading(false);
       } catch (error) {
@@ -27,37 +28,18 @@ const Cart = () => {
   }, []);
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => 
-      total + (item.price * item.quantity), 0
+    return cartItems.reduce((total, item) =>
+      total + ((Number(item.product_price ?? item.event_price) || 0) * item.quantity), 0
     ).toFixed(2);
   };
 
   const removeItem = async (itemId) => {
-    try {
-      await axios.delete(`../backend/api/cart.php'?id=${itemId}`);
-      setCartItems(cartItems.filter(item => item.id !== itemId));
-    } catch (error) {
-      console.error('Remove item error:', error);
-      alert('Failed to remove item');
-    }
+    alert('Remove item functionality not implemented yet.');
   };
 
   const updateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
-    
-    try {
-      await axios.put('./backend/api/cart.php', {
-        id: itemId,
-        quantity: newQuantity
-      });
-      
-      setCartItems(cartItems.map(item => 
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      ));
-    } catch (error) {
-      console.error('Quantity update error:', error);
-      alert('Failed to update quantity');
-    }
+    alert('Update quantity functionality not implemented yet.');
   };
 
   return (
@@ -90,25 +72,28 @@ const Cart = () => {
             <div className="md:col-span-2 space-y-4">
               {cartItems.map((item) => (
                 <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex items-center">
-                  <img 
-                    src={item.image_url} 
-                    alt={item.name} 
-                    className="w-20 h-20 object-cover rounded-md mr-4" 
+                  <img
+                    src={item.product_image_url || item.event_image_url || ''}
+                    alt={item.product_name || item.event_name || 'Item'}
+                    className="w-20 h-20 object-cover rounded-md mr-4"
                   />
-                  
+
                   <div className="flex-grow">
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-gray-600 text-sm">${item.price.toFixed(2)}</p>
-                    
+                    <h3 className="font-medium">{item.product_name || item.event_name || 'Unnamed Item'}</h3>
+                    <p className="text-gray-600 text-sm">${!isNaN(Number(item.product_price ?? item.event_price)) ? Number(item.product_price ?? item.event_price).toFixed(2) : 'N/A'}</p>
+                    <span className="inline-block text-xs font-semibold text-white bg-blue-600 rounded-full px-2 py-0.5 ml-2">
+                      {item.product_id ? 'Product' : item.event_id ? 'Event' : 'Unknown'}
+                    </span>
+
                     <div className="flex items-center mt-2">
-                      <button 
+                      <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="bg-gray-200 text-gray-600 px-2 py-1 rounded-l-md"
                       >
                         -
                       </button>
                       <span className="bg-gray-100 px-4 py-1">{item.quantity}</span>
-                      <button 
+                      <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="bg-gray-200 text-gray-600 px-2 py-1 rounded-r-md"
                       >
@@ -116,12 +101,12 @@ const Cart = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="text-right ml-4">
                     <p className="font-semibold">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${!isNaN(Number(item.product_price ?? item.event_price)) ? (Number(item.product_price ?? item.event_price) * item.quantity).toFixed(2) : 'N/A'}
                     </p>
-                    <button 
+                    <button
                       onClick={() => removeItem(item.id)}
                       className="mt-2 text-gray-600 hover:text-red-500"
                     >
@@ -134,7 +119,7 @@ const Cart = () => {
 
             <div className="bg-white rounded-lg shadow-md p-6 h-fit">
               <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-              
+
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
@@ -149,8 +134,8 @@ const Cart = () => {
                   <span className="text-green-600">${calculateTotal()}</span>
                 </div>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => navigate('/checkout')}
                 className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mb-3"
               >

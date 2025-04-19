@@ -1,149 +1,295 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
-import { getUserCredentials } from '../api/get_usercredentials';
+import React, { useState, useEffect } from "react";
+import { Edit, Save, User, Mail, Building, Calendar, Lock, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { getUserProfile, updateUserProfile } from "../api/profileService";
 
-const AccountProfile = ({ setIsLoggedIn, setUserType }) => {
+const Profile = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [profile, setProfile] = useState({
+    id: "",
+    name: "",
+    email: "",
+    userType: "",
+    companyName: "",
+    created_at: "",
+    currentPassword: "",
+    newPassword: "",
+    retypeNewPassword: ""
+  });
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await getUserCredentials();
-        
-        if (response.success && response.data) {
-          setProfile({
-            name: response.data.name || 'Unknown',
-            email: response.data.email || '',
-            userType: response.data.userType || '',
-            companyName: response.data.companyName || ''
-          });
-          setUserType(response.data.userType);
-          setError('');
-        } else {
-          setError(response.message || 'Failed to load profile');
-          if (response.message && response.message.toLowerCase().includes('authentication')) {
-            navigate('/login');
-          }
-        }
-      } catch (err) {
-        console.error('Profile error:', err);
-        setError('Connection to server failed');
-      } finally {
-        setLoading(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const userType = localStorage.getItem("userType");
+    if (!userType) {
+      navigate("/login");
+      return;
+    }
+    fetchUserProfile();
+  }, [navigate]);
+
+  const fetchUserProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await getUserProfile();
+      if (response.success) {
+        setProfile(response.data);
+      } else {
+        setError("Failed to load profile data: " + response.message);
       }
-    };
-
-    fetchProfile();
-  }, [navigate, setUserType]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userType');
-    setIsLoggedIn(false);
-    setUserType(null);
-    navigate('/login');
+    } catch (err) {
+      setError("An error occurred while fetching your profile");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setError('');
-    setTimeout(() => {
-      getUserCredentials()
-        .then(response => {
-          if (response.success && response.data) {
-            setProfile({
-              name: response.data.name || 'Unknown',
-              email: response.data.email || '',
-              userType: response.data.userType || '',
-              companyName: response.data.companyName || ''
-            });
-            setUserType(response.data.userType);
-            setError('');
-          } else {
-            setError(response.message || 'Failed to load profile');
-          }
-        })
-        .catch(err => {
-          console.error('Retry error:', err);
-          setError('Connection error on retry attempt');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 1000);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
-      </div>
-    );
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      console.log("Submitting profile update with data:", profile);
+      const response = await updateUserProfile(profile);
+      console.log("Update profile response:", response);
+      if (response.success) {
+        setSuccessMessage("Profile updated successfully!");
+        setIsEditing(false);
+        setTimeout(() => setSuccessMessage(""), 3000);
+      } else {
+        setError("Failed to update profile: " + response.message);
+      }
+    } catch (err) {
+      console.error("Error during profile update:", err);
+      setError("An error occurred while updating your profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (!profile) {
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch {
+      return dateString;
+    }
+  };
+
+  if (loading && !profile.id) {
     return (
-      <div className="min-h-screen flex items-center justify-center flex-col">
-        <div className="text-red-600 text-lg mb-4">{error || 'Profile not found'}</div>
-        <button 
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          onClick={handleRefresh}
-        >
-          Try Again
-        </button>
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
+        <div className="text-green-600 text-lg">Loading profile...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold">{profile.name}</h1>
-              <p className="text-gray-600">{profile.email}</p>
-            </div>
-            <button 
-              onClick={handleLogout}
-              className="flex items-center gap-2 text-red-600 hover:text-red-800 transition-colors"
-            >
-              <LogOut size={20} />
-              <span>Logout</span>
-            </button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-r from-green-100 via-white to-green-100 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Navigation */}
+        <div className="mb-8">
+          <Link to="/" className="inline-flex items-center text-green-700 hover:text-green-900 transition-colors font-semibold">
+            <ArrowLeft className="mr-2" size={20} />
+            Back to Dashboard
+          </Link>
+        </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <span className="font-medium">Account Type:</span>
-              <span className="capitalize bg-gray-100 px-3 py-1 rounded">
-                {profile.userType}
-              </span>
+          {/* Profile Card */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-green-200">
+            {/* Header */}
+            <div className="bg-green-700 text-white p-8 flex items-center justify-between">
+              <div className="flex items-center space-x-6">
+                <User size={48} className="text-green-300" />
+                <div>
+                  <h1 className="text-3xl font-extrabold tracking-wide">{profile.name || "User"}</h1>
+                  <p className="text-green-200 capitalize">{profile.userType || "Account"}</p>
+                </div>
+              </div>
+              {!isEditing && (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center"
+                >
+                  <Edit className="mr-2" size={20} />
+                  Edit Profile
+                </button>
+              )}
             </div>
-            
-            {profile.companyName && (
-              <div className="flex items-center gap-4">
-                <span className="font-medium">Company:</span>
-                <span className="bg-gray-100 px-3 py-1 rounded">
-                  {profile.companyName}
-                </span>
+
+            {/* Messages */}
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-4 mx-6 mt-6 rounded-r-md shadow-sm">
+                <p>{error}</p>
               </div>
             )}
-          </div>
+            {successMessage && (
+              <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-4 mx-6 mt-6 rounded-r-md shadow-sm">
+                <p>{successMessage}</p>
+              </div>
+            )}
 
-          {error && (
-            <div className="mt-6 p-3 bg-red-50 text-red-600 rounded-lg">
-              {error}
-            </div>
-          )}
+            {/* Profile Content */}
+            <div className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Name */}
+                <div>
+                  <label className="flex items-center text-gray-700 font-semibold mb-2">
+                    <User className="mr-2 text-green-600" size={20} />
+                    Name
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="name"
+                      value={profile.name || ""}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                      required
+                    />
+                  ) : (
+                    <p className="text-gray-900 text-lg">{profile.name || "Not specified"}</p>
+                  )}
+                </div>
+
+              {/* Email */}
+              <div>
+                <label className="flex items-center text-gray-700 font-semibold mb-2">
+                  <Mail className="mr-2 text-green-600" size={20} />
+                  Email
+                </label>
+                <p className="text-gray-900 text-lg">{profile.email || "Not specified"}</p>
+              </div>
+
+              {/* Account Type */}
+              <div>
+                <label className="flex items-center text-gray-700 font-semibold mb-2">
+                  <User className="mr-2 text-green-600" size={20} />
+                  Account Type
+                </label>
+                <p className="text-gray-900 capitalize text-lg">{profile.userType || "Not specified"}</p>
+              </div>
+
+              {/* Company Name - Only for Sellers */}
+              {profile.userType === "seller" && isEditing && (
+                <div>
+                  <label className="flex items-center text-gray-700 font-semibold mb-2">
+                    <Building className="mr-2 text-green-600" size={20} />
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={profile.companyName || ""}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                  />
+                </div>
+              )}
+              {profile.userType === "seller" && !isEditing && (
+                <div>
+                  <label className="flex items-center text-gray-700 font-semibold mb-2">
+                    <Building className="mr-2 text-green-600" size={20} />
+                    Company Name
+                  </label>
+                  <p className="text-gray-900 text-lg">{profile.companyName || "Not specified"}</p>
+                </div>
+              )}
+
+                {/* Joined Date */}
+                <div>
+                  <label className="flex items-center text-gray-700 font-semibold mb-2">
+                    <Calendar className="mr-2 text-green-600" size={20} />
+                    Joined On
+                  </label>
+                  <p className="text-gray-900 text-lg">{formatDate(profile.created_at)}</p>
+                </div>
+              </div>
+
+              {/* Password Fields and Action Buttons in Edit Mode */}
+              {isEditing && (
+                <>
+                  <div className="mt-6">
+                    <label className="flex items-center text-gray-700 font-semibold mb-2">
+                      <Lock className="mr-2 text-green-600" size={20} />
+                      Current Password
+                    </label>
+                    <input
+                      type="password"
+                      name="currentPassword"
+                      value={profile.currentPassword || ""}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                      placeholder="Enter current password"
+                    />
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="flex items-center text-gray-700 font-semibold mb-2">
+                      <Lock className="mr-2 text-green-600" size={20} />
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      name="newPassword"
+                      value={profile.newPassword || ""}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                      placeholder="Enter new password"
+                    />
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="flex items-center text-gray-700 font-semibold mb-2">
+                      <Lock className="mr-2 text-green-600" size={20} />
+                      Retype New Password
+                    </label>
+                    <input
+                      type="password"
+                      name="retypeNewPassword"
+                      value={profile.retypeNewPassword || ""}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+                      placeholder="Retype new password"
+                    />
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0 md:space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing(false)}
+                      className="w-full md:w-auto px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="w-full md:w-auto px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center"
+                      disabled={loading}
+                    >
+                      <Save className="mr-2" size={20} />
+                      {loading ? "Saving..." : "Save Changes"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default AccountProfile;
+export default Profile;

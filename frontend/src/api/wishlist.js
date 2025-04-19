@@ -7,7 +7,7 @@ const API_URL = 'http://localhost/DutyDinarRepo/backend/api';
 // Get all wishlist items for the current user
 export const getWishlistItems = async () => {
   try {
-    const response = await axios.get(`${API_URL}/wishlist.php`);
+    const response = await axios.get(`${API_URL}/get_favorites.php`);
     return response.data;
   } catch (error) {
     console.error('Error fetching wishlist items:', error);
@@ -18,10 +18,8 @@ export const getWishlistItems = async () => {
 // Add item to wishlist
 export const addToWishlist = async (type, itemId) => {
   try {
-    const response = await axios.post(`${API_URL}/wishlist.php`, {
-      type, // 'product' or 'event'
-      itemId
-    });
+    const payload = type === 'product' ? { product_id: itemId } : { event_id: itemId };
+    const response = await axios.post(`${API_URL}/add_to_wishlist.php`, payload);
     return response.data;
   } catch (error) {
     console.error('Error adding item to wishlist:', error);
@@ -32,7 +30,7 @@ export const addToWishlist = async (type, itemId) => {
 // Remove item from wishlist
 export const removeFromWishlist = async (wishlistId) => {
   try {
-    const response = await axios.delete(`${API_URL}/wishlist.php?id=${wishlistId}`);
+    const response = await axios.post(`${API_URL}/remove_from_wishlist.php`, { id: wishlistId });
     return response.data;
   } catch (error) {
     console.error('Error removing item from wishlist:', error);
@@ -44,9 +42,14 @@ export const removeFromWishlist = async (wishlistId) => {
 export const findInWishlist = async (type, itemId) => {
   try {
     const response = await getWishlistItems();
-    if (response.success && response.data) {
-      return response.data.find(item => 
-        item.type === type && item.itemId === itemId
+    if (response.success && response.favorites) {
+      // Map wishlist_id to id for compatibility with FavoriteButton
+      const mappedFavorites = response.favorites.map(item => ({
+        ...item,
+        id: item.wishlist_id,
+      }));
+      return mappedFavorites.find(item => 
+        (type === 'product' && item.id === itemId) || (type === 'event' && item.event_id === itemId)
       );
     }
     return null;

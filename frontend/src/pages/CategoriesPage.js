@@ -3,14 +3,18 @@ import { getCategories } from "../api/get_categories";
 import { getProducts } from "../api/get_products";
 import { Star, Package } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
-import { getCategoryIcon } from "../data/categories"; // Import the function instead of direct categories
+import { getCategoryIcon } from "../data/categories";
+import FavoriteButton from "../components/products/FavoriteButton";
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortBy, setSortBy] = useState("recommended");
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 99999 });
-  const [minOrderQuantity, setMinOrderQuantity] = useState(0);
+  // Temporarily disable filters to show all products
+  // const [priceRange, setPriceRange] = useState({ min: 0, max: 99999 });
+  // const [minOrderQuantity, setMinOrderQuantity] = useState(0);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 9999999 });
+  const [minOrderQuantity, setMinOrderQuantity] = useState(-1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -36,21 +40,21 @@ const CategoriesPage = () => {
     });
   }, []);
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // We fetch all products and filter them client-side
-        // This is because the products in the database use category string names
-        // rather than category IDs
-        const filters = {
-          sortBy,
-          minPrice: priceRange.min,
-          maxPrice: priceRange.max,
-          minOrderQuantity,
-        };
+        // Pass parameters correctly to getProducts
+        const categoryParam = selectedCategory ? selectedCategory.toString() : '';
+        const priceRangeArray = [priceRange.min, priceRange.max];
 
-        const productList = await getProducts(filters);
+        const productList = await getProducts(
+          categoryParam,
+          sortBy,
+          priceRangeArray,
+          minOrderQuantity
+        );
+        console.log("Fetched products:", productList.products);
         if (productList.success) {
           setProducts(productList.products);
         } else {
@@ -65,7 +69,7 @@ const CategoriesPage = () => {
     };
 
     fetchProducts();
-  }, [sortBy, priceRange, minOrderQuantity]);
+  }, [sortBy, priceRange, minOrderQuantity, selectedCategory]);
 
   const handleSeeProduct = (productId) => {
     navigate(`/product/${productId}`);
@@ -76,28 +80,25 @@ const CategoriesPage = () => {
     setPriceRange((prev) => ({ ...prev, max: value }));
   };
 
-  // Get the selected category name
   const selectedCategoryName = selectedCategory 
     ? categories.find(c => c.id === selectedCategory)?.name 
     : null;
 
-  // Filter products based on all criteria
   const filteredProducts = products.filter(product => {
-    // Check if product matches the selected category
-    const categoryMatches = !selectedCategory || 
-      // Match by category ID if product.categoryId exists
-      (product.categoryId && product.categoryId === selectedCategory) ||
-      // Match by category name string (since some products may use string category)
-      (product.category && categories.find(c => c.id === selectedCategory)?.name === product.category);
+    const productCategory = product.category ? product.category.trim().toLowerCase() : "";
+    const selectedCategoryNameLower = selectedCategoryName ? selectedCategoryName.trim().toLowerCase() : "";
+
+    console.log("Filtering product:", product.name, "Category:", productCategory, "Selected:", selectedCategoryNameLower);
+
+    // Relax category matching: if no selectedCategoryName, show all products
+    const categoryMatches = !selectedCategoryNameLower || productCategory === selectedCategoryNameLower;
     
-    // Check other filters
     const priceMatches = product.price >= priceRange.min && product.price <= priceRange.max;
-    const moqMatches = product.minOrderQuantity >= minOrderQuantity;
+    const moqMatches = minOrderQuantity < 0 || product.minOrderQuantity >= minOrderQuantity;
     
     return categoryMatches && priceMatches && moqMatches;
   });
 
-  // Sort the filtered products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "price_asc":
@@ -115,7 +116,6 @@ const CategoriesPage = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
-          {/* Filters Sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow p-4">
               <h3 className="font-semibold mb-4">Categories</h3>
@@ -168,7 +168,7 @@ const CategoriesPage = () => {
               <h3 className="font-semibold mb-4">Minimum Order</h3>
               <input
                 type="number"
-                value={minOrderQuantity}
+                value={minOrderQuantity < 0 ? 0 : minOrderQuantity}
                 onChange={(e) =>
                   setMinOrderQuantity(
                     Math.max(0, parseInt(e.target.value) || 0)
@@ -181,7 +181,6 @@ const CategoriesPage = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">
@@ -213,36 +212,39 @@ const CategoriesPage = () => {
                   return (
                     <div
                       key={product.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden"
+                      className="bg-white rounded-lg shadow-md overflow-hidden relative"
                     >
                       <div
                         className="h-48 bg-gray-200 bg-cover bg-center"
                         style={{ backgroundImage: `url(${product.image_url})` }}
                       />
                       <div className="p-4">
-                        <h3 className="font-semibold text-lg mb-2">
-                          {product.name}
-                        </h3>
-                        <div className="flex items-center mb-2">
-                          <Star
-                            className="text-yellow-400"
-                            size={16}
-                            fill="currentColor"
-                          />
-                          <span className="text-sm text-gray-600 ml-1">
-                            {product.rating || 4.5} ({product.reviews || 10} reviews)
-                          </span>
-                        </div>
-                        <div className="text-sm text-gray-600 mb-2 flex items-center">
-                          <CategoryIcon size={16} className="mr-1" />
-                          Category: {product.category || "N/A"}
-                        </div>
-                        <div className="text-sm text-gray-600 mb-2">
-                          Stock: {product.stock} units
-                        </div>
-                        <div className="text-sm text-gray-600 mb-2">
-                          MOQ: {product.minOrderQuantity} pieces
-                        </div>
+                    <h3 className="font-semibold text-lg mb-1">
+                      {product.name}
+                    </h3>
+                    <div className="text-sm text-gray-600 mb-2">
+                      Company: {product.companyName || "N/A"}
+                    </div>
+                    <div className="flex items-center mb-2">
+                      <Star
+                        className="text-yellow-400"
+                        size={16}
+                        fill="currentColor"
+                      />
+                      <span className="text-sm text-gray-600 ml-1">
+                        {product.rating || 4.5} ({product.reviews || 10} reviews)
+                      </span>
+                    </div>
+                <div className="text-sm text-gray-600 mb-2 flex items-center">
+                  <CategoryIcon size={16} className="mr-1" />
+                  Category: {product.category || "N/A"}
+                </div>
+                <div className="text-sm text-gray-600 mb-2">
+                  Stock: {product.stock} units
+                </div>
+                <div className="text-sm text-gray-600 mb-2">
+                  MOQ: {product.minOrderQuantity} pieces
+                </div>
                         <div className="flex justify-between items-center">
                           <div className="text-green-600 font-semibold">
                             ${product.price}
@@ -255,6 +257,9 @@ const CategoriesPage = () => {
                           </button>
                         </div>
                       </div>
++                      <div className="absolute top-2 right-2">
++                        <FavoriteButton productId={product.id} />
++                      </div>
                     </div>
                   );
                 })

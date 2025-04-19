@@ -12,10 +12,10 @@ const AddProducts = () => {
     price: '',
     stock: '',
     minOrderQuantity: '',
-    imageUrl: ''
+    imageUrl: '',
+    category: 0  // initialize as 0
   });
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -44,10 +44,24 @@ const AddProducts = () => {
     });
   };
 
+  const handleCategoryChange = (e) => {
+    const val = parseInt(e.target.value, 10);
+    setFormData({
+      ...formData,
+      category: val
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+
+    if (formData.category === 0) {
+      setError('Please select a valid category.');
+      return;
+    }
+
+    setLoading(true);
 
     const productData = {
       ...formData,
@@ -55,7 +69,7 @@ const AddProducts = () => {
       stock: parseInt(formData.stock),
       minOrderQuantity: parseInt(formData.minOrderQuantity),
       image_url: formData.imageUrl,
-      categories: selectedCategories
+      categories: [formData.category]  // send as array for backend compatibility
     };
 
     try {
@@ -71,7 +85,6 @@ const AddProducts = () => {
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Network error';
-      console.error('Submission error:', err.response || err);
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -164,26 +177,21 @@ const AddProducts = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-lg font-semibold">Categories</label>
-            <select 
-              multiple
-              value={selectedCategories}
-              onChange={(e) => setSelectedCategories(
-                Array.from(e.target.selectedOptions, option => option.value)
-              )}
-              className="w-full border border-gray-300 p-2 rounded-lg h-32"
+            <label className="text-lg font-semibold">Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleCategoryChange}
+              required
+              className="w-full border border-gray-300 p-2 rounded-lg"
             >
+              <option value={0} disabled>Select a category</option>
               {categories.map(category => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
-            <p className="text-sm text-gray-500">
-              {categories.length === 0 
-                ? 'No categories available' 
-                : 'Hold CTRL/CMD to select multiple categories'}
-            </p>
           </div>
 
           <button

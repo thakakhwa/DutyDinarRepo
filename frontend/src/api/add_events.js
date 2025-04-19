@@ -12,10 +12,29 @@ export const addEvent = async (formData) => {
       throw new Error('Unauthorized: Please login as a seller');
     }
 
+<<<<<<< HEAD
     // Make the POST request
     const response = await axios.post(
       `${API_BASE_URL}/add_events.php`,
       formData,
+=======
+    // Prepare payload
+    let payload;
+    if (formData instanceof FormData) {
+      // Convert FormData to plain object
+      payload = {};
+      formData.forEach((value, key) => {
+        payload[key] = value;
+      });
+    } else {
+      payload = formData;
+    }
+
+    // Make the POST request
+    const response = await axios.post(
+      `${API_BASE_URL}/add_events.php`,
+      JSON.stringify(payload),
+>>>>>>> fixedbranchfsfs
       {
         withCredentials: true,
         headers: {
