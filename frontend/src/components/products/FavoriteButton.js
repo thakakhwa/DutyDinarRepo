@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Heart, HeartOff } from 'lucide-react';
 import { addToWishlist, removeFromWishlist, getWishlistItems } from '../../api/wishlist';
 
-const FavoriteButton = ({ productId }) => {
+const FavoriteButton = ({ productId, onFavoriteChange }) => {
   const [loading, setLoading] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [wishlistId, setWishlistId] = useState(null);
@@ -39,6 +39,7 @@ const FavoriteButton = ({ productId }) => {
           if (success.success) {
             setFavorite(false);
             setWishlistId(null);
+            if (onFavoriteChange) onFavoriteChange();
           }
         }
       } else {
@@ -46,6 +47,7 @@ const FavoriteButton = ({ productId }) => {
         if (success.success && success.data) {
           setFavorite(true);
           setWishlistId(success.data.id || success.data.wishlist_id);
+          if (onFavoriteChange) onFavoriteChange();
         }
       }
     } catch (error) {
