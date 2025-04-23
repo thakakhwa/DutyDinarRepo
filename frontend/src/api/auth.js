@@ -20,6 +20,7 @@ export const login = async (email, password) => {
       // Store user data and type
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userType', response.data.userType);
+      localStorage.setItem('userId', response.data.data.userId); // Store userId for message sender check
       return {
         success: true,
         data: response.data.data,

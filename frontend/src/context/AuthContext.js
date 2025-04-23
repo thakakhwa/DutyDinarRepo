@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
           setUser({
             username: session.data.username,
             userType: session.data.userType,
+            userId: session.data.userId,
           });
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('userType', session.data.userType);
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }) => {
         setUser({
           username: email,
           userType: response.userType,
+          userId: response.data.userId,
         });
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userType', response.userType);
