@@ -268,11 +268,12 @@ const ProductsPage = () => {
     if (modalMode === 'add') {
       // Include seller_id in productData when admin adds product
       if (modalMode === 'add' && productData.seller) {
-        const seller = sellers.find(s => s.username === productData.seller);
+        const seller = mappedSellers.find(s => s.username === productData.seller);
         if (seller) {
           productData.seller_id = seller.id;
         }
       }
+      console.log('Submitting productData:', productData);
       response = await addProduct(productData);
     } else {
       response = await updateProduct(productData);
