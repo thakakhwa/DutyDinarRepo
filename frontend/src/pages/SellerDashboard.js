@@ -1,18 +1,47 @@
-import React from 'react';
-import { Package, Calendar } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
 const SellerDashboard = () => {
-  const navigate = useNavigate(); // Hook to navigate to another page
+  const navigate = useNavigate();
 
-  // Function to handle "Add New Events" button click
+  const [totalSales, setTotalSales] = useState(0);
+  const [activeOrders, setActiveOrders] = useState(0);
+  const [productViews, setProductViews] = useState(0);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/get_seller_dashboard_data.php`, {
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          const totalSalesNum = Number(data.totalSales);
+          setTotalSales(isNaN(totalSalesNum) ? 0 : totalSalesNum);
+          setActiveOrders(data.activeOrders || 0);
+          setProductViews(data.productViews || 0);
+          const recentOrdersWithNumbers = (data.recentOrders || []).map(order => ({
+            ...order,
+            total_amount: Number(order.total_amount)
+          }));
+          setRecentOrders(recentOrdersWithNumbers);
+          setUpcomingEvents(data.upcomingEvents || []);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching seller dashboard data:', error);
+      });
+  }, []);
+
   const handleAddEventClick = () => {
-    navigate('/add-events'); // Navigate to the AddEvents page
+    navigate('/add-events');
   };
   const handleAddProductClick = () => {
-    navigate('/add-products'); // Navigate to the Add Products
+    navigate('/add-products');
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,23 +49,22 @@ const SellerDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Total Sales</h3>
-            <div className="text-3xl font-bold text-green-600">$24,500</div>
+            <div className="text-3xl font-bold text-green-600">${totalSales.toFixed(2)}</div>
             <div className="text-sm text-gray-600">Last 30 days</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Active Orders</h3>
-            <div className="text-3xl font-bold text-green-600">18</div>
+            <div className="text-3xl font-bold text-green-600">{activeOrders}</div>
             <div className="text-sm text-gray-600">Pending fulfillment</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Product Views</h3>
-            <div className="text-3xl font-bold text-green-600">2,845</div>
+            <div className="text-3xl font-bold text-green-600">{productViews}</div>
             <div className="text-sm text-gray-600">Last 7 days</div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Recent Orders */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow">
               <div className="p-4 border-b">
@@ -53,36 +81,61 @@ const SellerDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[1, 2, 3, 4, 5].map((order) => (
-                      <tr key={order} className="border-t">
-                        <td className="py-4">#ORD-{order.toString().padStart(4, '0')}</td>
-                        <td className="py-4">Business Name {order}</td>
-                        <td className="py-4">${(Math.random() * 1000).toFixed(2)}</td>
-                        <td className="py-4">
-                          <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                            Completed
-                          </span>
+                    {recentOrders.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="py-4 text-center text-gray-500">
+                          No recent orders
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      recentOrders.map((order) => (
+                        <tr key={order.order_id} className="border-t">
+                          <td className="py-4">#ORD-{order.order_id.toString().padStart(4, '0')}</td>
+                          <td className="py-4">
+                            {order.items.length > 0
+                              ? order.items[0].product_name || order.items[0].event_name || 'N/A'
+                              : 'N/A'}
+                          </td>
+                          <td className="py-4">${order.total_amount.toFixed(2)}</td>
+                          <td className="py-4">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                order.status === 'pending'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : order.status === 'processing'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : order.status === 'shipped'
+                                  ? 'bg-purple-100 text-purple-800'
+                                  : order.status === 'delivered'
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-red-100 text-red-800'
+                              }`}
+                            >
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          {/* Quick Actions */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-2">
-                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
-                onClick={handleAddProductClick}>
+                <button
+                  className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
+                  onClick={handleAddProductClick}
+                >
                   Add New Product
                 </button>
                 <button
                   className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
-                  onClick={handleAddEventClick} // Add click handler
+                  onClick={handleAddEventClick}
                 >
                   Add New Events
                 </button>
@@ -98,12 +151,22 @@ const SellerDashboard = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
               <div className="space-y-4">
-                {[1, 2].map((event) => (
-                  <div key={event} className="border-b pb-4 last:border-b-0">
-                    <h4 className="font-medium">Trade Show {event}</h4>
-                    <div className="text-sm text-gray-600">March 15, 2024</div>
-                  </div>
-                ))}
+                {upcomingEvents.length === 0 ? (
+                  <div className="text-gray-500">No upcoming events</div>
+                ) : (
+                  upcomingEvents.map((event) => (
+                    <div key={event.id} className="border-b pb-4 last:border-b-0">
+                      <h4 className="font-medium">{event.name}</h4>
+                      <div className="text-sm text-gray-600">
+                        {new Date(event.event_date).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

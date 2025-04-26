@@ -21,6 +21,15 @@ export const getProducts = async (category = '', sortBy = '', priceRange = [0, 9
       products: response.data.data?.products || [],
     };
   } catch (error) {
+    // Improved error logging to help diagnose JSON parse errors
+    if (error.response) {
+      const contentType = error.response.headers['content-type'];
+      if (contentType && contentType.indexOf('application/json') === -1) {
+        console.error('Expected JSON but received:', error.response.data);
+      }
+    } else {
+      console.error('Error fetching products:', error.message);
+    }
     return {
       success: false,
       message: error.response?.data?.message || "Failed to fetch products",
@@ -42,6 +51,14 @@ export const getProductById = async (id) => {
       product: response.data.data?.product || null,
     };
   } catch (error) {
+    if (error.response) {
+      const contentType = error.response.headers['content-type'];
+      if (contentType && contentType.indexOf('application/json') === -1) {
+        console.error('Expected JSON but received:', error.response.data);
+      }
+    } else {
+      console.error('Error fetching product:', error.message);
+    }
     return {
       success: false,
       message: error.response?.data?.message || "Failed to fetch product",
