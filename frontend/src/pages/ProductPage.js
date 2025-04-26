@@ -7,6 +7,8 @@ import FavoriteButton from "../components/products/FavoriteButton";
 import { AuthContext } from "../context/AuthContext";
 import addReview from "../api/add_review";
 import getReviews from "../api/get_reviews";
+import { getFullImageUrl } from "../utils/imageUtils";
+import AuthModal from "../components/auth/AuthModal";
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -18,7 +20,10 @@ const ProductPage = () => {
   const [reviewForm, setReviewForm] = useState({ rating: "", comment: "" });
   const [addingReview, setAddingReview] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+
+  const imageUrl = getFullImageUrl(product?.image_url);
 
   useEffect(() => {
     window.scrollTo({
@@ -165,7 +170,7 @@ const ProductPage = () => {
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               {product.image_url && (
                 <img
-                  src={product.image_url}
+                  src={imageUrl}
                   alt={product.name}
                   className="w-full h-96 object-cover"
                 />
@@ -204,12 +209,18 @@ const ProductPage = () => {
                     Add to Cart
                   </button>
                 )}
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Add a Review
-                </button>
+              <button
+                onClick={() => {
+                  if (user) {
+                    setShowModal(true);
+                  } else {
+                    setShowAuthModal(true);
+                  }
+                }}
+                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Add a Review
+              </button>
                 {(user && user.userType === "buyer") && (
                   <button
                     onClick={() => navigate("/cart")}
@@ -302,6 +313,13 @@ const ProductPage = () => {
             </form>
           </div>
         </div>
+      )}
+      {showAuthModal && (
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          initialUserType="buyer"
+        />
       )}
     </>
   );

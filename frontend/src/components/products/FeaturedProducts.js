@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import { getProducts } from '../../api/get_products';
 import { useNavigate } from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
+import { getFullImageUrl } from '../../utils/imageUtils';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -46,7 +47,7 @@ const FeaturedProducts = () => {
           >
             <div
               className="h-48 bg-cover bg-center"
-              style={{ backgroundImage: `url(${product.image_url})` }}
+              style={{ backgroundImage: `url(${getFullImageUrl(product.image_url)})` }}
             />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-2">{product.name}</h3>

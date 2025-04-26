@@ -8,6 +8,7 @@ const SellerDashboard = () => {
 
   const [totalSales, setTotalSales] = useState(0);
   const [activeOrders, setActiveOrders] = useState(0);
+  const [productsListed, setProductsListed] = useState(0);
   const [productViews, setProductViews] = useState(0);
   const [recentOrders, setRecentOrders] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
@@ -35,6 +36,23 @@ const SellerDashboard = () => {
         console.error('Error fetching seller dashboard data:', error);
       });
   }, []);
+  
+  useEffect(() => {
+    // Fetch count of products listed by the seller
+    fetch(`${API_BASE_URL}/get_seller_products_count.php`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && typeof data.product_count === 'number') {
+          setProductsListed(data.product_count);
+        } else {
+          setProductsListed(0);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching products listed count:', error);
+        setProductsListed(0);
+      });
+  }, []);
 
   const handleAddEventClick = () => {
     navigate('/add-events');
@@ -53,9 +71,9 @@ const SellerDashboard = () => {
             <div className="text-sm text-gray-600">Last 30 days</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold mb-2">Active Orders</h3>
-            <div className="text-3xl font-bold text-green-600">{activeOrders}</div>
-            <div className="text-sm text-gray-600">Pending fulfillment</div>
+            <h3 className="text-lg font-semibold mb-2">Products Listed</h3>
+            <div className="text-3xl font-bold text-green-600">{productsListed}</div>
+            <div className="text-sm text-gray-600">Total products listed</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Product Views</h3>

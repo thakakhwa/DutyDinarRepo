@@ -5,6 +5,7 @@ import { Star, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCategoryIcon } from "../data/categories";
 import FavoriteButton from "../components/products/FavoriteButton";
+import { getFullImageUrl } from "../utils/imageUtils";
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -214,10 +215,16 @@ const CategoriesPage = () => {
                       key={product.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden relative"
                     >
-                      <div
-                        className="h-48 bg-gray-200 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${product.image_url})` }}
-                      />
+                      {(() => {
+                        const imageUrl = product.image_url && !product.image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${product.image_url}` : product.image_url;
+                        console.log('Category product image URL:', imageUrl);
+                        return (
+                          <div
+                            className="h-48 bg-gray-200 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${getFullImageUrl(product.image_url)})` }}
+                          />
+                        );
+                      })()}
                       <div className="p-4">
                     <h3 className="font-semibold text-lg mb-1">
                       {product.name}

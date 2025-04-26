@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addEvent } from '../api/add_events';
 
@@ -11,17 +11,52 @@ const AddEventPage = () => {
     location: '',
     price: '',
     available_tickets: '',
-    image: null,
+    imageUrl: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'image') {
-      setFormData((prev) => ({ ...prev, image: files[0] }));
+      const file = files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData((prev) => ({ ...prev, imageUrl: reader.result }));
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setError('Please select a valid image file.');
+      }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setError('');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, imageUrl: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setError('Please drop a valid image file.');
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -30,17 +65,22 @@ const AddEventPage = () => {
     setError('');
     setLoading(true);
 
+    if (!formData.imageUrl) {
+      setError('Please upload an image.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('description', formData.description);
-      data.append('event_date', formData.event_date);
-      data.append('location', formData.location);
-      data.append('price', formData.price);
-      data.append('available_tickets', formData.available_tickets);
-      if (formData.image) {
-        data.append('image', formData.image);
-      }
+      const data = {
+        name: formData.name,
+        description: formData.description,
+        event_date: formData.event_date,
+        location: formData.location,
+        price: formData.price,
+        available_tickets: formData.available_tickets,
+        image_url: formData.imageUrl,
+      };
 
       const response = await addEvent(data);
       if (response.status) {
@@ -67,7 +107,7 @@ const AddEventPage = () => {
             type="text"
             name="name"
             value={formData.name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
             className="w-full border px-3 py-2 rounded"
           />
@@ -77,7 +117,7 @@ const AddEventPage = () => {
           <textarea
             name="description"
             value={formData.description}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
             className="w-full border px-3 py-2 rounded"
           />
@@ -88,7 +128,7 @@ const AddEventPage = () => {
             type="date"
             name="event_date"
             value={formData.event_date}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
             className="w-full border px-3 py-2 rounded"
           />
@@ -99,7 +139,7 @@ const AddEventPage = () => {
             type="text"
             name="location"
             value={formData.location}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="w-full border px-3 py-2 rounded"
           />
         </div>
@@ -109,7 +149,7 @@ const AddEventPage = () => {
             type="number"
             name="price"
             value={formData.price}
-            onChange={handleChange}
+            onChange={handleInputChange}
             step="0.01"
             min="0"
             className="w-full border px-3 py-2 rounded"
@@ -121,19 +161,32 @@ const AddEventPage = () => {
             type="number"
             name="available_tickets"
             value={formData.available_tickets}
-            onChange={handleChange}
+            onChange={handleInputChange}
             min="0"
             className="w-full border px-3 py-2 rounded"
           />
         </div>
         <div className="mb-6">
           <label className="block mb-1 font-medium">Image</label>
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            className="w-full h-40 border-4 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer bg-white mb-2"
+            onClick={handleButtonClick}
+          >
+            {formData.imageUrl ? (
+              <img src={formData.imageUrl} alt="Preview" className="max-h-full max-w-full object-contain" />
+            ) : (
+              <span className="text-gray-500">Drag and drop an image here or click to select</span>
+            )}
+          </div>
           <input
             type="file"
             name="image"
             accept="image/*"
-            onChange={handleChange}
-            className="w-full"
+            ref={fileInputRef}
+            onChange={handleInputChange}
+            style={{ display: 'none' }}
           />
         </div>
         <button

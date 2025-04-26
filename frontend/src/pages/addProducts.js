@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../api/get_categories';
 import axios from "axios";
@@ -19,6 +19,7 @@ const AddProducts = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,12 +53,71 @@ const AddProducts = () => {
     });
   };
 
+  // New handler for drag and drop image
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setError('');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({
+          ...formData,
+          imageUrl: reader.result // base64 string
+        });
+        console.log('Image dropped and converted to base64');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setError('Please drop a valid image file.');
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  // New handler for file input change (button upload)
+  const handleFileChange = (e) => {
+    setError('');
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({
+          ...formData,
+          imageUrl: reader.result // base64 string
+        });
+        console.log('Image selected and converted to base64');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setError('Please select a valid image file.');
+    }
+  };
+
+  // Handler to trigger file input click
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+      console.log('File input clicked');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    console.log('Form submit triggered');
 
     if (formData.category === 0) {
       setError('Please select a valid category.');
+      console.log('Invalid category selected');
+      return;
+    }
+
+    if (!formData.imageUrl) {
+      setError('Please upload an image.');
+      console.log('No image uploaded');
       return;
     }
 
@@ -72,10 +132,14 @@ const AddProducts = () => {
       categories: [formData.category]  // send as array for backend compatibility
     };
 
+    console.log('Sending product data:', productData);
+
     try {
       const response = await axios.post(`${API_BASE_URL}/add_products.php`, productData, {
         withCredentials: true
       });
+
+      console.log('Response from backend:', response.data);
 
       if (response.data.success) {
         alert('Product added successfully');
@@ -86,6 +150,7 @@ const AddProducts = () => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Network error';
       setError(errorMessage);
+      console.error('Error during product add:', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -165,14 +230,31 @@ const AddProducts = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-lg font-semibold">Image URL</label>
+            <label className="text-lg font-semibold">Product Image (Drag and Drop or Select)</label>
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              className="w-full h-40 border-4 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer bg-white mb-2"
+            >
+              {formData.imageUrl ? (
+                <img src={formData.imageUrl} alt="Preview" className="max-h-full max-w-full object-contain" />
+              ) : (
+                <span className="text-gray-500">Drag and drop an image here</span>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={handleButtonClick}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            >
+              Select Image
+            </button>
             <input
-              type="text"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleInputChange}
-              required
-              className="w-full border border-gray-300 p-2 rounded-lg"
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
             />
           </div>
 

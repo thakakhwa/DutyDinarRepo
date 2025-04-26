@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Package, MapPin, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getEvents } from '../api/get_events';
+import { getFullImageUrl } from '../utils/imageUtils';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -44,7 +45,7 @@ const EventsPage = () => {
 
               return (
                 <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <img src={event.image_url} alt={event.name} className="h-48 w-full object-cover" />
+                  <img src={getFullImageUrl(event.image_url)} alt={event.name} className="h-48 w-full object-cover" />
                   <div className="p-4">
                     <h3 className="font-semibold text-lg mb-2">{event.name}</h3>
                     <p className="text-gray-600 mb-4">{event.description}</p>

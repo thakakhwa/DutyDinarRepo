@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Package } from 'lucide-react';
+import { getFullImageUrl } from '../utils/imageUtils';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
@@ -78,7 +79,7 @@ const EventDetailsPage = () => {
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="relative">
-            <img src={event.image_url || ''} alt={event.name} className="h-64 w-full object-cover" />
+          <img src={getFullImageUrl(event.image_url)} alt={event.name} className="h-64 w-full object-cover" />
             <div className="absolute top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg">
               Featured Event
             </div>

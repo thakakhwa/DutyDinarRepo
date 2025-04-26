@@ -5,6 +5,7 @@ import { addProduct, getCategories } from '../../api/add_products';
 import { updateProduct } from '../../api/update_products';
 import { deleteProduct } from '../../api/delete_products';
 import { fetchUsers } from '../../api/adminUsers';
+import { getFullImageUrl } from '../../utils/imageUtils';
 
 const ProductModal = ({ mode, product, onClose, onSubmit, categories, sellers }) => {
   const [formData, setFormData] = useState({
@@ -367,7 +368,17 @@ const ProductsPage = () => {
                 <div key={product.id} className="border rounded-lg overflow-hidden group hover:shadow-md transition-shadow">
                   <div className="aspect-w-4 aspect-h-3 bg-gray-100 relative">
                     {/* Product Image */}
-                    <img src={product.image_url || '/placeholder.jpg'} alt={product.name} className="w-full h-full object-cover" />
+                    {(() => {
+                      const imageUrl = (product.image_url && !product.image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${product.image_url}` : product.image_url) || '/placeholder.jpg';
+                      console.log('Product image URL:', imageUrl);
+                      return (
+                        <img
+                          src={getFullImageUrl(product.image_url) || '/placeholder.jpg'}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      );
+                    })()}
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <div className="flex space-x-2">
                         <button

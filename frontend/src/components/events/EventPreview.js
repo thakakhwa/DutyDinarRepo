@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Package } from 'lucide-react';
 import { getEvents } from '../../api/get_events';
+import { getFullImageUrl } from '../../utils/imageUtils';
 
 const EventPreview = () => {
   const [events, setEvents] = useState([]);
@@ -29,7 +30,7 @@ const EventPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {events.map((event) => (
             <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <img src={event.image_url} alt={event.name} className="h-40 w-full object-cover" />
+              <img src={getFullImageUrl(event.image_url)} alt={event.name} className="h-40 w-full object-cover" />
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-2">{event.name}</h3>
                 <div className="text-sm text-gray-600 mb-2">

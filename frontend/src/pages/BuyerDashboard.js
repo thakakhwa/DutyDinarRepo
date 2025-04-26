@@ -150,14 +150,14 @@ const BuyerDashboard = () => {
                         <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                           {order.items[0]?.product_image_url && (
                             <img
-                              src={order.items[0].product_image_url}
+                              src={(order.items[0].product_image_url && !order.items[0].product_image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${order.items[0].product_image_url}` : order.items[0].product_image_url)}
                               alt={order.items[0].product_name}
                               className="w-full h-full object-cover"
                             />
                           )}
                           {order.items[0]?.event_image_url && (
                             <img
-                              src={order.items[0].event_image_url}
+                              src={(order.items[0].event_image_url && !order.items[0].event_image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${order.items[0].event_image_url}` : order.items[0].event_image_url)}
                               alt={order.items[0].event_name}
                               className="w-full h-full object-cover"
                             />

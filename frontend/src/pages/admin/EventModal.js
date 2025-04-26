@@ -180,6 +180,13 @@ const EventModal = ({ mode, event, onClose, onSubmit, sellers }) => {
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
             />
+            {formData.image_url && (
+              <img
+                src={(formData.image_url && !formData.image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_URL || ''}/${formData.image_url}` : formData.image_url)}
+                alt="Event"
+                className="mt-2 max-h-48 object-contain"
+              />
+            )}
           </div>
           <div>
             <label className="block mb-1 font-medium">Seller</label>

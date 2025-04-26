@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getFavorites } from '../api/get_favorites';
 import FavoriteButton from '../components/products/FavoriteButton';
 import { Link } from 'react-router-dom';
+import { getFullImageUrl } from '../utils/imageUtils';
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState([]);
@@ -44,7 +45,7 @@ const FavoritesPage = () => {
               >
                 <div
                   className="h-48 bg-gray-200 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${product.image_url})` }}
+                  style={{ backgroundImage: `url(${getFullImageUrl(product.image_url)})` }}
                 />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="font-semibold text-lg mb-1 truncate">{product.name}</h3>

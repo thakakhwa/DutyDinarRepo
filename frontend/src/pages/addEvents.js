@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addEvent } from '../api/add_events'; // Import the addEvent function
 
@@ -12,33 +12,96 @@ const AddEventPage = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      const file = files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImageUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please select a valid image file.');
+      }
+    } else {
+      switch (name) {
+        case 'name':
+          setName(value);
+          break;
+        case 'description':
+          setDescription(value);
+          break;
+        case 'eventDate':
+          setEventDate(value);
+          break;
+        case 'location':
+          setLocation(value);
+          break;
+        case 'price':
+          setPrice(value);
+          break;
+        case 'availableTickets':
+          setAvailableTickets(value);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('Please drop a valid image file.');
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const eventData = {
-        name,
-        description,
-        event_date: eventDate,
-        location,
-        price,
-        available_tickets: availableTickets,
-        image_url: imageUrl,
+      name,
+      description,
+      event_date: eventDate,
+      location,
+      price,
+      available_tickets: availableTickets,
+      image_url: imageUrl,
     };
 
     const result = await addEvent(eventData); // Call the API utility function
 
     if (result.status) {
-        alert('Event added successfully');
-        navigate('/seller-dashboard'); // Redirect to dashboard
+      alert('Event added successfully');
+      navigate('/seller-dashboard'); // Redirect to dashboard
     } else {
-        alert(result.message || 'Failed to add event');
+      alert(result.message || 'Failed to add event');
     }
 
     setLoading(false);
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -49,8 +112,9 @@ const AddEventPage = () => {
             <label className="text-lg font-semibold">Event Name</label>
             <input
               type="text"
+              name="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -59,8 +123,9 @@ const AddEventPage = () => {
           <div className="space-y-2">
             <label className="text-lg font-semibold">Description</label>
             <textarea
+              name="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -70,8 +135,9 @@ const AddEventPage = () => {
             <label className="text-lg font-semibold">Event Date</label>
             <input
               type="datetime-local"
+              name="eventDate"
               value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -81,8 +147,9 @@ const AddEventPage = () => {
             <label className="text-lg font-semibold">Location</label>
             <input
               type="text"
+              name="location"
               value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -92,8 +159,9 @@ const AddEventPage = () => {
             <label className="text-lg font-semibold">Price</label>
             <input
               type="number"
+              name="price"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
@@ -103,21 +171,35 @@ const AddEventPage = () => {
             <label className="text-lg font-semibold">Available Tickets</label>
             <input
               type="number"
+              name="availableTickets"
               value={availableTickets}
-              onChange={(e) => setAvailableTickets(e.target.value)}
+              onChange={handleInputChange}
               required
               className="w-full border border-gray-300 p-2 rounded-lg"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-lg font-semibold">Image URL</label>
+            <label className="text-lg font-semibold">Image</label>
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              className="w-full h-40 border-4 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer bg-white mb-2"
+              onClick={handleButtonClick}
+            >
+              {imageUrl ? (
+                <img src={imageUrl} alt="Preview" className="max-h-full max-w-full object-contain" />
+              ) : (
+                <span className="text-gray-500">Drag and drop an image here or click to select</span>
+              )}
+            </div>
             <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              required
-              className="w-full border border-gray-300 p-2 rounded-lg"
+              type="file"
+              name="image"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleInputChange}
+              style={{ display: 'none' }}
             />
           </div>
 

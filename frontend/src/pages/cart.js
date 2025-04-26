@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCart } from '../api/get_cart';
+import { getFullImageUrl } from '../utils/imageUtils';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -108,11 +109,11 @@ const Cart = () => {
             <div className="md:col-span-2 space-y-4">
               {cartItems.map((item) => (
                 <div key={item.id} className="bg-white rounded-lg shadow-card p-4 flex items-center">
-                  <img
-                    src={item.product_image_url || item.event_image_url || ''}
-                    alt={item.product_name || item.event_name || 'Item'}
-                    className="w-20 h-20 object-cover rounded-md mr-4"
-                  />
+                    <img
+                      src={getFullImageUrl(item.product_image_url) || getFullImageUrl(item.event_image_url) || ''}
+                      alt={item.product_name || item.event_name || 'Item'}
+                      className="w-20 h-20 object-cover rounded-md mr-4"
+                    />
 
                   <div className="flex-grow">
                     <h3 className="font-medium text-gray-800">{item.product_name || item.event_name || 'Unnamed Item'}</h3>

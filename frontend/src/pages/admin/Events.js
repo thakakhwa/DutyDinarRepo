@@ -3,6 +3,7 @@ import { Calendar, MapPin, Users, Plus, Edit2, Trash2, Clock } from 'lucide-reac
 import EventModal from './EventModal';
 import { fetchEvents, addEvent, updateEvent, deleteEvent } from '../../api/events';
 import { fetchUsers } from '../../api/adminUsers';
+import { getFullImageUrl } from '../../utils/imageUtils';
 
 const EventsPage = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -34,7 +35,7 @@ const EventsPage = () => {
           // Removed mapping title: event.name to preserve name field directly
           date,
           time,
-          image: event.image_url,
+          image: getFullImageUrl(event.image_url),
           available_tickets: event.available_tickets,
           price: event.price,
         };
@@ -74,7 +75,7 @@ const EventsPage = () => {
       // Removed mapping title: event.name to preserve name field directly
       date: event.date || '',
       time: event.time || '',
-      image: event.image || event.image_url || '',
+      image: event.image || getFullImageUrl(event.image_url) || '',
       available_tickets: event.available_tickets,
       price: event.price,
       seller: event.seller || event.seller_username || '', // try multiple possible fields
@@ -231,7 +232,7 @@ const EventsPage = () => {
             .map((event) => (
               <div key={event.id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                 <div className="aspect-w-16 aspect-h-9 bg-gray-100 relative">
-                  <div className="w-full h-full bg-gray-200"></div>
+                  <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
                   <div className="absolute top-2 right-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize
                       ${event.status === 'upcoming' ? 'bg-blue-100 text-blue-800' :
@@ -306,3 +307,4 @@ const EventsPage = () => {
 };
 
 export default EventsPage;
+
