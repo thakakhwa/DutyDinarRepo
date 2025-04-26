@@ -4,7 +4,7 @@ import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search, Heart 
 import AuthModal from '../auth/AuthModal';
 import { AuthContext } from '../../context/AuthContext';
 
-const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType }) => {
+const Navbar = ({ user, loading, cartItems }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -12,8 +12,6 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
 
   const onLogout = async () => {
     await handleLogout();
-    setIsLoggedIn(false);
-    setUserType('buyer');
     setIsProfileOpen(false);
     navigate('/');
   };
@@ -37,9 +35,9 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
               <Link to="/" className="text-gray-600 hover:text-green-600">Home</Link>
               <Link to="/categories" className="text-gray-600 hover:text-green-600">Categories</Link>
               <Link to="/events" className="text-gray-600 hover:text-green-600">Events</Link>
-              {isLoggedIn && (
+              {user && (
                 <Link to="/dashboard" className="text-gray-600 hover:text-green-600">
-                  {userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                  {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                 </Link>
               )}
             </div>
@@ -54,10 +52,10 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                 />
               </div>
 
-              {isLoggedIn ? (
+              {user ? (
                 <>
                   <Bell className="text-gray-600 cursor-pointer" size={24} />
-                  {userType === 'buyer' && (
+                  {user.userType === 'buyer' && (
                     <div className="relative flex items-center space-x-4">
                       <Link to="/favorites" className="text-gray-600 hover:text-green-600 relative">
                         <Heart className="cursor-pointer" size={24} />
@@ -87,7 +85,7 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={() => setIsProfileOpen(false)}
                         >
-                          {userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+                          {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                         </Link>
                         <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
                         <Link to="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</Link>
@@ -119,8 +117,6 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
       <AuthModal 
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserType={setUserType}
       />
     </>
   );

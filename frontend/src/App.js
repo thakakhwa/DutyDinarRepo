@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,33 +26,19 @@ import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
 import FavoritesPage from "./pages/FavoritesPage";
 import { WishlistProvider } from "./context/WishlistContext";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
 import MessagePopup from "./components/MessagePopup";
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const [cartItems, setCartItems] = useState(3);
-  const [isMessageOpen, setIsMessageOpen] = useState(false);
-
-  useEffect(() => {
-    // Load authentication status from localStorage
-    const savedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const savedUserType = localStorage.getItem("userType");
-
-    if (savedIsLoggedIn && savedUserType) {
-      setIsLoggedIn(true);
-      setUserType(savedUserType);
-    } else {
-      setIsLoggedIn(false);
-      setUserType(null);
-    }
-  }, []);
+const AppRoutes = () => {
+  const { user, loading } = useContext(AuthContext);
 
   // Private Route to protect authenticated user routes
   const PrivateRoute = ({ children }) => {
-    if (!isLoggedIn) {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (!user) {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -60,7 +46,10 @@ const App = () => {
 
   // Admin Route to restrict admin pages
   const AdminRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== "admin") {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (!user || user.userType !== "admin") {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -68,7 +57,10 @@ const App = () => {
 
   // Seller Route to restrict seller pages
   const SellerRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== "seller") {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (!user || user.userType !== "seller") {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -76,11 +68,17 @@ const App = () => {
 
   // Buyer Route to restrict buyer pages
   const BuyerRoute = ({ children }) => {
-    if (!isLoggedIn || userType !== "buyer") {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (!user || user.userType !== "buyer") {
       return <Navigate to="/" replace />;
     }
     return children;
   };
+
+  const [cartItems, setCartItems] = React.useState(3);
+  const [isMessageOpen, setIsMessageOpen] = React.useState(false);
 
   const toggleMessagePopup = () => {
     setIsMessageOpen(!isMessageOpen);
@@ -88,110 +86,107 @@ const App = () => {
 
   return (
     <Router>
-      <AuthProvider>
-        <WishlistProvider>
-          <div className="min-h-screen bg-gray-50">
-            <Navbar
-              isLoggedIn={isLoggedIn}
-              userType={userType}
-              cartItems={cartItems}
-              setIsLoggedIn={setIsLoggedIn}
-              setUserType={setUserType}
+      <WishlistProvider>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar user={user} loading={loading} cartItems={cartItems} />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/event/:eventId" element={<EventDetailsPage />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/tos" element={<TOS />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/Privacy" element={<Privacypolicy />} />
+            <Route
+              path="/profile"
+              element={
+                <AccountProfile />
+              }
             />
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/events" element={<EventsPage />} />
-              <Route path="/product/:productId" element={<ProductPage />} />
-              <Route path="/event/:eventId" element={<EventDetailsPage />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/tos" element={<TOS />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/contact" element={<ContactUs />} />
-              <Route path="/Privacy" element={<Privacypolicy />} />
-              <Route
-                path="/profile"
-                element={
-                  <AccountProfile
-                    setIsLoggedIn={setIsLoggedIn}
-                    setUserType={setUserType}
-                  />
-                }
-              />
 
-              {/* Protected Cart Route for Buyers */}
-              <Route
-                path="/cart"
-                element={
-                  <BuyerRoute>
-                    <Cart />
-                  </BuyerRoute>
-                }
-              />
+            {/* Protected Cart Route for Buyers */}
+            <Route
+              path="/cart"
+              element={
+                <BuyerRoute>
+                  <Cart />
+                </BuyerRoute>
+              }
+            />
 
-              {/* Protected Favorites Route for Buyers */}
-              <Route
-                path="/favorites"
-                element={
-                  <BuyerRoute>
-                    <FavoritesPage />
-                  </BuyerRoute>
-                }
-              />
+            {/* Protected Favorites Route for Buyers */}
+            <Route
+              path="/favorites"
+              element={
+                <BuyerRoute>
+                  <FavoritesPage />
+                </BuyerRoute>
+              }
+            />
 
-              {/* Protected User Dashboard */}
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivateRoute>
-                    {userType === "admin" ? (
-                      <Navigate to="/admin" replace />
-                    ) : userType === "seller" ? (
-                      <SellerDashboard />
-                    ) : (
-                      <BuyerDashboard />
-                    )}
-                  </PrivateRoute>
-                }
-              />
-              {/* Protected Seller Add Event Page */}
-              <Route
-                path="/add-events"
-                element={
-                  <SellerRoute>
-                    <AddEvents />
-                  </SellerRoute>
-                }
-              />
-              {/* Protected Seller Add Products Page */}
-              <Route
-                path="/add-products"
-                element={
-                  <SellerRoute>
-                    <AddProducts />
-                  </SellerRoute>
-                }
-              />
-              {/* Protected Admin Routes */}
-              <Route
-                path="/admin/*"
-                element={
-                  <AdminRoute>
-                    <AdminRoutes />
-                  </AdminRoute>
-                }
-              />
-              {/* Redirect unknown routes to Home */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            <MessageButton onClick={toggleMessagePopup} />
-            {isMessageOpen && <MessagePopup onClose={toggleMessagePopup} />}
-            <Footer />
-          </div>
-        </WishlistProvider>
-      </AuthProvider>
+            {/* Protected User Dashboard */}
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  {user && user.userType === "admin" ? (
+                    <Navigate to="/admin" replace />
+                  ) : user && user.userType === "seller" ? (
+                    <SellerDashboard />
+                  ) : (
+                    <BuyerDashboard />
+                  )}
+                </PrivateRoute>
+              }
+            />
+            {/* Protected Seller Add Event Page */}
+            <Route
+              path="/add-events"
+              element={
+                <SellerRoute>
+                  <AddEvents />
+                </SellerRoute>
+              }
+            />
+            {/* Protected Seller Add Products Page */}
+            <Route
+              path="/add-products"
+              element={
+                <SellerRoute>
+                  <AddProducts />
+                </SellerRoute>
+              }
+            />
+            {/* Protected Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <AdminRoute>
+                  <AdminRoutes />
+                </AdminRoute>
+              }
+            />
+            {/* Redirect unknown routes to Home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <MessageButton onClick={toggleMessagePopup} />
+          {isMessageOpen && <MessagePopup onClose={toggleMessagePopup} />}
+          <Footer />
+        </div>
+      </WishlistProvider>
     </Router>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 };
 

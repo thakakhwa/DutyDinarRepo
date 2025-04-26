@@ -19,13 +19,6 @@ const ProductPage = () => {
   const [addingReview, setAddingReview] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const [userLoaded, setUserLoaded] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setUserLoaded(true);
-    }
-  }, [user]);
 
   useEffect(() => {
     window.scrollTo({
@@ -60,7 +53,6 @@ const ProductPage = () => {
     fetchProduct();
   }, [productId, navigate]);
 
-
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -92,18 +84,12 @@ const ProductPage = () => {
 
       if (response.data.success) {
         alert("Product added to cart!");
-        // Do not open review modal on add to cart success
-        // setShowModal(true);
       } else {
         alert("Failed to add to cart");
-        // Do not open review modal on add to cart failure
-        // setShowModal(true);
       }
     } catch (error) {
       console.error("Add to cart error:", error);
       alert("Error adding to cart. Please try again.");
-      // Do not open review modal on add to cart error
-      // setShowModal(true);
     }
   };
 
@@ -132,7 +118,6 @@ const ProductPage = () => {
       if (response.success) {
         alert("Review added successfully!");
         setReviewForm({ rating: "", comment: "" });
-        // Refresh reviews
         const refreshed = await getReviews(productId);
         if (refreshed.success) {
           setReviews(refreshed.reviews);
@@ -211,14 +196,14 @@ const ProductPage = () => {
               </div>
 
               <div className="flex gap-4 items-center mb-6">
-              {(userLoaded && user && user.userType === "buyer") && (
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                >
-                  Add to Cart
-                </button>
-              )}
+                {(user && user.userType === "buyer") && (
+                  <button
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  >
+                    Add to Cart
+                  </button>
+                )}
                 <button
                   onClick={() => setShowModal(true)}
                   className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
@@ -263,7 +248,6 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-      {/* Modal for Review Form */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg">
