@@ -13,11 +13,11 @@ error_log("Raw input: " . file_get_contents('php://input'));
 
 try {
     // Check if user is logged in and is a seller
-    if (!isset($_SESSION['userId']) || !isset($_SESSION['userType']) || $_SESSION['userType'] !== 'seller') {
+    if (!isset($_SESSION['userId']) || !isset($_SESSION['userType']) || !in_array($_SESSION['userType'], ['seller', 'admin'])) {
         http_response_code(403);
         echo json_encode([
             'status' => false,
-            'message' => 'Unauthorized: Only authenticated sellers can add events'
+            'message' => 'Unauthorized: Only authenticated sellers or admins can add events'
         ]);
         exit();
     }
@@ -50,7 +50,13 @@ try {
         throw new Exception('Database prepare failed: ' . $conn->error, 500);
     }
 
-    $sellerId = $_SESSION['userId'];
+    // Determine sellerId: if admin and seller_id provided, use it; else use session userId
+    if ($_SESSION['userType'] === 'admin' && isset($input['seller_id']) && is_numeric($input['seller_id'])) {
+        $sellerId = intval($input['seller_id']);
+    } else {
+        $sellerId = $_SESSION['userId'];
+    }
+
     $name = $input['name'];
     $description = $input['description'];
     $eventDate = $input['event_date'];
