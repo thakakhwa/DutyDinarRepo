@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCategories } from '../api/get_categories';
 import { getProducts } from '../api/get_products';
 import FeaturedProducts from '../components/products/FeaturedProducts';
@@ -14,6 +14,7 @@ const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
   const [initialUserType, setInitialUserType] = useState('buyer');
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({
@@ -56,6 +57,10 @@ const HomePage = () => {
   const handleBecomeSeller = () => {
     setInitialUserType('seller');
     setIsAuthModalOpen(true);
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/categories?category=${categoryId}`);
   };
 
   return (
@@ -124,7 +129,11 @@ const HomePage = () => {
         <h2 className="text-2xl font-semibold mb-8">Browse Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {categories.map(({ id, name }) => (
-            <div key={id} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl">
+            <div 
+              key={id} 
+              className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl cursor-pointer"
+              onClick={() => handleCategoryClick(id)}
+            >
               <Package className="text-green-600 mb-2" size={32} />
               <span className="text-sm text-center">{name}</span>
             </div>
