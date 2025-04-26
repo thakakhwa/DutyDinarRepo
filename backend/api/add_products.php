@@ -37,7 +37,13 @@ if (!$user) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
     exit;
 }
-$seller_id = $user['id'];
+
+// Determine seller_id: if admin and seller_id provided in input, use it; else use logged-in user id
+if ($user['userType'] === 'admin' && isset($inputData['seller_id'])) {
+    $seller_id = intval($inputData['seller_id']);
+} else {
+    $seller_id = $user['id'];
+}
 
 // Prepare the product data from the input
 $name = $inputData['name'];
@@ -65,6 +71,8 @@ if (empty($category_name)) {
     echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
     exit;
 }
+
+error_log("Adding product with seller_id: " . $seller_id);
 
 // Begin transaction
 $conn->begin_transaction();
