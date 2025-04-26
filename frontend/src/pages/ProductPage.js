@@ -217,7 +217,7 @@ const ProductPage = () => {
                     setShowAuthModal(true);
                   }
                 }}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
                 Add a Review
               </button>
@@ -305,7 +305,7 @@ const ProductPage = () => {
                 <button
                   type="submit"
                   disabled={addingReview}
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
                 >
                   {addingReview ? "Adding..." : "Submit Review"}
                 </button>
