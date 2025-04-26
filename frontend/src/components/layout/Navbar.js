@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search, Heart } from 'lucide-react';
 import AuthModal from '../auth/AuthModal';
+import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { handleLogout } = useContext(AuthContext);
 
-  const handleLogout = () => {
+  const onLogout = async () => {
+    await handleLogout();
     setIsLoggedIn(false);
     setUserType('buyer');
-    localStorage.setItem('isLoggedIn', 'false');
-    localStorage.setItem('userType', 'buyer');
     setIsProfileOpen(false);
-    
-    // Refresh the page after logout
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
@@ -94,7 +93,7 @@ const Navbar = ({ isLoggedIn, userType, cartItems, setIsLoggedIn, setUserType })
                         <Link to="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</Link>
                         <hr className="my-2" />
                         <button
-                          onClick={handleLogout}
+                          onClick={onLogout}
                           className="flex items-center px-4 py-2 text-red-600 hover:bg-gray-100 w-full"
                         >
                           <LogOut size={16} className="mr-2" />
