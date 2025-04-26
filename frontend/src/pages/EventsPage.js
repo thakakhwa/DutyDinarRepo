@@ -20,6 +20,13 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
+    useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, []);
+
   const handleDetailsClick = (eventId) => {
     navigate(`/event/${eventId}`);
   };

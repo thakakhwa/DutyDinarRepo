@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Calendar, User, LogOut, Bell, ChevronDown, Search, Heart } from 'lucide-react';
+import { ShoppingCart, Calendar, CalendarCheck, User, LogOut, Bell, ChevronDown, Search, Heart } from 'lucide-react';
 import AuthModal from '../auth/AuthModal';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -36,10 +36,12 @@ const Navbar = ({ user, loading, cartItems }) => {
               <Link to="/categories" className="text-gray-600 hover:text-green-600">Categories</Link>
               <Link to="/events" className="text-gray-600 hover:text-green-600">Events</Link>
               {user && (
-                <Link to="/dashboard" className="text-gray-600 hover:text-green-600">
-                  {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
-                </Link>
-              )}
+                <>
+              <Link to="/dashboard" className="text-gray-600 hover:text-green-600">
+                {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+              </Link>
+            </>
+          )}
             </div>
 
             <div className="flex items-center space-x-4">
@@ -59,6 +61,9 @@ const Navbar = ({ user, loading, cartItems }) => {
                     <div className="relative flex items-center space-x-4">
                       <Link to="/favorites" className="text-gray-600 hover:text-green-600 relative">
                         <Heart className="cursor-pointer" size={24} />
+                      </Link>
+                      <Link to="/booked-events" className="text-gray-600 hover:text-green-600 relative" title="Booked Events">
+                        <CalendarCheck className="cursor-pointer" size={24} />
                       </Link>
                       <Link to="/cart" className="relative">
                         <ShoppingCart className="text-gray-600 cursor-pointer" size={24} />

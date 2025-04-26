@@ -25,6 +25,7 @@ import AccountProfile from "./pages/AccountProfile";
 import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
 import FavoritesPage from "./pages/FavoritesPage";
+import BookedEventsPage from "./pages/BookedEventsPage";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
@@ -124,6 +125,16 @@ const AppRoutes = () => {
               element={
                 <BuyerRoute>
                   <FavoritesPage />
+                </BuyerRoute>
+              }
+            />
+
+            {/* Protected Booked Events Route for Buyers */}
+            <Route
+              path="/booked-events"
+              element={
+                <BuyerRoute>
+                  <BookedEventsPage />
                 </BuyerRoute>
               }
             />

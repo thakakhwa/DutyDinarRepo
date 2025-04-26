@@ -13,6 +13,14 @@ const EventDetailsPage = () => {
   const [bookingLoading, setBookingLoading] = useState(false);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+
+  useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await fetch(`http://localhost/DutyDinarRepo/backend/api/get_events.php?id=${eventId}`, {

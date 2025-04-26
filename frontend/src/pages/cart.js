@@ -26,6 +26,13 @@ const Cart = () => {
     fetchCart();
   }, []);
 
+    useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, []);
+
   const calculateTotal = () => {
     return cartItems.reduce((total, item) =>
       total + ((Number(item.product_price ?? item.event_price) || 0) * item.quantity), 0
