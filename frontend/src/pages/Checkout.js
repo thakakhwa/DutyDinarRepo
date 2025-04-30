@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe('pk_test_51RJbVDQmRraBhPiiiaNOYDXbnq03gesKd08368EkbvBrxeJwYEqSolsMYOVd5Xj1qcaM7b0d2h0WY8hpTGXhW4hj00Qxh0qP3B');
 
@@ -25,6 +26,7 @@ const jordanianCities = [
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   // Placeholder cartItems array for testing
   const cartItems = [
@@ -221,6 +223,7 @@ function CheckoutForm() {
           if (createOrderResult.success) {
             alert('Order created successfully!');
             // Optionally clear cart here
+            navigate('/buyer-dashboard', { state: { refresh: true } });
           } else {
             alert('Failed to create order: ' + createOrderResult.message);
           }
@@ -247,6 +250,7 @@ function CheckoutForm() {
       if (createOrderResult.success) {
         alert('Order created successfully!');
         // Optionally clear cart here
+        navigate('/buyer-dashboard', { state: { refresh: true } });
       } else {
         alert('Failed to create order: ' + createOrderResult.message);
       }

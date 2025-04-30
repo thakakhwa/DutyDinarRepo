@@ -75,6 +75,14 @@ const SellerDashboard = () => {
     }
   };
 
+  const renderOrderItems = (items) => {
+    return items.map((item, index) => (
+      <div key={index} className="mb-1">
+        {item.product_name || item.event_name || 'N/A'} (Qty: {item.quantity})
+      </div>
+    ));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -108,6 +116,7 @@ const SellerDashboard = () => {
                     <tr className="text-left text-gray-600">
                       <th className="pb-4">Order ID</th>
                       <th className="pb-4">Customer</th>
+                      <th className="pb-4">Items</th>
                       <th className="pb-4">Amount</th>
                       <th className="pb-4">Status</th>
                     </tr>
@@ -115,18 +124,17 @@ const SellerDashboard = () => {
                   <tbody>
                     {recentOrders.length === 0 ? (
                       <tr>
-                        <td colSpan="4" className="py-4 text-center text-gray-500">
+                        <td colSpan="5" className="py-4 text-center text-gray-500">
                           No recent orders
                         </td>
                       </tr>
                     ) : (
                       recentOrders.map((order) => (
-                        <tr key={order.order_id} className="border-t">
+                        <tr key={order.order_id} className="border-t align-top">
                           <td className="py-4">#ORD-{order.order_id.toString().padStart(4, '0')}</td>
+                          <td className="py-4">{order.customer_name || 'N/A'}</td>
                           <td className="py-4">
-                            {order.items.length > 0
-                              ? order.items[0].product_name || order.items[0].event_name || 'N/A'
-                              : 'N/A'}
+                            {renderOrderItems(order.items)}
                           </td>
                           <td className="py-4">${order.total_amount.toFixed(2)}</td>
                           <td className="py-4">
