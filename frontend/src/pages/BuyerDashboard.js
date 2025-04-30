@@ -243,9 +243,11 @@ const BuyerDashboard = () => {
                 >
                   Browse Categories
                 </Link>
+                <Link to="/favorites" className="block w-full">
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
-                  View Wishlist
+                  View Favorites
                 </button>
+                </Link>
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
                   Track Orders
                 </button>
