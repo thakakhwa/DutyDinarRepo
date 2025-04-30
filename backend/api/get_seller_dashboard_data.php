@@ -15,13 +15,14 @@ $sellerId = $_SESSION['userId'];
 try {
     // Total Sales: sum of total_amount for orders containing seller's products or events
     $totalSalesQuery = "
-        SELECT IFNULL(SUM(o.total_amount), 0) AS total_sales
+        SELECT IFNULL(SUM(oi.price * oi.quantity), 0) AS total_sales
         FROM orders o
         JOIN order_items oi ON o.id = oi.order_id
+        JOIN order_item_status ois ON oi.id = ois.order_item_id
         LEFT JOIN products p ON oi.product_id = p.id
         LEFT JOIN events e ON oi.event_id = e.id
         WHERE (p.seller_id = ? OR e.seller_id = ?)
-          AND o.status IN ('pending', 'processing', 'shipped', 'delivered')
+          AND ois.status = 'delivered'
     ";
     $stmt = $conn->prepare($totalSalesQuery);
     $stmt->bind_param("ii", $sellerId, $sellerId);
