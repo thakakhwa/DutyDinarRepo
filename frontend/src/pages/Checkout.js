@@ -1,41 +1,115 @@
 import React, { useState } from 'react';
 
+const jordanianCities = [
+  "Amman",
+  "Zarqa",
+  "Irbid",
+  "Russeifa",
+  "Aqaba",
+  "Madaba",
+  "Jerash",
+  "Mafraq",
+  "Karak",
+  "Ajloun",
+  "Salt",
+  "Tafilah",
+  "Ma'an",
+  "Balqa",
+  "Maan",
+];
+
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    location: '',
+    country: 'Jordan',
     email: '',
     city: '',
     number: '',
     street: '',
+    cardHolderName: '',
+    cardNumber: '',
+    cvv: '',
+    expiryDate: '',
   });
   const [errors, setErrors] = useState({});
+
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, '');
+    const formatted = digits.replace(/(.{4})/g, '$1 ').trim();
+    return formatted;
+  };
+
+  const formatExpiryDate = (value) => {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length === 0) return '';
+    if (digits.length < 3) return digits;
+    return digits.substring(0, 2) + '/' + digits.substring(2, 4);
+  };
 
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (/\d/.test(formData.name)) {
+      newErrors.name = 'Name cannot contain numbers';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const allowedMailboxes = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com'];
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Email is invalid';
+      } else {
+        const domain = formData.email.split('@')[1].toLowerCase();
+        if (!allowedMailboxes.includes(domain)) {
+          newErrors.email = 'Email must be from a common mailbox (gmail, yahoo, hotmail, outlook, icloud)';
+        }
+      }
     }
-    if (!formData.city.trim()) newErrors.city = 'City is required';
-    if (!formData.street.trim()) newErrors.street = 'Street is required';
+
+    if (!formData.city) {
+      newErrors.city = 'City is required';
+    }
+
+    if (!formData.street.trim()) {
+      newErrors.street = 'Street is required';
+    }
 
     if (!formData.number.trim()) {
       newErrors.number = 'Phone number is required';
     } else {
-      // Validate phone number starts with +962 and has 10 digits after
-      const phoneRegex = /^\+962\d{10}$/;
-      if (!phoneRegex.test(formData.number)) {
-        newErrors.number = 'Phone number must start with +962 and have 10 digits after';
+      if (!/^\d{9}$/.test(formData.number)) {
+        newErrors.number = 'Phone number must be exactly 9 digits';
       }
     }
 
     if (!paymentMethod) newErrors.paymentMethod = 'Please select a payment method';
+
+    if (paymentMethod === 'visa') {
+      if (!formData.cardHolderName.trim()) newErrors.cardHolderName = 'Card holder name is required';
+      if (!formData.cardNumber.trim()) {
+        newErrors.cardNumber = 'Card number is required';
+      } else {
+        const cardNumberDigits = formData.cardNumber.replace(/\s/g, '');
+        if (!/^\d{16}$/.test(cardNumberDigits)) {
+          newErrors.cardNumber = 'Card number must be 16 digits';
+        }
+      }
+      if (!formData.cvv.trim()) {
+        newErrors.cvv = 'CVV is required';
+      } else if (!/^\d{3}$/.test(formData.cvv)) {
+        newErrors.cvv = 'CVV must be exactly 3 digits';
+      }
+      if (!formData.expiryDate.trim()) {
+        newErrors.expiryDate = 'Expiry date is required';
+      } else if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(formData.expiryDate)) {
+        newErrors.expiryDate = 'Expiry date must be in MM/YY format';
+      }
+    }
 
     setErrors(newErrors);
 
@@ -43,7 +117,23 @@ const Checkout = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value});
+    const { name, value } = e.target;
+
+    if (name === 'cardNumber') {
+      const formattedValue = formatCardNumber(value);
+      setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    } else if (name === 'expiryDate') {
+      const formattedValue = formatExpiryDate(value);
+      setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    } else if (name === 'cvv') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 3);
+      setFormData((prev) => ({ ...prev, [name]: digitsOnly }));
+    } else if (name === 'number') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 9);
+      setFormData((prev) => ({ ...prev, [name]: digitsOnly }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handlePaymentChange = (e) => {
@@ -53,7 +143,6 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      // Submit form or proceed with payment
       alert('Form submitted successfully!');
     }
   };
@@ -93,6 +182,71 @@ const Checkout = () => {
         )}
       </div>
 
+      {paymentMethod === 'visa' && (
+        <div className="mb-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
+          <h3 className="text-lg font-medium mb-4">Credit Card Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-1 font-medium text-gray-700" htmlFor="cardHolderName">Card Holder Name</label>
+              <input
+                type="text"
+                id="cardHolderName"
+                name="cardHolderName"
+                value={formData.cardHolderName}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.cardHolderName ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {errors.cardHolderName && <p className="text-red-600 text-sm mt-1">{errors.cardHolderName}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-1 font-medium text-gray-700" htmlFor="cardNumber">Card Number</label>
+              <input
+                type="text"
+                id="cardNumber"
+                name="cardNumber"
+                maxLength="19"
+                value={formData.cardNumber}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'}`}
+                placeholder="1234 5678 9012 3456"
+              />
+              {errors.cardNumber && <p className="text-red-600 text-sm mt-1">{errors.cardNumber}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-1 font-medium text-gray-700" htmlFor="cvv">CVV</label>
+              <input
+                type="text"
+                id="cvv"
+                name="cvv"
+                maxLength="3"
+                value={formData.cvv}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.cvv ? 'border-red-500' : 'border-gray-300'}`}
+                placeholder="123"
+              />
+              {errors.cvv && <p className="text-red-600 text-sm mt-1">{errors.cvv}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-1 font-medium text-gray-700" htmlFor="expiryDate">Expiry Date (MM/YY)</label>
+              <input
+                type="text"
+                id="expiryDate"
+                name="expiryDate"
+                maxLength="5"
+                placeholder="MM/YY"
+                value={formData.expiryDate}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.expiryDate ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {errors.expiryDate && <p className="text-red-600 text-sm mt-1">{errors.expiryDate}</p>}
+            </div>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} noValidate>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -109,16 +263,15 @@ const Checkout = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700" htmlFor="location">Location</label>
+            <label className="block mb-1 font-medium text-gray-700" htmlFor="country">Country</label>
             <input
               type="text"
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.location ? 'border-red-500' : 'border-gray-300'}`}
+              id="country"
+              name="country"
+              value={formData.country}
+              disabled
+              className="w-full border rounded px-3 py-2 bg-gray-200 cursor-not-allowed"
             />
-            {errors.location && <p className="text-red-600 text-sm mt-1">{errors.location}</p>}
           </div>
 
           <div>
@@ -136,28 +289,36 @@ const Checkout = () => {
 
           <div>
             <label className="block mb-1 font-medium text-gray-700" htmlFor="city">City</label>
-            <input
-              type="text"
+            <select
               id="city"
               name="city"
               value={formData.city}
               onChange={handleChange}
               className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.city ? 'border-red-500' : 'border-gray-300'}`}
-            />
+            >
+              <option value="">Select a city</option>
+              {jordanianCities.map((city) => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
             {errors.city && <p className="text-red-600 text-sm mt-1">{errors.city}</p>}
           </div>
 
           <div>
             <label className="block mb-1 font-medium text-gray-700" htmlFor="number">Phone Number</label>
-            <input
-              type="text"
-              id="number"
-              name="number"
-              placeholder="+962xxxxxxxxx"
-              value={formData.number}
-              onChange={handleChange}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.number ? 'border-red-500' : 'border-gray-300'}`}
-            />
+            <div className="flex">
+              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-200 text-gray-700 select-none">+962</span>
+              <input
+                type="text"
+                id="number"
+                name="number"
+                placeholder="9 digits"
+                value={formData.number}
+                onChange={handleChange}
+                maxLength="9"
+                className={`w-full border rounded-r-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.number ? 'border-red-500' : 'border-gray-300'}`}
+              />
+            </div>
             {errors.number && <p className="text-red-600 text-sm mt-1">{errors.number}</p>}
           </div>
 
