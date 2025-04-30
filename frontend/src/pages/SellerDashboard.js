@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateOrderStatus } from "../api/updateOrderStatus";
+import MessagePopup from "../components/MessagePopup";
 
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
@@ -13,6 +14,7 @@ const SellerDashboard = () => {
   const [productViews, setProductViews] = useState(0);
   const [recentOrders, setRecentOrders] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [showMessagesPopup, setShowMessagesPopup] = useState(false);
 
   useEffect(() => {
     window.scrollTo({
@@ -216,7 +218,10 @@ const SellerDashboard = () => {
                 >
                   Add New Events
                 </button>
-                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
+                <button
+                  className="w-full border border-green-600 text-green-600 py-2 rounded-lg"
+                  onClick={() => setShowMessagesPopup(true)}
+                >
                   View Messages
                 </button>
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
@@ -224,6 +229,9 @@ const SellerDashboard = () => {
                 </button>
               </div>
             </div>
+            {showMessagesPopup && (
+              <MessagePopup onClose={() => setShowMessagesPopup(false)} />
+            )}
 
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
