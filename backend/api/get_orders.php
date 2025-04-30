@@ -17,17 +17,20 @@ try {
     $query = "SELECT o.id AS order_id, o.order_type, o.total_amount, o.status, o.created_at,
                      oi.product_id, oi.event_id, oi.quantity, oi.price,
                      p.name AS product_name, p.image_url AS product_image_url,
-                     e.name AS event_name, e.image_url AS event_image_url
+                     e.name AS event_name, e.image_url AS event_image_url,
+                     ois.status AS item_status, ois.updated_at AS status_updated_at
               FROM orders o
-              LEFT JOIN order_items oi ON o.id = oi.order_id
+              JOIN order_items oi ON o.id = oi.order_id
+              JOIN order_item_status ois ON oi.id = ois.order_item_id
               LEFT JOIN products p ON oi.product_id = p.id
-              LEFT JOIN events e ON oi.event_id = e.id";
+              LEFT JOIN events e ON oi.event_id = e.id
+              WHERE o.buyer_id = ?";
 
     if ($statusFilter) {
-        $query .= " WHERE o.status = ?";
+        $query .= " AND ois.status = ?";
     }
 
-    $query .= " ORDER BY o.created_at DESC";
+    $query .= " ORDER BY ois.updated_at DESC";
 
     $stmt = $conn->prepare($query);
     if (!$stmt) {
@@ -35,9 +38,9 @@ try {
     }
 
     if ($statusFilter) {
-        $stmt->bind_param("s", $statusFilter);
+        $stmt->bind_param("is", $_SESSION['userId'], $statusFilter);
     } else {
-        // No parameters to bind
+        $stmt->bind_param("i", $_SESSION['userId']);
     }
 
     $stmt->execute();
@@ -51,7 +54,7 @@ try {
                 'order_id' => $orderId,
                 'order_type' => $row['order_type'],
                 'total_amount' => $row['total_amount'],
-                'status' => $row['status'],
+                'status' => $row['item_status'], // use item_status from order_item_status
                 'created_at' => $row['created_at'],
                 'items' => []
             ];

@@ -26,6 +26,22 @@ function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  // Placeholder cartItems array for testing
+  const cartItems = [
+    {
+      product_id: 1,
+      event_id: null,
+      quantity: 2,
+      price: 50,
+    },
+    {
+      product_id: 2,
+      event_id: null,
+      quantity: 1,
+      price: 30,
+    },
+  ];
+
   const [paymentMethod, setPaymentMethod] = useState('');
   const [formData, setFormData] = useState({
     name: '',
@@ -101,6 +117,20 @@ function CheckoutForm() {
     setPaymentMethod(e.target.value);
   };
 
+  const prepareOrderItems = () => {
+    // Map cartItems to order items format expected by backend
+    return cartItems.map(item => ({
+      product_id: item.product_id || null,
+      event_id: item.event_id || null,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+  };
+
+  const calculateTotalAmount = () => {
+    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCardError(null);
@@ -108,6 +138,14 @@ function CheckoutForm() {
     if (!validate()) {
       return;
     }
+
+    const orderItems = prepareOrderItems();
+    if (orderItems.length === 0) {
+      alert('Your cart is empty.');
+      return;
+    }
+
+    const orderType = orderItems[0].product_id ? 'product' : 'event'; // simplistic assumption
 
     if (paymentMethod === 'visa') {
       if (!stripe || !elements) {
@@ -120,25 +158,21 @@ function CheckoutForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: 1000, // example amount in cents, replace with actual order amount
+          amount: Math.round(calculateTotalAmount() * 100), // amount in cents
           currency: 'usd',
         }),
       });
-      console.log('Response status:', response.status);
 
       if (!response.ok) {
         const text = await response.text();
-        console.error('Non-OK response:', text);
         setCardError('Server error: ' + text);
         setProcessing(false);
         return;
       }
 
       const data = await response.json();
-      console.log('Response data:', data);
 
       if (data.error) {
-        console.error('PaymentIntent error:', data.error);
         setCardError(data.error);
         setProcessing(false);
         return;
@@ -164,18 +198,59 @@ function CheckoutForm() {
       });
 
       if (result.error) {
-        console.error('Stripe confirmCardPayment error:', result.error.message);
         setCardError(result.error.message);
         setProcessing(false);
       } else {
         if (result.paymentIntent.status === 'succeeded') {
           setCardError(null);
+
+          // Create order in backend with payment_method 'visa'
+          const orderData = {
+            order_type: orderType,
+            items: orderItems,
+            payment_method: 'visa',
+          };
+
+          const createOrderResponse = await fetch('http://localhost/DutyDinarRepo/backend/api/create_order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(orderData),
+          });
+          const createOrderResult = await createOrderResponse.json();
+          if (createOrderResult.success) {
+            alert('Order created successfully!');
+            // Optionally clear cart here
+          } else {
+            alert('Failed to create order: ' + createOrderResult.message);
+          }
           setProcessing(false);
-          alert('Payment successful!');
         }
       }
-    } else {
-      alert('Order submitted successfully with Cash payment!');
+    } else if (paymentMethod === 'cash') {
+      setProcessing(true);
+
+      // Create order in backend with payment_method 'cash'
+      const orderData = {
+        order_type: orderType,
+        items: orderItems,
+        payment_method: 'cash',
+      };
+
+      const createOrderResponse = await fetch('http://localhost/DutyDinarRepo/backend/api/create_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(orderData),
+      });
+      const createOrderResult = await createOrderResponse.json();
+      if (createOrderResult.success) {
+        alert('Order created successfully!');
+        // Optionally clear cart here
+      } else {
+        alert('Failed to create order: ' + createOrderResult.message);
+      }
+      setProcessing(false);
     }
   };
 

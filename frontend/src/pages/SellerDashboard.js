@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { updateOrderStatus } from '../api/updateOrderStatus';
 
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
@@ -61,6 +62,19 @@ const SellerDashboard = () => {
     navigate('/add-products');
   };
 
+  const handleStatusChange = async (orderId, newStatus) => {
+    const response = await updateOrderStatus(orderId, newStatus);
+    if (response.success) {
+      setRecentOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.order_id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } else {
+      alert('Failed to update order status: ' + response.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -116,8 +130,10 @@ const SellerDashboard = () => {
                           </td>
                           <td className="py-4">${order.total_amount.toFixed(2)}</td>
                           <td className="py-4">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs ${
+                            <select
+                              value={order.status}
+                              onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
+                              className={`px-2 py-1 rounded text-xs ${
                                 order.status === 'pending'
                                   ? 'bg-yellow-100 text-yellow-800'
                                   : order.status === 'processing'
@@ -129,8 +145,12 @@ const SellerDashboard = () => {
                                   : 'bg-red-100 text-red-800'
                               }`}
                             >
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                            </span>
+                              <option value="pending">Pending</option>
+                              <option value="processing">Processing</option>
+                              <option value="shipped">Shipped</option>
+                              <option value="delivered">Delivered</option>
+                              <option value="cancelled">Cancelled</option>
+                            </select>
                           </td>
                         </tr>
                       ))
