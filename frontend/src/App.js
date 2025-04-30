@@ -26,6 +26,7 @@ import AddProducts from "./pages/addProducts";
 import Cart from "./pages/cart";
 import FavoritesPage from "./pages/FavoritesPage";
 import BookedEventsPage from "./pages/BookedEventsPage";
+import Checkout from "./pages/Checkout";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
@@ -152,6 +153,14 @@ const AppRoutes = () => {
                     <BuyerDashboard />
                   )}
                 </PrivateRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <BuyerRoute>
+                  <Checkout />
+                </BuyerRoute>
               }
             />
             {/* Protected Seller Add Event Page */}
