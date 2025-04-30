@@ -56,7 +56,7 @@ const Navbar = ({ user, loading, cartItems }) => {
 
               {user ? (
                 <>
-                  <Bell className="text-gray-600 cursor-pointer" size={24} />
+                  
                   {user.userType === 'buyer' && (
                     <div className="relative flex items-center space-x-4">
                       <Link to="/favorites" className="text-gray-600 hover:text-green-600 relative">
@@ -93,7 +93,7 @@ const Navbar = ({ user, loading, cartItems }) => {
                           {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                         </Link>
                         <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
-                        <Link to="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</Link>
+                        
                         <hr className="my-2" />
                         <button
                           onClick={onLogout}
