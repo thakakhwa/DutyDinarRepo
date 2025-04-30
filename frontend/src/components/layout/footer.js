@@ -48,11 +48,11 @@ const Footer = () => {
 
           {/* Categories */}
           <div className="space-y-2">
-            <h4 className="text-lg font-semibold mb-2">Categories</h4>
-            <Link to="/categories/electronics" className="block text-sm hover:text-green-200 transition-colors">Electronics</Link>
-            <Link to="/categories/machinery" className="block text-sm hover:text-green-200 transition-colors">Machinery</Link>
-            <Link to="/categories/textiles" className="block text-sm hover:text-green-200 transition-colors">Textiles</Link>
-            <Link to="/categories/raw-materials" className="block text-sm hover:text-green-200 transition-colors">Raw Materials</Link>
+            <h4 className="text-lg font-semibold mb-2">Navigation</h4>
+            <Link to="/Home" className="block text-sm hover:text-green-200 transition-colors">Home</Link>
+            <Link to="/Categories" className="block text-sm hover:text-green-200 transition-colors">Categories</Link>
+            <Link to="/Events" className="block text-sm hover:text-green-200 transition-colors">Events</Link>
+            <Link to="/Dashboard" className="block text-sm hover:text-green-200 transition-colors">Dashboard</Link>
           </div>
 
           {/* Newsletter */}

@@ -26,38 +26,47 @@ const BuyerDashboard = () => {
         if (data.success) {
           return data.orders;
         }
-        console.error('API error:', data.message);
+        console.error("API error:", data.message);
         return [];
       } catch (jsonError) {
-        console.error('Failed to parse JSON:', text);
+        console.error("Failed to parse JSON:", text);
         return [];
       }
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Fetch error:", error);
       return [];
     }
   };
 
   const fetchWishlist = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/get_favorites.php`, { credentials: "include" });
+      const response = await fetch(`${API_BASE_URL}/get_favorites.php`, {
+        credentials: "include",
+      });
       const text = await response.text();
       try {
         const data = JSON.parse(text);
         if (data.success) {
           return data.favorites;
         }
-        console.error('API error:', data.message);
+        console.error("API error:", data.message);
         return [];
       } catch (jsonError) {
-        console.error('Failed to parse JSON:', text);
+        console.error("Failed to parse JSON:", text);
         return [];
       }
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Fetch error:", error);
       return [];
     }
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   const loadData = async () => {
     setLoading(true);
@@ -95,7 +104,11 @@ const BuyerDashboard = () => {
   }, [location.state]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   const renderOrderItems = (items) => {
@@ -104,14 +117,23 @@ const BuyerDashboard = () => {
         <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
           {item.product_image_url && (
             <img
-              src={(item.product_image_url && !item.product_image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${item.product_image_url}` : item.product_image_url)}
+              src={
+                item.product_image_url &&
+                !item.product_image_url.startsWith("http")
+                  ? `${process.env.REACT_APP_BACKEND_BASE_URL || ""}/${item.product_image_url}`
+                  : item.product_image_url
+              }
               alt={item.product_name}
               className="w-full h-full object-cover"
             />
           )}
           {item.event_image_url && (
             <img
-              src={(item.event_image_url && !item.event_image_url.startsWith('http') ? `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${item.event_image_url}` : item.event_image_url)}
+              src={
+                item.event_image_url && !item.event_image_url.startsWith("http")
+                  ? `${process.env.REACT_APP_BACKEND_BASE_URL || ""}/${item.event_image_url}`
+                  : item.event_image_url
+              }
               alt={item.event_name}
               className="w-full h-full object-cover"
             />
@@ -137,7 +159,9 @@ const BuyerDashboard = () => {
               <h3 className="text-lg font-semibold">Active Orders</h3>
               <ShoppingBag className="text-green-600" size={24} />
             </div>
-            <div className="text-3xl font-bold text-green-600">{activeOrders.length}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {activeOrders.length}
+            </div>
             <div className="text-sm text-gray-600">In progress</div>
           </div>
 
@@ -146,7 +170,9 @@ const BuyerDashboard = () => {
               <h3 className="text-lg font-semibold">Wishlist</h3>
               <Heart className="text-green-600" size={24} />
             </div>
-            <div className="text-3xl font-bold text-green-600">{wishlist.length}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {wishlist.length}
+            </div>
             <div className="text-sm text-gray-600">Saved items</div>
           </div>
 
@@ -155,7 +181,9 @@ const BuyerDashboard = () => {
               <h3 className="text-lg font-semibold">Pending</h3>
               <Clock className="text-green-600" size={24} />
             </div>
-            <div className="text-3xl font-bold text-green-600">{pendingOrders.length}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {pendingOrders.length}
+            </div>
             <div className="text-sm text-gray-600">Awaiting delivery</div>
           </div>
 
@@ -164,7 +192,9 @@ const BuyerDashboard = () => {
               <h3 className="text-lg font-semibold">Completed</h3>
               <Package className="text-green-600" size={24} />
             </div>
-            <div className="text-3xl font-bold text-green-600">{completedOrders.length}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {completedOrders.length}
+            </div>
             <div className="text-sm text-gray-600">Total orders</div>
           </div>
         </div>
@@ -177,19 +207,25 @@ const BuyerDashboard = () => {
                 <h2 className="text-lg font-semibold">Recent Orders</h2>
               </div>
               <div className="p-4 space-y-4">
-                {recentOrders.length === 0 && <div>No recent orders found.</div>}
+                {recentOrders.length === 0 && (
+                  <div>No recent orders found.</div>
+                )}
                 {recentOrders.map((order) => (
-                  <div
-                    key={order.order_id}
-                    className="p-4 border rounded-lg"
-                  >
-                    <div className="mb-2 font-semibold">Order #{order.order_id.toString().padStart(4, "0")}</div>
+                  <div key={order.order_id} className="p-4 border rounded-lg">
+                    <div className="mb-2 font-semibold">
+                      Order #{order.order_id.toString().padStart(4, "0")}
+                    </div>
                     {renderOrderItems(order.items)}
                     <div className="mt-2 text-right font-medium text-green-600">
-                      Total: ${isNaN(Number(order.total_amount)) ? "0.00" : Number(order.total_amount).toFixed(2)}
+                      Total: $
+                      {isNaN(Number(order.total_amount))
+                        ? "0.00"
+                        : Number(order.total_amount).toFixed(2)}
                     </div>
                     <div className="text-right text-sm text-gray-600">
-                      Status: {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      Status:{" "}
+                      {order.status.charAt(0).toUpperCase() +
+                        order.status.slice(1)}
                     </div>
                   </div>
                 ))}

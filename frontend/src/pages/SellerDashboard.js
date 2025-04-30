@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { updateOrderStatus } from '../api/updateOrderStatus';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { updateOrderStatus } from "../api/updateOrderStatus";
 
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
@@ -15,8 +15,15 @@ const SellerDashboard = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
     fetch(`${API_BASE_URL}/get_seller_dashboard_data.php`, {
-      credentials: 'include',
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
@@ -25,41 +32,45 @@ const SellerDashboard = () => {
           setTotalSales(isNaN(totalSalesNum) ? 0 : totalSalesNum);
           setActiveOrders(data.activeOrders || 0);
           setProductViews(data.productViews || 0);
-          const recentOrdersWithNumbers = (data.recentOrders || []).map(order => ({
-            ...order,
-            total_amount: Number(order.total_amount)
-          }));
+          const recentOrdersWithNumbers = (data.recentOrders || []).map(
+            (order) => ({
+              ...order,
+              total_amount: Number(order.total_amount),
+            })
+          );
           setRecentOrders(recentOrdersWithNumbers);
           setUpcomingEvents(data.upcomingEvents || []);
         }
       })
       .catch((error) => {
-        console.error('Error fetching seller dashboard data:', error);
+        console.error("Error fetching seller dashboard data:", error);
       });
   }, []);
-  
+
   useEffect(() => {
     // Fetch count of products listed by the seller
-    fetch(`${API_BASE_URL}/get_seller_products_count.php`, { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && typeof data.product_count === 'number') {
+    fetch(`${API_BASE_URL}/get_seller_products_count.php`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && typeof data.product_count === "number") {
           setProductsListed(data.product_count);
         } else {
           setProductsListed(0);
         }
       })
-      .catch(error => {
-        console.error('Error fetching products listed count:', error);
+      .catch((error) => {
+        console.error("Error fetching products listed count:", error);
         setProductsListed(0);
       });
   }, []);
 
   const handleAddEventClick = () => {
-    navigate('/add-events');
+    navigate("/add-events");
   };
   const handleAddProductClick = () => {
-    navigate('/add-products');
+    navigate("/add-products");
   };
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -71,14 +82,14 @@ const SellerDashboard = () => {
         )
       );
     } else {
-      alert('Failed to update order status: ' + response.message);
+      alert("Failed to update order status: " + response.message);
     }
   };
 
   const renderOrderItems = (items) => {
     return items.map((item, index) => (
       <div key={index} className="mb-1">
-        {item.product_name || item.event_name || 'N/A'} (Qty: {item.quantity})
+        {item.product_name || item.event_name || "N/A"} (Qty: {item.quantity})
       </div>
     ));
   };
@@ -89,17 +100,23 @@ const SellerDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Total Sales</h3>
-            <div className="text-3xl font-bold text-green-600">${totalSales.toFixed(2)}</div>
+            <div className="text-3xl font-bold text-green-600">
+              ${totalSales.toFixed(2)}
+            </div>
             <div className="text-sm text-gray-600">Last 30 days</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Products Listed</h3>
-            <div className="text-3xl font-bold text-green-600">{productsListed}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {productsListed}
+            </div>
             <div className="text-sm text-gray-600">Total products listed</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-2">Product Views</h3>
-            <div className="text-3xl font-bold text-green-600">{productViews}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {productViews}
+            </div>
             <div className="text-sm text-gray-600">Last 7 days</div>
           </div>
         </div>
@@ -124,33 +141,47 @@ const SellerDashboard = () => {
                   <tbody>
                     {recentOrders.length === 0 ? (
                       <tr>
-                        <td colSpan="5" className="py-4 text-center text-gray-500">
+                        <td
+                          colSpan="5"
+                          className="py-4 text-center text-gray-500"
+                        >
                           No recent orders
                         </td>
                       </tr>
                     ) : (
                       recentOrders.map((order) => (
                         <tr key={order.order_id} className="border-t align-top">
-                          <td className="py-4">#ORD-{order.order_id.toString().padStart(4, '0')}</td>
-                          <td className="py-4">{order.customer_name || 'N/A'}</td>
+                          <td className="py-4">
+                            #ORD-{order.order_id.toString().padStart(4, "0")}
+                          </td>
+                          <td className="py-4">
+                            {order.customer_name || "N/A"}
+                          </td>
                           <td className="py-4">
                             {renderOrderItems(order.items)}
                           </td>
-                          <td className="py-4">${order.total_amount.toFixed(2)}</td>
+                          <td className="py-4">
+                            ${order.total_amount.toFixed(2)}
+                          </td>
                           <td className="py-4">
                             <select
                               value={order.status}
-                              onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
+                              onChange={(e) =>
+                                handleStatusChange(
+                                  order.order_id,
+                                  e.target.value
+                                )
+                              }
                               className={`px-2 py-1 rounded text-xs ${
-                                order.status === 'pending'
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : order.status === 'processing'
-                                  ? 'bg-blue-100 text-blue-800'
-                                  : order.status === 'shipped'
-                                  ? 'bg-purple-100 text-purple-800'
-                                  : order.status === 'delivered'
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-red-100 text-red-800'
+                                order.status === "pending"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : order.status === "processing"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : order.status === "shipped"
+                                      ? "bg-purple-100 text-purple-800"
+                                      : order.status === "delivered"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-red-100 text-red-800"
                               }`}
                             >
                               <option value="pending">Pending</option>
@@ -201,14 +232,20 @@ const SellerDashboard = () => {
                   <div className="text-gray-500">No upcoming events</div>
                 ) : (
                   upcomingEvents.map((event) => (
-                    <div key={event.id} className="border-b pb-4 last:border-b-0">
+                    <div
+                      key={event.id}
+                      className="border-b pb-4 last:border-b-0"
+                    >
                       <h4 className="font-medium">{event.name}</h4>
                       <div className="text-sm text-gray-600">
-                        {new Date(event.event_date).toLocaleDateString(undefined, {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })}
+                        {new Date(event.event_date).toLocaleDateString(
+                          undefined,
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
                       </div>
                     </div>
                   ))
