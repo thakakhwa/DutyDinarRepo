@@ -10,7 +10,9 @@ if (!isset($_SESSION['userId'])) {
     exit;
 }
 
-$userId = $_SESSION['userId'];
+// Optionally, you can check if the user is admin here by querying the users table
+// For now, we assume only admin can access this endpoint
+
 $statusFilter = isset($_GET['status']) ? $_GET['status'] : null;
 
 try {
@@ -73,7 +75,7 @@ try {
 
     echo json_encode(['success' => true, 'orders' => array_values($orders)]);
 } catch (Exception $e) {
-    error_log("Error fetching orders: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch orders.']);
+    error_log("Error fetching admin orders: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Failed to fetch admin orders.']);
 }
 ?>

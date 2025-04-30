@@ -16,9 +16,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Products', icon: Package, path: '/admin/products' },
     { name: 'Events', icon: Calendar, path: '/admin/events' },
     { name: 'Orders', icon: ShoppingBag, path: '/admin/orders' },
-    { name: 'Messages', icon: MessageSquare, path: '/admin/messages' },
     { name: 'Analytics', icon: BarChart2, path: '/admin/analytics' },
-    { name: 'Settings', icon: Settings, path: '/admin/settings' },
   ];
 
   const NavItem = ({ item }) => {
@@ -49,22 +47,7 @@ const AdminLayout = ({ children }) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           {/* Logo */}
-<div className="flex items-center justify-between h-16 px-4 border-b">
-  <Link to="/admin" className="flex items-center space-x-2">
-    <img 
-      src="/logo.jpeg" 
-      alt="Duty Dinar Logo" 
-      className="h-12 w-auto object-contain"
-    />
-    
-  </Link>
-  <button
-    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-    className="p-1 rounded-lg hover:bg-gray-100 md:hidden"
-  >
-    {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-  </button>
-</div>
+
 
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">

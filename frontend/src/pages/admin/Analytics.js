@@ -1,38 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Calendar, ChevronDown, Download, Filter, 
   TrendingUp, TrendingDown, DollarSign, Users, 
-  ShoppingBag, ArrowRight, Settings as SettingsIcon
+  ShoppingBag, ArrowRight
 } from 'lucide-react';
+import { fetchAdminAnalytics } from '../../api/adminAnalytics';
 
 const AnalyticsPage = () => {
   const [dateRange, setDateRange] = useState('This Month');
   const [selectedChart, setSelectedChart] = useState('revenue');
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Sample analytics data
-  const analyticsData = {
-    totalRevenue: 128500,
-    revenueGrowth: 12.3,
-    totalOrders: 1258,
-    ordersGrowth: 8.7,
-    totalUsers: 4587,
-    usersGrowth: 15.2,
-    monthlyRevenue: [12500, 13200, 14800, 15900, 16700, 17500],
-    topProducts: [
-      { name: 'Product A', sales: 156, amount: 15600 },
-      { name: 'Product B', sales: 129, amount: 12900 },
-      { name: 'Product C', sales: 98, amount: 9800 },
-      { name: 'Product D', sales: 75, amount: 7500 },
-      { name: 'Product E', sales: 63, amount: 6300 },
-    ],
-    topCountries: [
-      { name: 'United Arab Emirates', sales: 387, amount: 38700 },
-      { name: 'Saudi Arabia', sales: 245, amount: 24500 },
-      { name: 'Kuwait', sales: 198, amount: 19800 },
-      { name: 'Qatar', sales: 156, amount: 15600 },
-      { name: 'Bahrain', sales: 87, amount: 8700 },
-    ]
-  };
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchAdminAnalytics();
+        setAnalyticsData(data);
+      } catch (err) {
+        setError(err.message || 'Failed to load analytics data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadAnalytics();
+  }, []);
 
   const StatCard = ({ title, value, icon: Icon, growth, prefix = '', suffix = '' }) => (
     <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -47,7 +42,7 @@ const AnalyticsPage = () => {
           <Icon className="text-green-600" size={20} />
         </div>
       </div>
-      {growth && (
+      {growth !== undefined && growth !== null && (
         <div className="flex items-center mt-4">
           {growth > 0 ? (
             <TrendingUp className="text-green-500 mr-1" size={16} />
@@ -62,22 +57,79 @@ const AnalyticsPage = () => {
     </div>
   );
 
-  // Sample chart data (would be replaced with a real chart library)
-  const RevenueChart = () => (
-    <div className="h-64 mt-4">
-      <div className="w-full h-full bg-gray-50 rounded-lg flex items-end p-4">
-        {analyticsData.monthlyRevenue.map((value, index) => (
-          <div key={index} className="h-full flex-1 flex flex-col justify-end items-center">
-            <div 
-              className="w-4/5 bg-green-500 rounded-t-sm" 
-              style={{ height: `${(value / Math.max(...analyticsData.monthlyRevenue)) * 100}%` }}
-            />
-            <span className="text-xs mt-2">Month {index + 1}</span>
-          </div>
-        ))}
+  const RevenueChart = () => {
+    if (!analyticsData || !analyticsData.monthlyRevenue) return null;
+
+    const monthlyRevenueValues = Object.values(analyticsData.monthlyRevenue);
+    const maxRevenue = Math.max(...monthlyRevenueValues);
+
+    return (
+      <div className="h-64 mt-4">
+        <div className="w-full h-full bg-gray-50 rounded-lg flex items-end p-4">
+          {monthlyRevenueValues.map((value, index) => (
+            <div key={index} className="h-full flex-1 flex flex-col justify-end items-center">
+              <div 
+                className="w-4/5 bg-green-500 rounded-t-sm" 
+                style={{ height: `${(value / maxRevenue) * 100}%` }}
+              />
+              <span className="text-xs mt-2">{Object.keys(analyticsData.monthlyRevenue)[index]}</span>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
+
+  const exportData = () => {
+    if (!analyticsData) return;
+
+    // Prepare data for export
+    const XLSX = require('xlsx');
+
+    // Overview sheet data
+    const overviewData = [
+      ['Metric', 'Value'],
+      ['Total Revenue', analyticsData.totalRevenue],
+      ['Total Orders', analyticsData.totalOrders],
+      ['Total Users', analyticsData.totalUsers],
+    ];
+
+    // Monthly Revenue sheet data
+    const monthlyRevenueData = [
+      ['Month', 'Revenue'],
+      ...Object.entries(analyticsData.monthlyRevenue)
+    ];
+
+    // Top Products sheet data
+    const topProductsData = [
+      ['Product Name', 'Sales', 'Amount'],
+      ...analyticsData.topProducts.map(p => [p.name, p.sales, p.amount])
+    ];
+
+    // Top Countries sheet data
+    const topCountriesData = [
+      ['Country', 'Sales', 'Amount'],
+      ...analyticsData.topCountries.map(c => [c.name, c.sales, c.amount])
+    ];
+
+    // Create workbook and sheets
+    const workbook = XLSX.utils.book_new();
+
+    const overviewSheet = XLSX.utils.aoa_to_sheet(overviewData);
+    XLSX.utils.book_append_sheet(workbook, overviewSheet, 'Overview');
+
+    const monthlyRevenueSheet = XLSX.utils.aoa_to_sheet(monthlyRevenueData);
+    XLSX.utils.book_append_sheet(workbook, monthlyRevenueSheet, 'Monthly Revenue');
+
+    const topProductsSheet = XLSX.utils.aoa_to_sheet(topProductsData);
+    XLSX.utils.book_append_sheet(workbook, topProductsSheet, 'Top Products');
+
+    const topCountriesSheet = XLSX.utils.aoa_to_sheet(topCountriesData);
+    XLSX.utils.book_append_sheet(workbook, topCountriesSheet, 'Top Countries');
+
+    // Write file
+    XLSX.writeFile(workbook, 'analytics_report.xlsx');
+  };
 
   return (
     <div className="p-6">
@@ -93,116 +145,129 @@ const AnalyticsPage = () => {
             <Filter size={16} className="mr-2" />
             Filters
           </button>
-          <button className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          <button 
+            className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            onClick={exportData}
+          >
             <Download size={16} className="mr-2" />
             Export
           </button>
         </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard 
-          title="Total Revenue"
-          value={analyticsData.totalRevenue}
-          icon={DollarSign}
-          growth={analyticsData.revenueGrowth}
-          prefix="$"
-        />
-        <StatCard 
-          title="Total Orders"
-          value={analyticsData.totalOrders}
-          icon={ShoppingBag}
-          growth={analyticsData.ordersGrowth}
-        />
-        <StatCard 
-          title="Total Users"
-          value={analyticsData.totalUsers}
-          icon={Users}
-          growth={analyticsData.usersGrowth}
-        />
-      </div>
-
-      {/* Revenue Chart */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Revenue Analytics</h2>
-          <div className="flex space-x-2">
-            {['revenue', 'orders', 'users'].map((chart) => (
-              <button
-                key={chart}
-                onClick={() => setSelectedChart(chart)}
-                className={`px-3 py-1 rounded-lg text-sm capitalize
-                  ${selectedChart === chart 
-                    ? 'bg-green-100 text-green-600' 
-                    : 'text-gray-600 hover:bg-gray-100'}`}
-              >
-                {chart}
-              </button>
-            ))}
+      {loading ? (
+        <div className="text-center py-10 text-gray-500">Loading analytics data...</div>
+      ) : error ? (
+        <div className="text-center py-10 text-red-500">Error: {error}</div>
+      ) : analyticsData ? (
+        <>
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <StatCard 
+              title="Total Revenue"
+              value={analyticsData.totalRevenue}
+              icon={DollarSign}
+              growth={null}
+              prefix="$"
+            />
+            <StatCard 
+              title="Total Orders"
+              value={analyticsData.totalOrders}
+              icon={ShoppingBag}
+              growth={null}
+            />
+            <StatCard 
+              title="Total Users"
+              value={analyticsData.totalUsers}
+              icon={Users}
+              growth={null}
+            />
           </div>
-        </div>
-        <RevenueChart />
-      </div>
 
-      {/* Top Products and Countries */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Top Products */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold">Top Products</h2>
-            <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
-              View All <ArrowRight size={16} className="ml-1" />
-            </button>
-          </div>
-          <div className="space-y-4">
-            {analyticsData.topProducts.map((product, index) => (
-              <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
-                    <span>{index + 1}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{product.name}</h3>
-                    <p className="text-sm text-gray-500">{product.sales} sales</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">${product.amount.toLocaleString()}</p>
-                </div>
+          {/* Revenue Chart */}
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Revenue Analytics</h2>
+              <div className="flex space-x-2">
+                {['revenue', 'orders', 'users'].map((chart) => (
+                  <button
+                    key={chart}
+                    onClick={() => setSelectedChart(chart)}
+                    className={`px-3 py-1 rounded-lg text-sm capitalize
+                      ${selectedChart === chart 
+                        ? 'bg-green-100 text-green-600' 
+                        : 'text-gray-600 hover:bg-gray-100'}`}
+                  >
+                    {chart}
+                  </button>
+                ))}
               </div>
-            ))}
+            </div>
+            <RevenueChart />
           </div>
-        </div>
 
-        {/* Top Countries */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold">Top Countries</h2>
-            <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
-              View All <ArrowRight size={16} className="ml-1" />
-            </button>
-          </div>
-          <div className="space-y-4">
-            {analyticsData.topCountries.map((country, index) => (
-              <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
-                    <span>{index + 1}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{country.name}</h3>
-                    <p className="text-sm text-gray-500">{country.sales} orders</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">${country.amount.toLocaleString()}</p>
-                </div>
+          {/* Top Products and Countries */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Top Products */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-semibold">Top Products</h2>
+                <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
+                  View All <ArrowRight size={16} className="ml-1" />
+                </button>
               </div>
-            ))}
+              <div className="space-y-4">
+                {analyticsData.topProducts.map((product, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
+                        <span>{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium">{product.name}</h3>
+                        <p className="text-sm text-gray-500">{product.sales} sales</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">${product.amount.toLocaleString()}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Countries */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-semibold">Top Countries</h2>
+                <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
+                  View All <ArrowRight size={16} className="ml-1" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                {analyticsData.topCountries.map((country, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
+                        <span>{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium">{country.name}</h3>
+                        <p className="text-sm text-gray-500">{country.sales} orders</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">${country.amount.toLocaleString()}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <div className="text-center py-10 text-gray-500">No analytics data available.</div>
+      )}
     </div>
   );
 };
