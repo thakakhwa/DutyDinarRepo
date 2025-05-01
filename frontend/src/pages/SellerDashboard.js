@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateOrderStatus } from "../api/updateOrderStatus";
 import MessagePopup from "../components/MessagePopup";
+import { Link } from "react-router-dom";
 
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
@@ -224,9 +225,14 @@ const SellerDashboard = () => {
                 >
                   View Messages
                 </button>
-                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
+                <Link
+                  to="/inventory"
+                  className="w-full block mt-2"
+                >
+                <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors duration-200">
                   Manage Inventory
                 </button>
+                </Link>
               </div>
             </div>
             {showMessagesPopup && (
