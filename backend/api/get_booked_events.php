@@ -41,7 +41,7 @@ try {
     $user_id = $_SESSION['userId'];
 
     $stmt = $conn->prepare("
-        SELECT e.id, e.seller_id, e.name, e.description, e.event_date, e.location, e.price, e.available_tickets, e.image_url, eb.quantity, eb.booking_date
+        SELECT e.id, e.seller_id, e.name, e.description, e.event_date, e.location, e.available_tickets, e.image_url, eb.quantity, eb.booking_date
         FROM event_bookings eb
         JOIN events e ON eb.event_id = e.id
         WHERE eb.user_id = ?

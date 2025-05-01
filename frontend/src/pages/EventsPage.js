@@ -46,10 +46,6 @@ const EventsPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => {
-              // Ensure the price is a valid number
-              const price = parseFloat(event.price);
-              const formattedPrice = !isNaN(price) ? price.toFixed(2) : "N/A"; // Fallback if the price is not a number
-
               return (
                 <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                   <img src={getFullImageUrl(event.image_url)} alt={event.name} className="h-48 w-full object-cover" />
@@ -60,7 +56,6 @@ const EventsPage = () => {
                       <div className="flex items-center"><Calendar className="mr-2" size={16} /> {event.event_date}</div>
                       <div className="flex items-center"><MapPin className="mr-2" size={16} /> {event.location}</div>
                       <div className="flex items-center"><Users className="mr-2" size={16} /> {event.available_tickets} Tickets Available</div>
-                      <div className="flex items-center"><Package className="mr-2" size={16} /> ${formattedPrice}</div>
                     </div>
                     <button
                       onClick={() => handleDetailsClick(event.id)}

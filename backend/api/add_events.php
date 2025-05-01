@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once 'config.php';
 require_once 'cors.php';
+require_once 'config.php'; // Database connection
 
 session_start();
 header('Content-Type: application/json');
@@ -11,7 +11,21 @@ header('Content-Type: application/json');
 error_log("Session data: " . print_r($_SESSION, true));
 error_log("Raw input: " . file_get_contents('php://input'));
 
+function check_authentication() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['userId']) && isset($_SESSION['userType'])) {
+        return [
+            'id' => $_SESSION['userId'],
+            'userType' => $_SESSION['userType']
+        ];
+    }
+    return null;
+}
+
 function save_base64_image($base64_image, $upload_dir) {
+    // Extract the image type and base64 data
     if (preg_match('/^data:image\/(\w+);base64,/', $base64_image, $type)) {
         $image_data = substr($base64_image, strpos($base64_image, ',') + 1);
         $image_type = strtolower($type[1]); // jpg, png, gif, etc.
@@ -31,9 +45,11 @@ function save_base64_image($base64_image, $upload_dir) {
         return [false, 'Invalid base64 image format'];
     }
 
+    // Generate unique filename
     $file_name = uniqid('event_', true) . '.' . $image_type;
     $file_path = $upload_dir . DIRECTORY_SEPARATOR . $file_name;
 
+    // Save the image file
     if (file_put_contents($file_path, $image_data) === false) {
         error_log("Failed to save image file at path: " . $file_path);
         return [false, 'Failed to save image file'];
@@ -42,89 +58,87 @@ function save_base64_image($base64_image, $upload_dir) {
     return [true, $file_name];
 }
 
+// Check if the user is logged in by validating the session
+$user = check_authentication();
+if (!$user || !in_array($user['userType'], ['seller', 'admin'])) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized: Only authenticated sellers or admins can add events']);
+    exit;
+}
+
+// Decode input JSON
+$inputData = json_decode(file_get_contents("php://input"), true);
+if (empty($inputData['name']) || empty($inputData['description']) || empty($inputData['event_date']) || empty($inputData['location']) || empty($inputData['available_tickets']) || empty($inputData['image_url'])) {
+    echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+    exit;
+}
+
+// Determine seller_id: if admin and seller_id provided in input, use it; else use logged-in user id
+if ($user['userType'] === 'admin' && isset($inputData['seller_id'])) {
+    $seller_id = intval($inputData['seller_id']);
+} else {
+    $seller_id = $user['id'];
+}
+
+// Prepare the event data from the input
+$name = $inputData['name'];
+$description = $inputData['description'];
+$event_date = $inputData['event_date'];
+$location = $inputData['location'];
+$available_tickets = intval($inputData['available_tickets']);
+$image_base64 = $inputData['image_url'];
+
+$upload_dir = dirname(__DIR__) . '/uploads';
+
+// Ensure upload directory exists
+if (!is_dir($upload_dir)) {
+    if (!mkdir($upload_dir, 0755, true)) {
+        error_log("Failed to create image upload directory: " . $upload_dir);
+        echo json_encode(['success' => false, 'message' => 'Failed to create image upload directory.']);
+        exit;
+    }
+}
+
+// Save the base64 image and get filename
+list($success, $result) = save_base64_image($image_base64, $upload_dir);
+if (!$success) {
+    error_log("Image upload error: " . $result);
+    echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $result]);
+    exit;
+}
+
+$image_url = 'uploads/' . $result; // Relative URL to save in DB
+
+// Begin transaction
+$conn->begin_transaction();
+
 try {
-    if (!isset($_SESSION['userId']) || !isset($_SESSION['userType']) || !in_array($_SESSION['userType'], ['seller', 'admin'])) {
-        http_response_code(403);
-        echo json_encode([
-            'status' => false,
-            'message' => 'Unauthorized: Only authenticated sellers or admins can add events'
-        ]);
-        exit();
-    }
-
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (!$input) {
-        throw new Exception('Invalid JSON input', 400);
-    }
-
-    $requiredFields = ['name', 'description', 'event_date', 'location', 'price', 'available_tickets', 'image_url'];
-    foreach ($requiredFields as $field) {
-        if (!isset($input[$field]) || $input[$field] === '') {
-            throw new Exception("Missing required field: $field", 400);
-        }
-    }
-
-    if (!is_string($input['name']) || !is_string($input['description']) || !is_string($input['event_date']) || !is_string($input['location']) || !is_string($input['image_url'])) {
-        throw new Exception('Invalid data type for string fields', 400);
-    }
-    if (!is_numeric($input['price']) || !is_numeric($input['available_tickets'])) {
-        throw new Exception('Price and available_tickets must be numeric', 400);
-    }
-
-    if ($_SESSION['userType'] === 'admin' && isset($input['seller_id']) && is_numeric($input['seller_id'])) {
-        $sellerId = intval($input['seller_id']);
-    } else {
-        $sellerId = $_SESSION['userId'];
-    }
-
-    $name = $input['name'];
-    $description = $input['description'];
-    $eventDate = $input['event_date'];
-    $location = $input['location'];
-    $price = floatval($input['price']);
-    $availableTickets = intval($input['available_tickets']);
-    $imageBase64 = $input['image_url'];
-
-    $upload_dir = __DIR__ . '/../uploads';
-
-    if (!is_dir($upload_dir)) {
-        if (!mkdir($upload_dir, 0755, true)) {
-            throw new Exception('Failed to create image upload directory', 500);
-        }
-    }
-
-    list($success, $result) = save_base64_image($imageBase64, $upload_dir);
-    if (!$success) {
-        throw new Exception('Image upload error: ' . $result, 500);
-    }
-
-    $imageUrl = 'uploads/' . $result;
-
-    $stmt = $conn->prepare("INSERT INTO events (seller_id, name, description, event_date, location, price, available_tickets, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    // Insert event
+    $stmt = $conn->prepare("INSERT INTO events (seller_id, name, description, event_date, location, available_tickets, image_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
     if (!$stmt) {
-        throw new Exception('Database prepare failed: ' . $conn->error, 500);
+        error_log("Failed to prepare SQL statement: " . $conn->error);
+        throw new Exception("Failed to prepare SQL statement: " . $conn->error);
     }
 
-    $bind = $stmt->bind_param("issssdis", $sellerId, $name, $description, $eventDate, $location, $price, $availableTickets, $imageUrl);
+    $bind = $stmt->bind_param("issssis", $seller_id, $name, $description, $event_date, $location, $available_tickets, $image_url);
     if (!$bind) {
-        throw new Exception('Parameter binding failed: ' . $stmt->error, 500);
+        error_log("Failed to bind parameters: " . $stmt->error);
+        throw new Exception("Failed to bind parameters: " . $stmt->error);
     }
 
     if (!$stmt->execute()) {
-        throw new Exception('Database execute failed: ' . $stmt->error, 500);
+        error_log("Failed to execute statement: " . $stmt->error);
+        throw new Exception("Failed to execute statement: " . $stmt->error);
     }
 
-    echo json_encode([
-        'status' => true,
-        'message' => 'Event added successfully',
-        'eventId' => $stmt->insert_id
-    ]);
+    $stmt->close();
+
+    // Commit transaction
+    $conn->commit();
+
+    echo json_encode(['success' => true, 'message' => 'Event added successfully.']);
 } catch (Exception $e) {
-    http_response_code($e->getCode() ?: 500);
-    error_log('Add Event API error: ' . $e->getMessage());
-    echo json_encode([
-        'status' => false,
-        'message' => $e->getMessage()
-    ]);
+    $conn->rollback();
+    error_log("Error adding event: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Failed to add event: ' . $e->getMessage()]);
 }
 ?>

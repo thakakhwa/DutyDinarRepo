@@ -43,7 +43,7 @@ try {
     $quantity = (int)$inputData['quantity'];
 
     // Check event availability and price
-    $event_stmt = $conn->prepare("SELECT price, available_tickets FROM events WHERE id = ?");
+    $event_stmt = $conn->prepare("SELECT available_tickets FROM events WHERE id = ?");
     if (!$event_stmt) {
         echo json_encode(['success' => false, 'message' => 'Failed to prepare event query.']);
         exit;
@@ -56,7 +56,6 @@ try {
         exit;
     }
     $event = $event_result->fetch_assoc();
-    $price = (float)$event['price'];
     $available_tickets = (int)$event['available_tickets'];
     $event_stmt->close();
 
@@ -75,7 +74,7 @@ try {
         echo json_encode(['success' => false, 'message' => 'Failed to prepare order insert.']);
         exit;
     }
-    $total_amount = $price * $quantity;
+    $total_amount = 0;
     $order_stmt->bind_param("id", $user_id, $total_amount);
     if (!$order_stmt->execute()) {
         $conn->rollback();
@@ -92,6 +91,7 @@ try {
         echo json_encode(['success' => false, 'message' => 'Failed to prepare order item insert.']);
         exit;
     }
+    $price = 0;
     $item_stmt->bind_param("iiid", $order_id, $event_id, $quantity, $price);
     if (!$item_stmt->execute()) {
         $conn->rollback();

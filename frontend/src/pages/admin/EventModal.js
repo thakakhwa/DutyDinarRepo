@@ -11,7 +11,6 @@ const EventModal = ({ mode, event, onClose, onSubmit, sellers }) => {
     attendees: event?.attendees ?? 0,
     status: event?.status || 'upcoming',
     image_url: event?.image_url || '',
-    price: event?.price ?? '',
     available_tickets: event?.available_tickets ?? '',
     seller: (event?.seller ?? (sellers.length > 0 ? sellers[0].username : '')) || '',
   });
@@ -27,7 +26,6 @@ const EventModal = ({ mode, event, onClose, onSubmit, sellers }) => {
       attendees: event?.attendees ?? 0,
       status: event?.status || 'upcoming',
       image_url: event?.image_url || '',
-      price: event?.price ?? '',
       available_tickets: event?.available_tickets ?? '',
       seller: (event?.seller ?? (sellers.length > 0 ? sellers[0].username : '')) || '',
     });

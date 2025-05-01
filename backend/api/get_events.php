@@ -37,7 +37,7 @@ try {
     $event_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
     if ($event_id) {
-        $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, price, available_tickets, image_url FROM events WHERE id = ?");
+        $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events WHERE id = ?");
         $stmt->bind_param("i", $event_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -72,7 +72,7 @@ try {
 
         json_response(true, "Event fetched", ['events' => [$event]]);
     } else {
-        $query = "SELECT id, seller_id, name, description, event_date, location, price, available_tickets, image_url FROM events ORDER BY event_date ASC";
+        $query = "SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events ORDER BY event_date ASC";
         $result = $conn->query($query);
 
         if (!$result) {

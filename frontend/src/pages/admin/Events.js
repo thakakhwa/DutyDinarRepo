@@ -37,7 +37,6 @@ const EventsPage = () => {
           time,
           image: getFullImageUrl(event.image_url),
           available_tickets: event.available_tickets,
-          price: event.price,
         };
       });
       setEvents(mappedEvents);
@@ -77,7 +76,6 @@ const EventsPage = () => {
       time: event.time || '',
       image: event.image || getFullImageUrl(event.image_url) || '',
       available_tickets: event.available_tickets,
-      price: event.price,
       seller: event.seller || event.seller_username || '', // try multiple possible fields
     };
     setCurrentEvent(mappedEvent);

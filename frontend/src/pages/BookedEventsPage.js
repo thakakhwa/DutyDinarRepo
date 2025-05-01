@@ -44,9 +44,6 @@ const BookedEventsPage = () => {
       <h1 className="text-2xl font-bold mb-4">My Booked Events</h1>
       <ul className="space-y-4">
         {bookedEvents.map(event => {
-          const price = parseFloat(event.price);
-          const formattedPrice = !isNaN(price) ? price.toFixed(2) : "N/A";
-
           return (
             <li key={event.id} className="border rounded-lg shadow-md overflow-hidden">
               <img
@@ -60,7 +57,6 @@ const BookedEventsPage = () => {
                 <p className="mb-1">{new Date(event.event_date).toLocaleString()}</p>
                 <p className="mb-1">{event.location}</p>
                 <p className="mb-1">Quantity Booked: {event.quantity}</p>
-                <p className="font-semibold">${formattedPrice}</p>
               </div>
             </li>
           );

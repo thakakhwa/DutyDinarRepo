@@ -7,7 +7,7 @@ const AddEventPage = () => {
   const [description, setDescription] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [location, setLocation] = useState('');
-  const [price, setPrice] = useState('');
+  // Removed price state
   const [availableTickets, setAvailableTickets] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,9 +40,6 @@ const AddEventPage = () => {
           break;
         case 'location':
           setLocation(value);
-          break;
-        case 'price':
-          setPrice(value);
           break;
         case 'availableTickets':
           setAvailableTickets(value);
@@ -86,7 +83,6 @@ const AddEventPage = () => {
       description,
       event_date: eventDate,
       location,
-      price,
       available_tickets: availableTickets,
       image_url: imageUrl,
     };
@@ -155,17 +151,7 @@ const AddEventPage = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="text-lg font-semibold">Price</label>
-            <input
-              type="number"
-              name="price"
-              value={price}
-              onChange={handleInputChange}
-              required
-              className="w-full border border-gray-300 p-2 rounded-lg"
-            />
-          </div>
+          {/* Removed Price input field */}
 
           <div className="space-y-2">
             <label className="text-lg font-semibold">Available Tickets</label>

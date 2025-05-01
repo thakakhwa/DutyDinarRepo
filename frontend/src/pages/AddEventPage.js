@@ -9,7 +9,6 @@ const AddEventPage = () => {
     description: '',
     event_date: '',
     location: '',
-    price: '',
     available_tickets: '',
     imageUrl: '',
   });
@@ -77,7 +76,6 @@ const AddEventPage = () => {
         description: formData.description,
         event_date: formData.event_date,
         location: formData.location,
-        price: formData.price,
         available_tickets: formData.available_tickets,
         image_url: formData.imageUrl,
       };
