@@ -229,7 +229,7 @@ const SellerDashboard = () => {
                   to="/inventory"
                   className="w-full block mt-2"
                 >
-                <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors duration-200">
+                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-200">
                   Manage Inventory
                 </button>
                 </Link>
