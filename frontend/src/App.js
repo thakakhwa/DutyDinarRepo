@@ -27,6 +27,7 @@ import Cart from "./pages/cart";
 import FavoritesPage from "./pages/FavoritesPage";
 import BookedEventsPage from "./pages/BookedEventsPage";
 import Checkout from "./pages/Checkout";
+import InventoryPage from "./pages/InventoryPage";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
@@ -178,6 +179,15 @@ const AppRoutes = () => {
               element={
                 <SellerRoute>
                   <AddProducts />
+                </SellerRoute>
+              }
+            />
+            {/* Protected Seller Inventory Page */}
+            <Route
+              path="/inventory"
+              element={
+                <SellerRoute>
+                  <InventoryPage />
                 </SellerRoute>
               }
             />

@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { deleteProduct } from '../api/delete_products';
 import { deleteEvent } from '../api/delete_events';
-
-const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
+import { getProducts } from '../api/get_products';
+import { getEvents } from '../api/get_events';
 
 const InventoryPage = () => {
   const { user } = useContext(AuthContext);
@@ -15,13 +15,14 @@ const InventoryPage = () => {
   const fetchProducts = async () => {
     setLoadingProducts(true);
     try {
-      const sellerIdParam = user?.userId ? `&seller_id=${user.userId}` : '';
-      const response = await fetch(`${API_BASE_URL}/get_products.php?myProducts=true${sellerIdParam}`, {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      if (data.success) {
-        setProducts(data.products || []);
+      if (!user?.userId) {
+        setProducts([]);
+        setLoadingProducts(false);
+        return;
+      }
+      const response = await getProducts('', '', [0, 9999999], 0, { myProducts: true, seller_id: user.userId });
+      if (response.success) {
+        setProducts(response.products || []);
       } else {
         setProducts([]);
       }
@@ -36,13 +37,14 @@ const InventoryPage = () => {
   const fetchEvents = async () => {
     setLoadingEvents(true);
     try {
-      const sellerIdParam = user?.userId ? `&seller_id=${user.userId}` : '';
-      const response = await fetch(`${API_BASE_URL}/get_events.php?myEvents=true${sellerIdParam}`, {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      if (data.success) {
-        setEvents(data.events || []);
+      if (!user?.userId) {
+        setEvents([]);
+        setLoadingEvents(false);
+        return;
+      }
+      const response = await getEvents({ myEvents: true, seller_id: user.userId });
+      if (response.success) {
+        setEvents(response.events || []);
       } else {
         setEvents([]);
       }
@@ -115,7 +117,7 @@ const InventoryPage = () => {
               {products.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2">{product.name}</td>
-                  <td className="border border-gray-300 px-4 py-2">${product.price.toFixed(2)}</td>
+                  <td className="border border-gray-300 px-4 py-2">${!isNaN(Number(product.price)) ? Number(product.price).toFixed(2) : 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.stock}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.category || 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">
@@ -156,7 +158,7 @@ const InventoryPage = () => {
                   <td className="border border-gray-300 px-4 py-2">{event.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{new Date(event.event_date).toLocaleDateString()}</td>
                   <td className="border border-gray-300 px-4 py-2">{event.location || 'N/A'}</td>
-                  <td className="border border-gray-300 px-4 py-2">${event.price.toFixed(2)}</td>
+                  <td className="border border-gray-300 px-4 py-2">${!isNaN(Number(event.price)) ? Number(event.price).toFixed(2) : 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">
                     <button
                       onClick={() => handleDeleteEvent(event.id)}

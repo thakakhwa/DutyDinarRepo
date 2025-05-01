@@ -15,6 +15,10 @@ try {
 
     // Check if a product ID is provided in the request
     $productId = isset($_GET['id']) ? $_GET['id'] : null;
+    $myProducts = isset($_GET['myProducts']) ? $_GET['myProducts'] === 'true' : false;
+    $sellerId = isset($_GET['seller_id']) ? intval($_GET['seller_id']) : null;
+
+    error_log("get_products.php called with myProducts: " . ($myProducts ? "true" : "false") . ", seller_id: " . $sellerId);
 
     if ($productId) {
         // Fetch a single product by ID with company name
@@ -28,6 +32,18 @@ try {
             throw new Exception("Failed to prepare SQL statement.");
         }
         $stmt->bind_param("i", $productId);
+    } elseif ($myProducts && $sellerId) {
+        // Fetch products by seller_id
+        $sql = "SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                FROM products p 
+                LEFT JOIN users u ON p.seller_id = u.id 
+                WHERE p.seller_id = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            error_log("Failed to prepare SQL statement for seller products.");
+            throw new Exception("Failed to prepare SQL statement.");
+        }
+        $stmt->bind_param("i", $sellerId);
     } else {
         // Fetch all products with company name
         $sql = "SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
@@ -39,6 +55,8 @@ try {
             throw new Exception("Failed to prepare SQL statement.");
         }
     }
+
+    error_log("Executing SQL: " . $sql);
 
     $stmt->execute();
     $result = $stmt->get_result();
@@ -60,6 +78,7 @@ try {
             while ($row = $result->fetch_assoc()) {
                 $products[] = $row;
             }
+            error_log("Number of products fetched: " . count($products));
             print_response(true, "Products fetched successfully.", ["products" => $products]);
         }
 

@@ -35,6 +35,10 @@ try {
     }
 
     $event_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+    $myEvents = isset($_GET['myEvents']) ? $_GET['myEvents'] === 'true' : false;
+    $sellerId = isset($_GET['seller_id']) ? intval($_GET['seller_id']) : null;
+
+    error_log("get_events.php called with myEvents: " . ($myEvents ? "true" : "false") . ", seller_id: " . $sellerId);
 
     if ($event_id) {
         $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events WHERE id = ?");
@@ -71,6 +75,24 @@ try {
         $event['booked_quantity'] = $booked_quantity;
 
         json_response(true, "Event fetched", ['events' => [$event]]);
+    } elseif ($myEvents && $sellerId) {
+        $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events WHERE seller_id = ? ORDER BY event_date ASC");
+        $stmt->bind_param("i", $sellerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if (!$result) {
+            throw new Exception("Query failed: " . $conn->error);
+        }
+
+        $events = [];
+        while ($row = $result->fetch_assoc()) {
+            $events[] = $row;
+        }
+
+        error_log("Number of events fetched: " . count($events));
+
+        json_response(true, "Events fetched", ['events' => $events]);
     } else {
         $query = "SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events ORDER BY event_date ASC";
         $result = $conn->query($query);
