@@ -119,7 +119,13 @@ const Navbar = ({ user, loading, cartItems }) => {
                         >
                           {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                         </Link>
-                        <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
+                        <Link 
+                          to="/profile" 
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          onClick={() => setIsProfileOpen(false)}
+                        >
+                          Profile
+                        </Link>
                         
                         <hr className="my-2" />
                         <button
