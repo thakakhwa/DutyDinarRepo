@@ -62,14 +62,14 @@ const Navbar = ({ user, loading, cartItems }) => {
               <Link to="/" className={getLinkClass('/')}>Home</Link>
               <Link to="/categories" className={getLinkClass('/categories')}>Categories</Link>
               <Link to="/events" className={getLinkClass('/events')}>Events</Link>
-              {user && user.userType === 'seller' && (
-                <Link to="/inventory" className={getLinkClass('/inventory')}>Inventory</Link>
-              )}
               {user && (
                 <>
               <Link to="/dashboard" className={getLinkClass('/dashboard')}>
                 {user.userType === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
               </Link>
+              {user.userType === 'seller' && (
+                <Link to="/inventory" className={getLinkClass('/inventory')}>Inventory</Link>
+              )}
             </>
           )}
             </div>
