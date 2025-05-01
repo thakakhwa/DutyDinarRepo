@@ -87,10 +87,13 @@ const ProductPage = () => {
         { withCredentials: true }
       );
 
+      console.log("Add to cart response:", response.data);
+
       if (response.data.success) {
         alert("Product added to cart!");
+        navigate('/cart');
       } else {
-        alert("Failed to add to cart");
+        alert("Failed to add to cart: " + (response.data.message || ""));
       }
     } catch (error) {
       console.error("Add to cart error:", error);

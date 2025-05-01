@@ -1,4 +1,7 @@
+
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once 'cors.php';
 session_start();
 
@@ -25,115 +28,49 @@ $userId = $_SESSION['userId'];
 // Debug log for userId
 error_log("get_cart.php called for userId: " . $userId);
 
-// Fetch cart items for the user
-$stmt = $conn->prepare("
-    SELECT 
-        c.id AS id,
-        c.product_id,
-        c.event_id,
-        SUM(c.quantity) AS quantity,
-        p.name AS product_name,
-        p.price AS product_price,
-        p.image_url AS product_image_url,
-        p.minOrderQuantity AS min_order_quantity,
-        NULL AS event_name,
-        NULL AS event_price,
-        NULL AS event_image_url
-    FROM cart c
-    INNER JOIN products p ON c.product_id = p.id
-    WHERE c.buyer_id = ?
-    GROUP BY c.product_id
-");
-if (!$stmt) {
-    $errorMsg = 'Database error: ' . $conn->error;
-    error_log("get_cart.php prepare statement error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
+    try {
+        // Fetch cart items for the user
+        $stmt = $conn->prepare("
+            SELECT 
+                c.product_id,
+                SUM(c.quantity) AS quantity,
+                p.name AS product_name,
+                p.price AS product_price,
+                p.image_url AS product_image_url,
+                p.minOrderQuantity AS min_order_quantity
+            FROM cart c
+            INNER JOIN products p ON c.product_id = p.id
+            WHERE c.buyer_id = ?
+            GROUP BY c.product_id, p.name, p.price, p.image_url, p.minOrderQuantity
+        ");
+        if (!$stmt) {
+            throw new Exception('Database error: ' . $conn->error);
+        }
 
-$stmt->bind_param("i", $userId);
+        $stmt->bind_param("i", $userId);
 
-if (!$stmt->execute()) {
-    $errorMsg = 'Execute failed: ' . $stmt->error;
-    error_log("get_cart.php execute error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
+        if (!$stmt->execute()) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
 
-$result = $stmt->get_result();
+        $result = $stmt->get_result();
 
-if (!$result) {
-    $errorMsg = 'Get result failed: ' . $stmt->error;
-    error_log("get_cart.php get_result error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
+        if (!$result) {
+            throw new Exception('Get result failed: ' . $stmt->error);
+        }
 
-$cartItems = [];
-while ($row = $result->fetch_assoc()) {
-    $cartItems[] = $row;
-}
+        $cartItems = [];
+        while ($row = $result->fetch_assoc()) {
+            $cartItems[] = $row;
+        }
 
- 
-// Fetch event cart items
-$eventStmt = $conn->prepare("
-    SELECT 
-        c.id AS id,
-        c.product_id,
-        c.event_id,
-        SUM(c.quantity) AS quantity,
-        NULL AS product_name,
-        NULL AS product_price,
-        NULL AS product_image_url,
-        e.name AS event_name,
-        e.price AS event_price,
-        e.image_url AS event_image_url
-    FROM cart c
-    INNER JOIN events e ON c.event_id = e.id
-    WHERE c.buyer_id = ? AND c.event_id IS NOT NULL
-    GROUP BY c.event_id
-");
+        $stmt->close();
+        $conn->close();
 
-if (!$eventStmt) {
-    $errorMsg = 'Database error: ' . $conn->error;
-    error_log("get_cart.php event prepare statement error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
-
-$eventStmt->bind_param("i", $userId);
-
-if (!$eventStmt->execute()) {
-    $errorMsg = 'Execute failed: ' . $eventStmt->error;
-    error_log("get_cart.php event execute error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
-
-$eventResult = $eventStmt->get_result();
-
-if (!$eventResult) {
-    $errorMsg = 'Get result failed: ' . $eventStmt->error;
-    error_log("get_cart.php event get_result error: " . $errorMsg);
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $errorMsg]);
-    exit;
-}
-
-while ($row = $eventResult->fetch_assoc()) {
-    $cartItems[] = $row;
-}
-
-$eventStmt->close();
-
-$stmt->close();
-
-$conn->close();
-
-echo json_encode(['success' => true, 'data' => $cartItems]);
+        echo json_encode(['success' => true, 'data' => $cartItems]);
+    } catch (Exception $e) {
+        error_log("get_cart.php error: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Internal server error']);
+    }
 ?>

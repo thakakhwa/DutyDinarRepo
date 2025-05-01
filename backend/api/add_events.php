@@ -98,13 +98,15 @@ if (!is_dir($upload_dir)) {
     }
 }
 
-// Save the base64 image and get filename
-list($success, $result) = save_base64_image($image_base64, $upload_dir);
-if (!$success) {
-    error_log("Image upload error: " . $result);
-    echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $result]);
-    exit;
-}
+    // Save the base64 image and get filename
+    list($success, $result) = save_base64_image($image_base64, $upload_dir);
+    if (!$success) {
+        error_log("Image upload error: " . $result);
+        echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $result]);
+        exit;
+    } else {
+        error_log("Image uploaded successfully: " . $result);
+    }
 
 $image_url = 'uploads/' . $result; // Relative URL to save in DB
 
@@ -117,17 +119,23 @@ try {
     if (!$stmt) {
         error_log("Failed to prepare SQL statement: " . $conn->error);
         throw new Exception("Failed to prepare SQL statement: " . $conn->error);
+    } else {
+        error_log("SQL statement prepared successfully");
     }
 
     $bind = $stmt->bind_param("issssis", $seller_id, $name, $description, $event_date, $location, $available_tickets, $image_url);
     if (!$bind) {
         error_log("Failed to bind parameters: " . $stmt->error);
         throw new Exception("Failed to bind parameters: " . $stmt->error);
+    } else {
+        error_log("Parameters bound successfully");
     }
 
     if (!$stmt->execute()) {
         error_log("Failed to execute statement: " . $stmt->error);
         throw new Exception("Failed to execute statement: " . $stmt->error);
+    } else {
+        error_log("SQL statement executed successfully");
     }
 
     $stmt->close();

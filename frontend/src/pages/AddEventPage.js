@@ -81,13 +81,16 @@ const AddEventPage = () => {
       };
 
       const response = await addEvent(data);
-      if (response.status) {
+      console.log('Add Event API response:', response);
+      if (response.success) {
         alert('Event added successfully!');
         navigate('/seller-dashboard');
       } else {
+        console.error('Add Event failed:', response);
         setError(response.message || 'Failed to add event');
       }
     } catch (err) {
+      console.error('Add Event error:', err);
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
@@ -138,6 +141,7 @@ const AddEventPage = () => {
             name="location"
             value={formData.location}
             onChange={handleInputChange}
+            required
             className="w-full border px-3 py-2 rounded"
           />
         </div>
