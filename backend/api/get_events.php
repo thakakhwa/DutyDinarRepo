@@ -94,19 +94,45 @@ try {
 
         json_response(true, "Events fetched", ['events' => $events]);
     } else {
-        $query = "SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events ORDER BY event_date ASC";
-        $result = $conn->query($query);
+        // Check if search query is provided
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-        if (!$result) {
-            throw new Exception("Query failed: " . $conn->error);
+        if ($search !== '') {
+            $searchParam = '%' . $search . '%';
+            $stmt = $conn->prepare("SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events WHERE name LIKE ? OR description LIKE ? ORDER BY event_date ASC");
+            if (!$stmt) {
+                throw new Exception("Failed to prepare SQL statement for search events: " . $conn->error);
+            }
+            $searchParam = $search . '%';
+            $stmt->bind_param("ss", $searchParam, $searchParam);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if (!$result) {
+                throw new Exception("Query failed: " . $conn->error);
+            }
+
+            $events = [];
+            while ($row = $result->fetch_assoc()) {
+                $events[] = $row;
+            }
+
+            json_response(true, "Events fetched", ['events' => $events]);
+        } else {
+            $query = "SELECT id, seller_id, name, description, event_date, location, available_tickets, image_url FROM events ORDER BY event_date ASC";
+            $result = $conn->query($query);
+
+            if (!$result) {
+                throw new Exception("Query failed: " . $conn->error);
+            }
+
+            $events = [];
+            while ($row = $result->fetch_assoc()) {
+                $events[] = $row;
+            }
+
+            json_response(true, "Events fetched", ['events' => $events]);
         }
-
-        $events = [];
-        while ($row = $result->fetch_assoc()) {
-            $events[] = $row;
-        }
-
-        json_response(true, "Events fetched", ['events' => $events]);
     }
 } catch (Exception $e) {
     json_response(false, "Server Error: " . $e->getMessage());

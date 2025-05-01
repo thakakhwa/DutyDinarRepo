@@ -138,14 +138,24 @@ const Navbar = ({ user, loading, cartItems }) => {
                         {productResults.map((product) => (
                           <li
                             key={product.id}
-                            className="px-4 py-2 hover:bg-green-100 cursor-pointer"
+                            className="flex items-center justify-between px-4 py-2 hover:bg-green-100 cursor-pointer"
                             onClick={() => {
                               setSearchQuery(product.name);
                               setShowDropdown(false);
                               navigate(`/product/${product.id}`);
                             }}
                           >
-                            {product.name}
+                            <div className="flex items-center">
+                              {product.image_url && (
+                                <img
+                                  src={`http://localhost/DutyDinarRepo/backend/${product.image_url}`}
+                                  alt={product.name}
+                                  className="w-10 h-10 object-cover rounded mr-3"
+                                />
+                              )}
+                              <span>{product.name}</span>
+                            </div>
+                            <span className="text-green-700 font-semibold">${Number(product.price).toFixed(2)}</span>
                           </li>
                         ))}
                       </>
@@ -156,14 +166,21 @@ const Navbar = ({ user, loading, cartItems }) => {
                         {eventResults.map((event) => (
                           <li
                             key={event.id}
-                            className="px-4 py-2 hover:bg-green-100 cursor-pointer"
+                            className="flex items-center px-4 py-2 hover:bg-green-100 cursor-pointer"
                             onClick={() => {
                               setSearchQuery(event.name);
                               setShowDropdown(false);
                               navigate(`/event/${event.id}`);
                             }}
                           >
-                            {event.name}
+                            {event.image_url && (
+                              <img
+                                src={`http://localhost/DutyDinarRepo/backend/${event.image_url}`}
+                                alt={event.name}
+                                className="w-10 h-10 object-cover rounded mr-3"
+                              />
+                            )}
+                            <span>{event.name}</span>
                           </li>
                         ))}
                       </>
