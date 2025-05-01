@@ -45,14 +45,32 @@ try {
         }
         $stmt->bind_param("i", $sellerId);
     } else {
-        // Fetch all products with company name
-        $sql = "SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
-                FROM products p 
-                LEFT JOIN users u ON p.seller_id = u.id";
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            error_log("Failed to prepare SQL statement for all products.");
-            throw new Exception("Failed to prepare SQL statement.");
+        // Check if search query is provided
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+        if ($search !== '') {
+            // Fetch products matching search query in name or description
+            $searchParam = '%' . $search . '%';
+            $sql = "SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id 
+                    WHERE p.name LIKE ? OR p.description LIKE ?";
+            $stmt = $conn->prepare($sql);
+            if (!$stmt) {
+                error_log("Failed to prepare SQL statement for search products.");
+                throw new Exception("Failed to prepare SQL statement.");
+            }
+            $stmt->bind_param("ss", $searchParam, $searchParam);
+        } else {
+            // Fetch all products with company name
+            $sql = "SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id";
+            $stmt = $conn->prepare($sql);
+            if (!$stmt) {
+                error_log("Failed to prepare SQL statement for all products.");
+                throw new Exception("Failed to prepare SQL statement.");
+            }
         }
     }
 

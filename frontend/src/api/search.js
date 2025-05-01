@@ -4,8 +4,8 @@ import { getEvents } from './get_events';
 // Unified search function to search products and events by query
 export const searchAll = async (query) => {
   const [productsResult, eventsResult] = await Promise.all([
-    getProducts(query),
-    getEvents(query),
+    getProducts('', '', [0, 9999999], 0, { search: query }),
+    getEvents({ search: query }),
   ]);
 
   const products = productsResult.success ? productsResult.products : [];

@@ -3,10 +3,15 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, Calendar, CalendarCheck, User, LogOut, Bell, ChevronDown, Search, Heart } from 'lucide-react';
 import AuthModal from '../auth/AuthModal';
 import { AuthContext } from '../../context/AuthContext';
+import { searchAll } from '../../api/search';
 
 const Navbar = ({ user, loading, cartItems }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [productResults, setProductResults] = useState([]);
+  const [eventResults, setEventResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { handleLogout } = useContext(AuthContext);
@@ -25,10 +30,49 @@ const Navbar = ({ user, loading, cartItems }) => {
       : 'text-gray-600 hover:text-primary-600';
   };
 
+  const handleSearchInputChange = async (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    if (value.trim() === '') {
+      setProductResults([]);
+      setEventResults([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    try {
+      const response = await searchAll(value);
+      if (response.success) {
+        setProductResults(response.products);
+        setEventResults(response.events);
+        setShowDropdown(true);
+      } else {
+        setProductResults([]);
+        setEventResults([]);
+        setShowDropdown(false);
+      }
+    } catch (error) {
+      setProductResults([]);
+      setEventResults([]);
+      setShowDropdown(false);
+    }
+  };
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim() !== '') {
+      setShowDropdown(false);
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileOpen(false);
+      }
+      if (!event.target.closest('.search-dropdown') && !event.target.closest('.search-input')) {
+        setShowDropdown(false);
       }
     };
 
@@ -80,8 +124,52 @@ const Navbar = ({ user, loading, cartItems }) => {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-64"
+                  className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-64 search-input"
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  onKeyDown={handleSearchKeyDown}
+                  onFocus={() => { if (productResults.length > 0 || eventResults.length > 0) setShowDropdown(true); }}
                 />
+                {showDropdown && (productResults.length > 0 || eventResults.length > 0) && (
+                  <ul className="absolute z-50 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto search-dropdown">
+                    {productResults.length > 0 && (
+                      <>
+                        <li className="px-4 py-1 font-semibold text-gray-700 border-b">Products</li>
+                        {productResults.map((product) => (
+                          <li
+                            key={product.id}
+                            className="px-4 py-2 hover:bg-green-100 cursor-pointer"
+                            onClick={() => {
+                              setSearchQuery(product.name);
+                              setShowDropdown(false);
+                              navigate(`/product/${product.id}`);
+                            }}
+                          >
+                            {product.name}
+                          </li>
+                        ))}
+                      </>
+                    )}
+                    {eventResults.length > 0 && (
+                      <>
+                        <li className="px-4 py-1 font-semibold text-gray-700 border-b mt-2">Events</li>
+                        {eventResults.map((event) => (
+                          <li
+                            key={event.id}
+                            className="px-4 py-2 hover:bg-green-100 cursor-pointer"
+                            onClick={() => {
+                              setSearchQuery(event.name);
+                              setShowDropdown(false);
+                              navigate(`/event/${event.id}`);
+                            }}
+                          >
+                            {event.name}
+                          </li>
+                        ))}
+                      </>
+                    )}
+                  </ul>
+                )}
               </div>
 
               {user ? (

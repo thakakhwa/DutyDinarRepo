@@ -13,6 +13,12 @@ export const getProducts = async (category = '', sortBy = '', priceRange = [0, 9
       minOrderQuantity,
       ...options,
     };
+
+    // Add search parameter if provided in options
+    if (options.search) {
+      params.search = options.search;
+    }
+
     const response = await axios.get(`${API_BASE_URL}/get_products.php`, {
       params,
     });
