@@ -97,7 +97,7 @@ const Profile = () => {
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="mb-8">
-          <Link to="/" className="inline-flex items-center text-green-700 hover:text-green-900 transition-colors font-semibold">
+          <Link to="/Dashboard" className="inline-flex items-center text-green-700 hover:text-green-900 transition-colors font-semibold">
             <ArrowLeft className="mr-2" size={20} />
             Back to Dashboard
           </Link>
