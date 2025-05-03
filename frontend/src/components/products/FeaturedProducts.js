@@ -27,9 +27,9 @@ const FeaturedProducts = () => {
     navigate(`/product/${productId}`);
   };
 
-  const handleContactSupplier = (e) => {
+  const handleContactSupplier = (e, productId) => {
     e.stopPropagation(); // Prevent navigation when clicking contact button
-    // Add contact supplier logic here
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -64,7 +64,7 @@ const FeaturedProducts = () => {
                 <div className="flex items-center">
                   <button 
                     className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
-                    onClick={handleContactSupplier}
+                    onClick={(e) => handleContactSupplier(e, product.id)}
                   >
                     Contact Supplier
                   </button>
