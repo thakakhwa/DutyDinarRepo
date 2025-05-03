@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
+import { getCart } from '../api/get_cart';
 
 const stripePromise = loadStripe('pk_test_51RJbVDQmRraBhPiiiaNOYDXbnq03gesKd08368EkbvBrxeJwYEqSolsMYOVd5Xj1qcaM7b0d2h0WY8hpTGXhW4hj00Qxh0qP3B');
 
@@ -28,21 +29,7 @@ function CheckoutForm() {
   const elements = useElements();
   const navigate = useNavigate();
 
-  // Placeholder cartItems array for testing
-  const cartItems = [
-    {
-      product_id: 1,
-      event_id: null,
-      quantity: 2,
-      price: 50,
-    },
-    {
-      product_id: 2,
-      event_id: null,
-      quantity: 1,
-      price: 30,
-    },
-  ];
+  const [cartItems, setCartItems] = useState([]);
 
   const [paymentMethod, setPaymentMethod] = useState('');
   const [formData, setFormData] = useState({
@@ -56,6 +43,18 @@ function CheckoutForm() {
   const [errors, setErrors] = useState({});
   const [cardError, setCardError] = useState(null);
   const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const response = await getCart();
+      if (response.success) {
+        setCartItems(response.data);
+      } else {
+        alert('Failed to fetch cart items: ' + response.message);
+      }
+    };
+    fetchCart();
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -120,17 +119,17 @@ function CheckoutForm() {
   };
 
   const prepareOrderItems = () => {
-    // Map cartItems to order items format expected by backend
+    // Map fetched cartItems to order items format expected by backend
     return cartItems.map(item => ({
       product_id: item.product_id || null,
-      event_id: item.event_id || null,
+      event_id: null,
       quantity: item.quantity,
-      price: item.price,
+      price: item.product_price,
     }));
   };
 
   const calculateTotalAmount = () => {
-    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return cartItems.reduce((sum, item) => sum + item.product_price * item.quantity, 0);
   };
 
   const handleSubmit = async (e) => {

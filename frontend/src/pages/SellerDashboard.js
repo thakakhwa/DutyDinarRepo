@@ -30,6 +30,7 @@ const SellerDashboard = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("SellerDashboard data fetched:", data);
         if (data.success) {
           const totalSalesNum = Number(data.totalSales);
           setTotalSales(isNaN(totalSalesNum) ? 0 : totalSalesNum);
@@ -90,9 +91,12 @@ const SellerDashboard = () => {
   };
 
   const renderOrderItems = (items) => {
+    if (!items || items.length === 0) {
+      return <div>No items</div>;
+    }
     return items.map((item, index) => (
       <div key={index} className="mb-1">
-        {item.product_name || item.event_name || "N/A"} (Qty: {item.quantity})
+        {(item.product_name || item.event_name || "N/A") + " (Qty: " + item.quantity + ")"}
       </div>
     ));
   };

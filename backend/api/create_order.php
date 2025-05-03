@@ -80,6 +80,13 @@ try {
             $stmtSeller->close();
         }
 
+        if ($sellerId === null) {
+            // If seller_id not found, rollback and return error
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Seller not found for product or event']);
+            exit;
+        }
+
         $stmtItem->bind_param("iiiiid", $orderId, $sellerId, $productId, $eventId, $quantity, $price);
         $stmtItem->execute();
 
