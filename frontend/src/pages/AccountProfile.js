@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Edit, Save, User, Mail, Building, Calendar, Lock, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { getUserProfile, updateUserProfile } from "../api/profileService";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { handleLogout } = useContext(require("../context/AuthContext").AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -273,6 +274,38 @@ const Profile = () => {
                     >
                       Cancel
                     </button>
+                    <div className="flex-grow flex justify-center">
+                      <button
+                        type="button"
+                        className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center"
+                        disabled={loading}
+                              onClick={async () => {
+                                if (window.confirm("Are you sure you want to delete your user account? This action cannot be undone.")) {
+                                  if (window.confirm("This is your last chance to cancel. Do you really want to delete your account?")) {
+                                    try {
+                                      setLoading(true);
+                                      const { deleteUser } = await import("../api/profile");
+                                      const response = await deleteUser();
+                                      if (response.success) {
+                                        alert("User deleted successfully. You will be logged out.");
+                                        await handleLogout();
+                                        // Redirect to login page after deletion
+                                        navigate("/login");
+                                      } else {
+                                        alert("Failed to delete user: " + response.message);
+                                      }
+                                    } catch (error) {
+                                      alert("An error occurred while deleting the user.");
+                                    } finally {
+                                      setLoading(false);
+                                    }
+                                  }
+                                }
+                              }}
+                      >
+                        Delete User
+                      </button>
+                    </div>
                     <button
                       type="submit"
                       className="w-full md:w-auto px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center"

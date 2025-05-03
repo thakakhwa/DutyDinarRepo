@@ -37,3 +37,18 @@ export const updateProfile = async (profileData) => {
       };
     }
   };
+
+export const deleteUser = async () => {
+    try {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/delete_user.php', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      return await response.json();
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Network error. Please check your connection.'
+      };
+    }
+  };
