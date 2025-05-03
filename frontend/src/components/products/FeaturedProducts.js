@@ -66,7 +66,7 @@ const FeaturedProducts = () => {
                     className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
                     onClick={(e) => handleContactSupplier(e, product.id)}
                   >
-                    Contact Supplier
+                    View Product
                   </button>
                   <FavoriteButton productId={product.id} />
                 </div>
