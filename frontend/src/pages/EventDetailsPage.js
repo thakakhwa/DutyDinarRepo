@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Users, Package } from 'lucide-react';
+import { Calendar, MapPin, Users, Package, Wallet, Mail, X } from 'lucide-react';
 import { getFullImageUrl } from '../utils/imageUtils';
 
 const EventDetailsPage = () => {
@@ -11,6 +11,8 @@ const EventDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [walletUrl, setWalletUrl] = useState(null);
 
   useEffect(() => {
     window.scrollTo({
@@ -52,19 +54,43 @@ const EventDetailsPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event_id: event.id, quantity: 1 }),
       });
+      
+      // Handle non-200 responses
+      if (!response.ok) {
+        console.error(`Error response: ${response.status} ${response.statusText}`);
+        if (response.status === 500) {
+          alert('Server error occurred. Please try again later.');
+        } else {
+          alert(`Error booking event: ${response.statusText}`);
+        }
+        setBookingLoading(false);
+        return;
+      }
+      
       const data = await response.json();
       if (data.success) {
-        alert('Event booked successfully!');
-        // Refresh the page to update booking status
-        window.location.reload();
+        setBookingSuccess(true);
+        if (data.wallet_url) {
+          setWalletUrl(data.wallet_url);
+        }
+        // Update the event to show as booked
+        setEvent(prev => ({
+          ...prev,
+          booked_quantity: 1
+        }));
       } else {
         alert(data.message || 'Failed to book event');
       }
     } catch (error) {
-      alert('Error booking event');
+      console.error("Error details:", error);
+      alert('Error connecting to the server. Please check your connection and try again.');
     } finally {
       setBookingLoading(false);
     }
+  };
+
+  const closeBookingSuccess = () => {
+    setBookingSuccess(false);
   };
 
   if (loading) {
@@ -77,6 +103,38 @@ const EventDetailsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {bookingSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Booking Successful!</h2>
+              <button onClick={closeBookingSuccess} className="p-1">
+                <X size={20} />
+              </button>
+            </div>
+            <p className="mb-4">Your ticket for {event.name} has been booked successfully.</p>
+            <p className="mb-4">A confirmation email has been sent to your email address.</p>
+            {walletUrl && (
+              <a 
+                href={walletUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center justify-center bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 mb-3"
+              >
+                <Wallet size={18} className="mr-2" />
+                Add to Google Wallet
+              </a>
+            )}
+            <button 
+              onClick={closeBookingSuccess} 
+              className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <button
           onClick={() => navigate(-1)}

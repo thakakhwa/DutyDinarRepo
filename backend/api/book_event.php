@@ -17,6 +17,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once 'config.php'; // Database connection
 
+// Simple placeholder for Google Wallet Pass function
+function createGoogleWalletPass($eventId, $userId, $bookingId) {
+    return [
+        'success' => true,
+        'wallet_url' => 'https://pay.google.com/gp/v/save/example_pass_' . time(),
+        'pass_id' => 'mock-pass-' . $eventId . '-' . $bookingId . '-' . time(),
+        'dev_mode' => true
+    ];
+}
+
+// Simple placeholder for email function
+function sendEmail($to, $subject, $body) {
+    error_log("MOCK EMAIL: To: $to, Subject: $subject");
+    return [
+        "success" => true,
+        "message" => "Email sent successfully (mock).",
+        "mock" => true
+    ];
+}
+
 session_start();
 
 function check_authentication() {
@@ -28,7 +48,90 @@ function check_authentication() {
     return ['id' => $_SESSION['userId']];
 }
 
+// Function to send booking confirmation email with Google Wallet link
+function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl) {
+    global $conn;
+    
+    try {
+        // Get user and event details
+        $query = "
+            SELECT u.email, u.name as user_name, e.name as event_name, e.event_date, e.location 
+            FROM users u
+            JOIN events e ON e.id = ?
+            WHERE u.id = ?
+        ";
+        
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            error_log("Email preparation error: " . $conn->error);
+            return ['success' => false, 'message' => 'Database error'];
+        }
+        
+        $stmt->bind_param("ii", $eventId, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 0) {
+            return ['success' => false, 'message' => 'User or event not found'];
+        }
+        
+        $data = $result->fetch_assoc();
+        $stmt->close();
+        
+        // Format email
+        $subject = "Your DutyDinar Event Booking Confirmation: " . $data['event_name'];
+        
+        $body = "
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background-color: #4CAF50; color: white; padding: 10px; text-align: center; }
+                .content { padding: 20px; border: 1px solid #ddd; }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Event Booking Confirmation</h1>
+                </div>
+                <div class='content'>
+                    <p>Hello " . $data['user_name'] . ",</p>
+                    <p>Thank you for booking a ticket for <strong>" . $data['event_name'] . "</strong>!</p>
+                    
+                    <div>
+                        <h3>Event Details:</h3>
+                        <p><strong>Event:</strong> " . $data['event_name'] . "</p>
+                        <p><strong>Date:</strong> " . date('F j, Y, g:i a', strtotime($data['event_date'])) . "</p>
+                        <p><strong>Location:</strong> " . $data['location'] . "</p>
+                        <p><strong>Booking ID:</strong> " . $bookingId . "</p>
+                    </div>
+                    
+                    <p>Add this event ticket to your Google Wallet for easy access:</p>
+                    <a href='" . $walletUrl . "'>Add to Google Wallet</a>
+                    
+                    <p>We look forward to seeing you at the event!</p>
+                    <p>Best regards,<br>The DutyDinar Team</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        ";
+        
+        return sendEmail($data['email'], $subject, $body);
+    } catch (Exception $e) {
+        error_log("Error in sendBookingConfirmationEmail: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Error sending email: ' . $e->getMessage()];
+    }
+}
+
 try {
+    // Mock user ID for testing without login
+    if (!isset($_SESSION['userId'])) {
+        $_SESSION['userId'] = 1; // Testing only
+    }
+    
     $user = check_authentication();
     $user_id = $user['id'];
 
@@ -148,15 +251,50 @@ try {
         echo json_encode(['success' => false, 'message' => 'Failed to insert event booking.']);
         exit;
     }
+    $booking_id = $conn->insert_id;
     $booking_stmt->close();
 
     $conn->commit();
-
-    echo json_encode(['success' => true, 'message' => 'Event booked successfully.', 'order_id' => $order_id]);
+    
+    // Generate Google Wallet pass 
+    $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
+    
+    // Try to send confirmation email
+    $email_sent = false;
+    try {
+        if ($wallet_result['success']) {
+            $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $wallet_result['wallet_url']);
+            $email_sent = !empty($email_result['success']);
+        }
+    } catch (Exception $emailError) {
+        error_log("Email sending failed: " . $emailError->getMessage());
+    }
+    
+    // Send the response
+    echo json_encode([
+        'success' => true, 
+        'message' => 'Event booked successfully.', 
+        'order_id' => $order_id,
+        'booking_id' => $booking_id,
+        'wallet_url' => $wallet_result['wallet_url'] ?? null,
+        'email_sent' => $email_sent
+    ]);
 
 } catch (Exception $e) {
-    $conn->rollback();
+    // Rollback transaction if it's active
+    if (isset($conn) && $conn->connect_errno === 0) {
+        try {
+            $conn->rollback();
+        } catch (Exception $rollbackError) {
+            error_log("Rollback failed: " . $rollbackError->getMessage());
+        }
+    }
+    
     error_log("Book Event API error: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Internal server error.']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Internal server error.',
+        'error' => $e->getMessage()
+    ]);
 }
 ?>

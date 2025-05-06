@@ -1,21 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { getBookedEvents } from '../api/get_booked_events';
 import { getFullImageUrl } from '../utils/imageUtils';
+import { Wallet } from 'lucide-react';
 
 const BookedEventsPage = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [unbookingEvent, setUnbookingEvent] = useState(null);
+  const [walletUrls, setWalletUrls] = useState({});
 
   const fetchBookedEvents = async () => {
     try {
       const events = await getBookedEvents();
       setBookedEvents(events);
+      
+      // Fetch Google Wallet pass URLs for each booked event
+      events.forEach(event => {
+        fetchWalletUrl(event.id, event.booking_id);
+      });
     } catch (err) {
       setError('Failed to load booked events.');
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const fetchWalletUrl = async (eventId, bookingId) => {
+    if (!eventId || !bookingId) return;
+    
+    try {
+      const response = await fetch('http://localhost/DutyDinarRepo/backend/api/google_wallet_pass.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ event_id: eventId, booking_id: bookingId }),
+      });
+      
+      // Handle non-200 responses
+      if (!response.ok) {
+        console.error(`Error fetching wallet URL: ${response.status} ${response.statusText}`);
+        return;
+      }
+      
+      const data = await response.json();
+      if (data.success && data.wallet_url) {
+        setWalletUrls(prev => ({
+          ...prev,
+          [eventId]: data.wallet_url
+        }));
+      } else if (data.message) {
+        console.log(`Wallet URL not available: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error fetching wallet URL:', error);
+      // Silently fail - wallet URL is optional
     }
   };
 
@@ -85,14 +126,26 @@ const BookedEventsPage = () => {
                 <p className="text-gray-600 mb-2">{event.description}</p>
                 <p className="mb-1">{new Date(event.event_date).toLocaleString()}</p>
                 <p className="mb-1">{event.location}</p>
-                {/* Removed Quantity Booked display */}
-                <button
-                  onClick={() => handleUnbookEvent(event.id)}
-                  disabled={unbookingEvent === event.id}
-                  className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
-                >
-                  {unbookingEvent === event.id ? 'Unbooking...' : 'Unbook'}
-                </button>
+                <div className="flex space-x-2 mt-3">
+                  {walletUrls[event.id] && (
+                    <a 
+                      href={walletUrls[event.id]} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
+                    >
+                      <Wallet size={18} className="mr-2" />
+                      Add to Google Wallet
+                    </a>
+                  )}
+                  <button
+                    onClick={() => handleUnbookEvent(event.id)}
+                    disabled={unbookingEvent === event.id}
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                  >
+                    {unbookingEvent === event.id ? 'Unbooking...' : 'Unbook'}
+                  </button>
+                </div>
               </div>
             </li>
           );
