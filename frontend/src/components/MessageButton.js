@@ -9,23 +9,44 @@ const MessageButton = ({ onClick }) => {
         bottom: '20px',
         right: '20px',
         zIndex: 1000,
-        backgroundColor: '#3b82f6', // Tailwind blue-500
+        backgroundColor: '#10B981', // Tailwind green-500
         color: 'white',
         borderRadius: '50%',
-        width: '50px',
-        height: '50px',
+        width: '56px',
+        height: '56px',
         border: 'none',
         cursor: 'pointer',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '24px',
+        transition: 'transform 0.2s, box-shadow 0.2s',
       }}
-      aria-label="Open Messages"
-      title="Messages"
+      onMouseOver={(e) => {
+        e.currentTarget.style.transform = 'scale(1.05)';
+        e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.25)';
+      }}
+      aria-label="Chat Support"
+      title="Chat Support"
     >
-      &#9993;
+      {/* Chat icon using SVG */}
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
     </button>
   );
 };

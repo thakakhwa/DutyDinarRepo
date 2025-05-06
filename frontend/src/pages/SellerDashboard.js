@@ -12,7 +12,7 @@ const SellerDashboard = () => {
   const [totalSales, setTotalSales] = useState(0);
   const [activeOrders, setActiveOrders] = useState(0);
   const [productsListed, setProductsListed] = useState(0);
-  const [productViews, setProductViews] = useState(0);
+  const [eventsListed, setEventsListed] = useState(0);
   const [recentOrders, setRecentOrders] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
@@ -35,7 +35,6 @@ const SellerDashboard = () => {
           const totalSalesNum = Number(data.totalSales);
           setTotalSales(isNaN(totalSalesNum) ? 0 : totalSalesNum);
           setActiveOrders(data.activeOrders || 0);
-          setProductViews(data.productViews || 0);
           const recentOrdersWithNumbers = (data.recentOrders || []).map(
             (order) => ({
               ...order,
@@ -67,6 +66,23 @@ const SellerDashboard = () => {
       .catch((error) => {
         console.error("Error fetching products listed count:", error);
         setProductsListed(0);
+      });
+      
+    // Fetch count of events listed by the seller
+    fetch(`${API_BASE_URL}/get_seller_events_count.php`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && typeof data.event_count === "number") {
+          setEventsListed(data.event_count);
+        } else {
+          setEventsListed(0);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching events listed count:", error);
+        setEventsListed(0);
       });
   }, []);
 
@@ -120,11 +136,11 @@ const SellerDashboard = () => {
             <div className="text-sm text-gray-600">Total products listed</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold mb-2">Product Views</h3>
+            <h3 className="text-lg font-semibold mb-2">Events Listed</h3>
             <div className="text-3xl font-bold text-green-600">
-              {productViews}
+              {eventsListed}
             </div>
-            <div className="text-sm text-gray-600">Last 7 days</div>
+            <div className="text-sm text-gray-600">Total events created</div>
           </div>
         </div>
 

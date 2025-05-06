@@ -167,7 +167,6 @@ const AuthModal = ({
         body: JSON.stringify({ email: forgetPasswordEmail }),
       });
       const data = await response.json();
-      console.log("Forgot Password API response:", data);
       
       if (data.success) {
         setForgetPasswordSuccess(data.message);
@@ -212,7 +211,6 @@ const AuthModal = ({
       });
       
       const data = await response.json();
-      console.log("Verify Code API response:", data);
       
       if (data.success) {
         // Move to the reset password step
@@ -258,7 +256,6 @@ const AuthModal = ({
       });
       
       const data = await response.json();
-      console.log("Reset Password API response:", data);
       
       if (data.success) {
         // Close the reset password modal and show success in the main modal
