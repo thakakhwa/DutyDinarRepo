@@ -68,6 +68,15 @@ const AuthModal = ({
       if (isLogin) {
         response = await handleLogin(formData.email, formData.password);
       } else {
+        // Password validation on signup
+        const { validatePassword } = await import("../../utils/passwordValidation");
+        const { valid, errors } = validatePassword(formData.password);
+        if (!valid) {
+          setError("Password is invalid: " + errors.join(" "));
+          setIsAnimating(false);
+          return;
+        }
+
         response = await signupUser(formData);
         if (response.status === "success") {
           response = await handleLogin(formData.email, formData.password);

@@ -148,7 +148,6 @@ const InventoryPage = () => {
                 <th className="border border-gray-300 px-4 py-2 text-left">Event Name</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Location</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Price</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
@@ -158,7 +157,6 @@ const InventoryPage = () => {
                   <td className="border border-gray-300 px-4 py-2">{event.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{new Date(event.event_date).toLocaleDateString()}</td>
                   <td className="border border-gray-300 px-4 py-2">{event.location || 'N/A'}</td>
-                  <td className="border border-gray-300 px-4 py-2">${!isNaN(Number(event.price)) ? Number(event.price).toFixed(2) : 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">
                     <button
                       onClick={() => handleDeleteEvent(event.id)}

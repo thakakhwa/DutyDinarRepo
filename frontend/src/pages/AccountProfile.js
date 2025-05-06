@@ -55,6 +55,23 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Password validation
+    if (profile.newPassword || profile.retypeNewPassword) {
+      const { validatePassword } = await import("../utils/passwordValidation");
+      const { valid, errors } = validatePassword(profile.newPassword);
+
+      if (!valid) {
+        setError("New password is invalid: " + errors.join(" "));
+        return;
+      }
+
+      if (profile.newPassword !== profile.retypeNewPassword) {
+        setError("New password and retype password do not match.");
+        return;
+      }
+    }
+
     try {
       setLoading(true);
       console.log("Submitting profile update with data:", profile);

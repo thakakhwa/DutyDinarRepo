@@ -131,6 +131,7 @@ const AddEventPage = () => {
             value={formData.event_date}
             onChange={handleInputChange}
             required
+            min={new Date().toISOString().split('T')[0]}
             className="w-full border px-3 py-2 rounded"
           />
         </div>

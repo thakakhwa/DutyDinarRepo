@@ -125,7 +125,7 @@ const EventDetailsPage = () => {
                     disabled={bookingLoading}
                     className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50"
                   >
-                    {bookingLoading ? 'Booking...' : 'Book Tickets'}
+                    {bookingLoading ? 'Booking...' : 'Book Ticket'}
                   </button>
                   <button className="flex-1 border border-green-600 text-green-600 py-3 rounded-lg font-semibold hover:bg-green-50">
                     Contact Organizer
