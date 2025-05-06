@@ -6,7 +6,6 @@ import { fetchUsers } from '../../api/adminUsers';
 import { getFullImageUrl } from '../../utils/imageUtils';
 
 const EventsPage = () => {
-  const [selectedStatus, setSelectedStatus] = useState('all');
   const [events, setEvents] = useState([]);
   const [sellers, setSellers] = useState([]);
   const mappedSellers = sellers.map(seller => ({
@@ -207,26 +206,9 @@ const EventsPage = () => {
       )}
 
       <div className="bg-white rounded-xl shadow-sm p-6">
-        {/* Filters */}
-        <div className="flex gap-4 mb-6">
-          {['all', 'upcoming', 'ongoing', 'completed', 'cancelled'].map((status) => (
-            <button
-              key={status}
-              onClick={() => setSelectedStatus(status)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize
-                ${selectedStatus === status
-                  ? 'bg-green-100 text-green-600'
-                  : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
-
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events
-            .filter(event => selectedStatus === 'all' || event.status === selectedStatus)
             .map((event) => (
               <div key={event.id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                 <div className="aspect-w-16 aspect-h-9 bg-gray-100 relative">

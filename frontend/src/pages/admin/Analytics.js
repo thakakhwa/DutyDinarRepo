@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Calendar, ChevronDown, Download, Filter, 
   TrendingUp, TrendingDown, DollarSign, Users, 
-  ShoppingBag, ArrowRight
+  ShoppingBag, ArrowRight, Download
 } from 'lucide-react';
 import { fetchAdminAnalytics } from '../../api/adminAnalytics';
 
 const AnalyticsPage = () => {
-  const [dateRange, setDateRange] = useState('This Month');
   const [selectedChart, setSelectedChart] = useState('revenue');
   const [analyticsData, setAnalyticsData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -136,15 +134,6 @@ const AnalyticsPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Analytics</h1>
         <div className="flex space-x-4">
-          <div className="flex items-center space-x-2 px-3 py-2 bg-white rounded-lg border">
-            <Calendar size={16} />
-            <span>{dateRange}</span>
-            <ChevronDown size={16} />
-          </div>
-          <button className="flex items-center px-3 py-2 bg-white rounded-lg border">
-            <Filter size={16} className="mr-2" />
-            Filters
-          </button>
           <button 
             className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             onClick={exportData}
@@ -187,7 +176,7 @@ const AnalyticsPage = () => {
           {/* Revenue Chart */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Revenue Analytics</h2>
+              <h2 className="text-lg font-semibold">Data Analytics</h2>
               <div className="flex space-x-2">
                 {['revenue', 'orders', 'users'].map((chart) => (
                   <button

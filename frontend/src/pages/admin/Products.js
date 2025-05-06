@@ -170,7 +170,6 @@ const ProductModal = ({ mode, product, onClose, onSubmit, categories, sellers })
 
 const ProductsPage = () => {
   const [viewType, setViewType] = useState('grid');
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(['all']);
@@ -180,8 +179,7 @@ const ProductsPage = () => {
   const [currentProduct, setCurrentProduct] = useState(null);
 
   const fetchProducts = async () => {
-    const categoryParam = selectedCategory === 'all' ? '' : selectedCategory;
-    const response = await getProducts(categoryParam, '', [0, 9999999], 0);
+    const response = await getProducts('', '', [0, 9999999], 0);
     if (response.success) {
       setProducts(response.products);
     } else {
@@ -233,7 +231,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory]);
+  }, []);
 
   const openAddModal = () => {
     setModalMode('add');
@@ -315,45 +313,29 @@ const ProductsPage = () => {
       <div className="bg-white rounded-xl shadow-sm p-6">
         {/* Filters and Search */}
         <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-          <div className="flex gap-4 overflow-x-auto">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category.toLowerCase())}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap
-                  ${selectedCategory === category.toLowerCase()
-                    ? 'bg-green-100 text-green-600'
-                    : 'text-gray-600 hover:bg-gray-100'}`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
+            <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div className="flex border rounded-lg overflow-hidden">
-              <button
-                onClick={() => setViewType('grid')}
-                className={`p-2 ${viewType === 'grid' ? 'bg-green-100 text-green-600' : 'hover:bg-gray-100'}`}
-              >
-                <Grid size={20} />
-              </button>
-              <button
-                onClick={() => setViewType('list')}
-                className={`p-2 ${viewType === 'list' ? 'bg-green-100 text-green-600' : 'hover:bg-gray-100'}`}
-              >
-                <List size={20} />
-              </button>
-            </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setViewType('grid')}
+              className={`p-2 rounded-lg ${viewType === 'grid' ? 'bg-green-100 text-green-600' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              <Grid size={20} />
+            </button>
+            <button
+              onClick={() => setViewType('list')}
+              className={`p-2 rounded-lg ${viewType === 'list' ? 'bg-green-100 text-green-600' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              <List size={20} />
+            </button>
           </div>
         </div>
 

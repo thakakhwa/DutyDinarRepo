@@ -6,6 +6,7 @@ import { getProducts } from '../api/get_products';
 import FeaturedProducts from '../components/products/FeaturedProducts';
 import EventPreview from '../components/events/EventPreview';
 import AuthModal from '../components/auth/AuthModal';
+import axios from 'axios';
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
@@ -14,6 +15,12 @@ const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
   const [initialUserType, setInitialUserType] = useState('buyer');
+  const [stats, setStats] = useState({
+    totalEvents: 0,
+    totalProducts: 0,
+    totalSellers: 0,
+    totalBuyers: 0
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +34,25 @@ const HomePage = () => {
       setIsLoggedIn(true);
       setUserType(localStorage.getItem('userType'));
     }
+
+    // Fetch quick stats
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get('http://localhost/DutyDinarRepo/backend/api/get_home_stats.php');
+        if (response.data.success) {
+          setStats({
+            totalEvents: response.data.totalEvents || 0,
+            totalProducts: response.data.totalProducts || 0,
+            totalSellers: response.data.totalSellers || 0,
+            totalBuyers: response.data.totalBuyers || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   useEffect(() => {
@@ -101,20 +127,20 @@ const HomePage = () => {
                   <h2 className="text-2xl font-semibold mb-4">Quick Stats</h2>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-green-600">5000+</div>
+                      <div className="text-3xl font-bold text-green-600">{stats.totalSellers}</div>
                       <div className="text-gray-600">Verified Suppliers</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-green-600">50k+</div>
+                      <div className="text-3xl font-bold text-green-600">{stats.totalProducts}</div>
                       <div className="text-gray-600">Products Listed</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-green-600">100k+</div>
+                      <div className="text-3xl font-bold text-green-600">{stats.totalBuyers}</div>
                       <div className="text-gray-600">Business Buyers</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-green-600">30+</div>
-                      <div className="text-gray-600">Countries</div>
+                      <div className="text-3xl font-bold text-green-600">{stats.totalEvents}</div>
+                      <div className="text-gray-600">Events Listed</div>
                     </div>
                   </div>
                 </div>

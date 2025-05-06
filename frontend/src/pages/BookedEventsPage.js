@@ -6,19 +6,20 @@ const BookedEventsPage = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [unbookingEvent, setUnbookingEvent] = useState(null);
+
+  const fetchBookedEvents = async () => {
+    try {
+      const events = await getBookedEvents();
+      setBookedEvents(events);
+    } catch (err) {
+      setError('Failed to load booked events.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBookedEvents = async () => {
-      try {
-        const events = await getBookedEvents();
-        setBookedEvents(events);
-      } catch (err) {
-        setError('Failed to load booked events.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchBookedEvents();
 
     window.scrollTo({
@@ -26,6 +27,34 @@ const BookedEventsPage = () => {
       behavior: "smooth",
     });
   }, []);
+
+  const handleUnbookEvent = async (eventId) => {
+    if (window.confirm('Are you sure you want to unbook this event?')) {
+      try {
+        setUnbookingEvent(eventId);
+        const response = await fetch('http://localhost/DutyDinarRepo/backend/api/unbook_event.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ event_id: eventId }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          // Remove the event from the state
+          setBookedEvents((prev) => prev.filter((e) => e.id !== eventId));
+          alert('Event unbooked successfully');
+        } else {
+          alert('Failed to unbook event: ' + data.message);
+        }
+      } catch (error) {
+        alert('Error unbooking event');
+      } finally {
+        setUnbookingEvent(null);
+      }
+    }
+  };
 
   if (loading) {
     return <div className="p-4">Loading booked events...</div>;
@@ -58,32 +87,11 @@ const BookedEventsPage = () => {
                 <p className="mb-1">{event.location}</p>
                 {/* Removed Quantity Booked display */}
                 <button
-                  onClick={async () => {
-                    if (window.confirm('Are you sure you want to unbook this event?')) {
-                      try {
-                        const response = await fetch('http://localhost/DutyDinarRepo/backend/api/unbook_event.php', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          credentials: 'include',
-                          body: JSON.stringify({ event_id: event.id }),
-                        });
-                        const data = await response.json();
-                        if (data.success) {
-                          alert('Event unbooked successfully');
-                          setBookedEvents((prev) => prev.filter((e) => e.id !== event.id));
-                        } else {
-                          alert('Failed to unbook event: ' + data.message);
-                        }
-                      } catch (error) {
-                        alert('Error unbooking event');
-                      }
-                    }
-                  }}
-                  className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  onClick={() => handleUnbookEvent(event.id)}
+                  disabled={unbookingEvent === event.id}
+                  className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
                 >
-                  Unbook
+                  {unbookingEvent === event.id ? 'Unbooking...' : 'Unbook'}
                 </button>
               </div>
             </li>
