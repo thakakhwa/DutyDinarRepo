@@ -73,8 +73,10 @@ try {
     $userName = $user['name'];
     $stmt->close();
 
-    // Generate a 6-digit verification code
-    $verificationCode = sprintf("%06d", mt_rand(100000, 999999));
+    // Generate a 6-digit verification code with proper leading zeros
+    // Using mt_rand(0, 999999) instead of mt_rand(100000, 999999) ensures we handle all edge cases correctly,
+    // including the case where the number might start with zeros. sprintf("%06d", ...) ensures it's always 6 digits.
+    $verificationCode = sprintf("%06d", mt_rand(0, 999999));
     error_log("Forgot Password API: Generated verification code for email " . $email . ": " . $verificationCode);
     
     // Check if the table exists, if not create it
@@ -105,8 +107,11 @@ try {
         $deleteStmt->close();
     }
 
-    // Set expiration time (30 minutes from now)
-    $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+    // Set expiration time (30 minutes from now) in the server's local timezone
+    // This matches how the verification code will check the expiration
+    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 60));
+    $currentTime = date('Y-m-d H:i:s');
+    error_log("Forgot Password API: Setting expiration time: " . $expiresAt . " (current server time: " . $currentTime . ")");
     
     // Store the verification code in the database
     $insertStmt = $conn->prepare("INSERT INTO password_reset_codes (user_id, email, reset_code, expires_at) VALUES (?, ?, ?, ?)");

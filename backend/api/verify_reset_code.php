@@ -33,7 +33,15 @@ if (empty($input['email']) || empty($input['code'])) {
 
 $email = $input['email'];
 $code = $input['code'];
-error_log("Verify Reset Code API: Processing request for email: $email, code: $code");
+
+// Normalize codes by removing leading zeros - some databases may store them differently
+$normalizedCode = ltrim($code, '0');
+if (empty($normalizedCode)) {
+    // If the code was all zeros (like 000123), then keep at least one zero
+    $normalizedCode = '0';
+}
+
+error_log("Verify Reset Code API: Processing request for email: $email, code: $code, normalized: $normalizedCode");
 
 try {
     // First check if there are any codes for this email
@@ -61,19 +69,33 @@ try {
     
     // Debug: Log all codes found for this email
     while ($row = $checkResult->fetch_assoc()) {
-        error_log("Verify Reset Code API: Found code in DB: " . $row['reset_code'] . " for email: " . $row['email'] . ", expires: " . $row['expires_at']);
+        // Normalize stored code for comparison
+        $storedCode = ltrim($row['reset_code'], '0');
+        error_log("Verify Reset Code API: Found code in DB: " . $row['reset_code'] . " (normalized: $storedCode) for email: " . $row['email'] . ", expires: " . $row['expires_at']);
     }
     $checkStmt->close();
     
-    // Check if the code exists and is valid
-    $stmt = $conn->prepare("SELECT * FROM password_reset_codes WHERE email = ? AND reset_code = ? AND expires_at > NOW()");
+    // Get the current time in the server's timezone
+    $currentTime = date('Y-m-d H:i:s');
+    error_log("Verify Reset Code API: Current server time: " . $currentTime);
+    
+    // Check if the code exists and is valid - using PHP time check instead of MySQL NOW()
+    $stmt = $conn->prepare("
+        SELECT * FROM password_reset_codes 
+        WHERE email = ? 
+        AND (
+            reset_code = ? 
+            OR reset_code = ? 
+            OR CAST(reset_code AS UNSIGNED) = CAST(? AS UNSIGNED)
+        )
+    ");
     if (!$stmt) {
         error_log("Verify Reset Code API: Prepare failed: " . $conn->error);
         throw new Exception("Database error: " . $conn->error);
     }
     
-    error_log("Verify Reset Code API: Checking if code matches. Email: $email, Code: $code");
-    $stmt->bind_param("ss", $email, $code);
+    error_log("Verify Reset Code API: Checking if code matches. Email: $email, Code: $code, Normalized: $normalizedCode");
+    $stmt->bind_param("ssss", $email, $code, $normalizedCode, $code);
     if (!$stmt->execute()) {
         error_log("Verify Reset Code API: Execute failed: " . $stmt->error);
         throw new Exception("Database error: " . $stmt->error);
@@ -81,22 +103,39 @@ try {
     $result = $stmt->get_result();
     
     if ($result->num_rows === 0) {
-        error_log("Verify Reset Code API: Invalid or expired code for email: " . $email);
-        
+        error_log("Verify Reset Code API: No matching code found for email: " . $email);
         // Check if there's a valid code but it doesn't match
-        $validCodeStmt = $conn->prepare("SELECT reset_code FROM password_reset_codes WHERE email = ? AND expires_at > NOW()");
+        $validCodeStmt = $conn->prepare("SELECT reset_code, expires_at FROM password_reset_codes WHERE email = ? ORDER BY created_at DESC LIMIT 1");
         $validCodeStmt->bind_param("s", $email);
         $validCodeStmt->execute();
         $validCodeResult = $validCodeStmt->get_result();
         
         if ($validCodeResult->num_rows > 0) {
             $validCode = $validCodeResult->fetch_assoc();
-            error_log("Verify Reset Code API: Valid code exists but doesn't match. Valid code: " . $validCode['reset_code'] . ", Provided code: " . $code);
+            error_log("Verify Reset Code API: Most recent code for email: " . $validCode['reset_code']);
+            error_log("Verify Reset Code API: Provided code: " . $code);
+            error_log("Verify Reset Code API: Normalized provided code: " . $normalizedCode);
+            
+            // Now manually check the expiration
+            $expiresAt = $validCode['expires_at'];
+            $isExpired = strtotime($expiresAt) <= time();
+            
+            error_log("Verify Reset Code API: Code expires at: " . $expiresAt . ", Current time: " . $currentTime);
+            error_log("Verify Reset Code API: Code is " . ($isExpired ? "expired" : "valid"));
+            
+            // Close the valid code statement
+            $validCodeStmt->close();
+            
+            // Just show the error for now, don't try to use the code
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Invalid or expired verification code. Please try again or request a new code.'
+            ]);
+            $stmt->close();
+            exit;
         } else {
-            error_log("Verify Reset Code API: No valid code exists for this email or all codes have expired");
+            error_log("Verify Reset Code API: No codes found for this email");
         }
-        $validCodeStmt->close();
-        
         echo json_encode([
             'success' => false, 
             'message' => 'Invalid or expired verification code. Please try again or request a new code.'
@@ -106,6 +145,24 @@ try {
     }
     
     $resetData = $result->fetch_assoc();
+    
+    // Now manually check the expiration
+    $expiresAt = $resetData['expires_at'];
+    $isExpired = strtotime($expiresAt) <= time();
+    
+    error_log("Verify Reset Code API: Code expires at: " . $expiresAt . ", Current time: " . $currentTime);
+    error_log("Verify Reset Code API: Code is " . ($isExpired ? "expired" : "valid"));
+    
+    if ($isExpired) {
+        error_log("Verify Reset Code API: Expired code for email: " . $email);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Verification code has expired. Please request a new code.'
+        ]);
+        $stmt->close();
+        exit;
+    }
+    
     $userId = $resetData['user_id'];
     error_log("Verify Reset Code API: Valid code found. User ID: " . $userId);
     $stmt->close();

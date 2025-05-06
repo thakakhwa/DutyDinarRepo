@@ -1,0 +1,5 @@
+[06-May-2025 15:54:44 UTC] PHP Warning:  require_once(./api/config.php): Failed to open stream: No such file or directory in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/test_password_codes.php on line 11
+[06-May-2025 15:54:44 UTC] PHP Fatal error:  Uncaught Error: Failed opening required './api/config.php' (include_path='.:/opt/homebrew/Cellar/php/8.4.6/share/php/pear') in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/test_password_codes.php:11
+Stack trace:
+#0 {main}
+  thrown in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/test_password_codes.php on line 11
