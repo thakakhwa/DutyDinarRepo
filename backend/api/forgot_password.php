@@ -222,8 +222,7 @@ try {
     // Return success response with exists=true for the frontend to know the email exists
     error_log("Forgot Password API: Successfully processed request, returning success response");
     send_response(true, 'If this email is registered, you will receive a verification code.', [
-        'exists' => true,
-        'code' => $verificationCode // For testing purposes, include the verification code in the response
+        'exists' => true
     ]);
 
 } catch (Exception $e) {

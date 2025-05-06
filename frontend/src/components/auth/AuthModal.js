@@ -39,8 +39,6 @@ const AuthModal = ({
   const [userId, setUserId] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  // For testing - store the code received in the API response
-  const [testingCode, setTestingCode] = useState("");
 
   useEffect(() => {
     if (isOpen && emailRef.current) {
@@ -178,11 +176,6 @@ const AuthModal = ({
         if (data.data && data.data.exists === true) {
           // If the email exists, move to the verification code step
           setResetStep(2);
-          
-          // For testing purposes, store the verification code if provided in the response
-          if (data.data.code) {
-            setTestingCode(data.data.code);
-          }
         } else {
           // If the email doesn't exist, just show the success message but don't move to next step
           setForgetPasswordSuccess("If this email is registered, you will receive a verification code.");
@@ -548,13 +541,6 @@ const AuthModal = ({
               {forgetPasswordSuccess && (
                 <div className="mb-4 p-3 bg-green-50 text-green-700 rounded-lg text-sm">
                   {forgetPasswordSuccess}
-                </div>
-              )}
-              
-              {/* Testing info - show the verification code for testing */}
-              {testingCode && resetStep === 2 && (
-                <div className="mb-4 p-3 bg-blue-50 text-blue-700 rounded-lg text-sm">
-                  <p><strong>For testing:</strong> The verification code is: {testingCode}</p>
                 </div>
               )}
 
