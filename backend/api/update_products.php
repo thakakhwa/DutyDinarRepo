@@ -23,14 +23,12 @@ function check_authentication() {
 
 $inputData = json_decode(file_get_contents("php://input"), true);
 if (empty($inputData['id']) || empty($inputData['name']) || empty($inputData['description']) || empty($inputData['price']) || empty($inputData['stock']) || empty($inputData['image_url']) || !isset($inputData['categories'][0])) {
-    echo json_encode(['success' => false, 'message' => 'All fields are required including category and product ID.']);
-    exit;
+    print_response(false, 'All fields are required including category and product ID.');
 }
 
 $user = check_authentication();
 if (!$user) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
-    exit;
+    print_response(false, 'Unauthorized: Please login.');
 }
 
 $id = intval($inputData['id']);
@@ -46,8 +44,7 @@ $category_id = intval($inputData['categories'][0]);
 $category_name = '';
 $stmtCat = $conn->prepare("SELECT name FROM categories WHERE id = ?");
 if (!$stmtCat) {
-    echo json_encode(['success' => false, 'message' => 'Failed to prepare category query.']);
-    exit;
+    print_response(false, 'Failed to prepare category query.');
 }
 $stmtCat->bind_param("i", $category_id);
 $stmtCat->execute();
@@ -56,22 +53,20 @@ $stmtCat->fetch();
 $stmtCat->close();
 
 if (empty($category_name)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid category selected.']);
-    exit;
+    print_response(false, 'Invalid category selected.');
 }
 
 $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, minOrderQuantity = ?, image_url = ?, category = ?, updated_at = NOW() WHERE id = ?");
 if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Failed to prepare update statement.']);
-    exit;
+    print_response(false, 'Failed to prepare update statement.');
 }
 
 $stmt->bind_param("ssdiiisi", $name, $description, $price, $stock, $minOrderQuantity, $image_url, $category_name, $id);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Product updated successfully.']);
+    print_response(true, 'Product updated successfully.');
 } else {
-    echo json_encode(['success' => false, 'message' => 'Failed to update product.']);
+    print_response(false, 'Failed to update product.');
 }
 $stmt->close();
 ?>

@@ -4,6 +4,7 @@ import { getProducts } from '../../api/get_products';
 import { useNavigate } from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
 import { getFullImageUrl } from '../../utils/imageUtils';
+import ProductReviews from './ProductReviews';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -54,7 +55,7 @@ const FeaturedProducts = () => {
               <div className="text-sm text-gray-600 mb-1">Company: {product.companyName || "N/A"}</div>
               <div className="flex items-center mb-2">
                 <Star className="text-yellow-400" size={16} fill="currentColor" />
-                <span className="text-sm text-gray-600 ml-1">4.5 (245 reviews)</span>
+                <ProductReviews productId={product.id} />
               </div>
               <div className="text-sm text-gray-600 mb-2">{product.description}</div>
               <div className="text-sm text-gray-600 mb-2">Category: {product.category}</div>

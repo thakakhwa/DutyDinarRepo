@@ -56,7 +56,35 @@ const BookedEventsPage = () => {
                 <p className="text-gray-600 mb-2">{event.description}</p>
                 <p className="mb-1">{new Date(event.event_date).toLocaleString()}</p>
                 <p className="mb-1">{event.location}</p>
-                <p className="mb-1">Quantity Booked: {event.quantity}</p>
+                {/* Removed Quantity Booked display */}
+                <button
+                  onClick={async () => {
+                    if (window.confirm('Are you sure you want to unbook this event?')) {
+                      try {
+                        const response = await fetch('http://localhost/DutyDinarRepo/backend/api/unbook_event.php', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          credentials: 'include',
+                          body: JSON.stringify({ event_id: event.id }),
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                          alert('Event unbooked successfully');
+                          setBookedEvents((prev) => prev.filter((e) => e.id !== event.id));
+                        } else {
+                          alert('Failed to unbook event: ' + data.message);
+                        }
+                      } catch (error) {
+                        alert('Error unbooking event');
+                      }
+                    }
+                  }}
+                  className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Unbook
+                </button>
               </div>
             </li>
           );

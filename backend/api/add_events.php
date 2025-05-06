@@ -61,15 +61,13 @@ function save_base64_image($base64_image, $upload_dir) {
 // Check if the user is logged in by validating the session
 $user = check_authentication();
 if (!$user || !in_array($user['userType'], ['seller', 'admin'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Only authenticated sellers or admins can add events']);
-    exit;
+    print_response(false, 'Unauthorized: Only authenticated sellers or admins can add events');
 }
 
 // Decode input JSON
 $inputData = json_decode(file_get_contents("php://input"), true);
 if (empty($inputData['name']) || empty($inputData['description']) || empty($inputData['event_date']) || empty($inputData['location']) || empty($inputData['available_tickets']) || empty($inputData['image_url'])) {
-    echo json_encode(['success' => false, 'message' => 'All fields are required.']);
-    exit;
+    print_response(false, 'All fields are required.');
 }
 
 // Determine seller_id: if admin and seller_id provided in input, use it; else use logged-in user id
@@ -93,20 +91,18 @@ $upload_dir = dirname(__DIR__) . '/uploads';
 if (!is_dir($upload_dir)) {
     if (!mkdir($upload_dir, 0755, true)) {
         error_log("Failed to create image upload directory: " . $upload_dir);
-        echo json_encode(['success' => false, 'message' => 'Failed to create image upload directory.']);
-        exit;
+        print_response(false, 'Failed to create image upload directory.');
     }
 }
 
     // Save the base64 image and get filename
     list($success, $result) = save_base64_image($image_base64, $upload_dir);
-    if (!$success) {
-        error_log("Image upload error: " . $result);
-        echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $result]);
-        exit;
-    } else {
-        error_log("Image uploaded successfully: " . $result);
-    }
+if (!$success) {
+    error_log("Image upload error: " . $result);
+    print_response(false, 'Image upload error: ' . $result);
+} else {
+    error_log("Image uploaded successfully: " . $result);
+}
 
 $image_url = 'uploads/' . $result; // Relative URL to save in DB
 
@@ -143,10 +139,10 @@ try {
     // Commit transaction
     $conn->commit();
 
-    echo json_encode(['success' => true, 'message' => 'Event added successfully.']);
+print_response(true, 'Event added successfully.');
 } catch (Exception $e) {
     $conn->rollback();
     error_log("Error adding event: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Failed to add event: ' . $e->getMessage()]);
+    print_response(false, 'Failed to add event: ' . $e->getMessage());
 }
 ?>

@@ -20,8 +20,7 @@ function check_authentication() {
 
 $userId = check_authentication();
 if (!$userId) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
-    exit;
+    print_response(false, 'Unauthorized: Please login.');
 }
 
 $inputData = json_decode(file_get_contents("php://input"), true);
@@ -33,8 +32,7 @@ $newPassword = isset($inputData['newPassword']) ? $inputData['newPassword'] : nu
 $retypeNewPassword = isset($inputData['retypeNewPassword']) ? $inputData['retypeNewPassword'] : null;
 
 if (!$name && !$companyName && !$newPassword) {
-    echo json_encode(['success' => false, 'message' => 'No data to update.']);
-    exit;
+    print_response(false, 'No data to update.');
 }
 
 try {
@@ -90,7 +88,7 @@ try {
 
     $conn->commit();
 
-    echo json_encode(['success' => true, 'message' => 'Profile updated successfully.']);
+    print_response(true, 'Profile updated successfully.');
 } catch (Exception $e) {
     $conn->rollback();
     error_log("Error updating profile: " . $e->getMessage());
@@ -98,6 +96,6 @@ try {
     // Additional error logging to a file
     file_put_contents(__DIR__ . '/update_profile_error.log', date('Y-m-d H:i:s') . " - " . $e->getMessage() . PHP_EOL, FILE_APPEND);
 
-    echo json_encode(['success' => false, 'message' => 'Failed to update profile: ' . $e->getMessage()]);
+    print_response(false, 'Failed to update profile: ' . $e->getMessage());
 }
 ?>

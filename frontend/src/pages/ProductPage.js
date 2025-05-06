@@ -9,6 +9,8 @@ import addReview from "../api/add_review";
 import getReviews from "../api/get_reviews";
 import { getFullImageUrl } from "../utils/imageUtils";
 import AuthModal from "../components/auth/AuthModal";
+import ReviewList from "../components/products/ReviewList";
+import ProductReviews from "../components/products/ProductReviews";
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -233,6 +235,11 @@ const ProductPage = () => {
                   </button>
                 )}
                 <FavoriteButton productId={product.id} />
+              </div>
+
+              <div className="flex items-center mb-4">
+                <span className="text-lg font-semibold mr-2">Average Rating:</span>
+                <ProductReviews productId={productId} />
               </div>
 
               <div>

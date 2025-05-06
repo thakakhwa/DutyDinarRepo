@@ -6,8 +6,7 @@ session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['userId'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
-    exit;
+    print_response(false, 'Unauthorized: Please login.');
 }
 
 $buyerId = $_SESSION['userId'];
@@ -15,8 +14,7 @@ $buyerId = $_SESSION['userId'];
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($data['order_type']) || !isset($data['items']) || !is_array($data['items']) || count($data['items']) === 0) {
-    echo json_encode(['success' => false, 'message' => 'Invalid order data']);
-    exit;
+    print_response(false, 'Invalid order data');
 }
 
 $orderType = $data['order_type'];
@@ -26,8 +24,7 @@ $paymentMethod = isset($data['payment_method']) ? $data['payment_method'] : null
 $totalAmount = 0;
 foreach ($items as $item) {
     if (!isset($item['quantity']) || !isset($item['price'])) {
-        echo json_encode(['success' => false, 'message' => 'Invalid item data']);
-        exit;
+        print_response(false, 'Invalid item data');
     }
     $totalAmount += $item['quantity'] * $item['price'];
 }
@@ -83,8 +80,7 @@ try {
         if ($sellerId === null) {
             // If seller_id not found, rollback and return error
             $conn->rollback();
-            echo json_encode(['success' => false, 'message' => 'Seller not found for product or event']);
-            exit;
+            print_response(false, 'Seller not found for product or event');
         }
 
         $stmtItem->bind_param("iiiiid", $orderId, $sellerId, $productId, $eventId, $quantity, $price);
@@ -110,10 +106,10 @@ try {
 
     $conn->commit();
 
-    echo json_encode(['success' => true, 'order_id' => $orderId]);
+    print_response(true, 'Order created successfully', ['order_id' => $orderId]);
 } catch (Exception $e) {
     $conn->rollback();
     error_log("Error creating order: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Failed to create order']);
+    print_response(false, 'Failed to create order');
 }
 ?>

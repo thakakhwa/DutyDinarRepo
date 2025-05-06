@@ -9,8 +9,7 @@ session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['userId'])) {
-    echo json_encode(['success' => false, 'message' => 'User not logged in']);
-    exit;
+    print_response(false, 'User not logged in');
 }
 
 $user_id = $_SESSION['userId'];
@@ -25,14 +24,14 @@ try {
     if ($stmt->affected_rows > 0) {
         // Destroy session after deletion
         session_destroy();
-        echo json_encode(['success' => true, 'message' => 'User deleted successfully']);
+        print_response(true, 'User deleted successfully');
     } else {
-        echo json_encode(['success' => false, 'message' => 'User not found or already deleted']);
+        print_response(false, 'User not found or already deleted');
     }
 
     $stmt->close();
     $conn->close();
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Error deleting user: ' . $e->getMessage()]);
+    print_response(false, 'Error deleting user: ' . $e->getMessage());
 }
 ?>

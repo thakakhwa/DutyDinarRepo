@@ -5,6 +5,7 @@ import { Star, Package } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getCategoryIcon } from "../data/categories";
 import FavoriteButton from "../components/products/FavoriteButton";
+import ProductReviews from "../components/products/ProductReviews";
 import { getFullImageUrl } from "../utils/imageUtils";
 
 const CategoriesPage = () => {
@@ -240,7 +241,7 @@ const CategoriesPage = () => {
                             fill="currentColor"
                           />
                           <span className="text-sm text-gray-600 ml-1">
-                            {product.rating || 4.5} ({product.reviews || 10} reviews)
+                            <ProductReviews productId={product.id} />
                           </span>
                         </div>
                         <div className="text-sm text-gray-600 mb-2 flex items-center">

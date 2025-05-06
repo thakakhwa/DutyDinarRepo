@@ -41,12 +41,14 @@ try {
     }
 
     if ($result->num_rows === 0) {
+        error_log("Login failed: Email not found - " . $input['email']);
         throw new Exception('Invalid email or password', 401);
     }
 
     $user = $result->fetch_assoc();
 
     if (!password_verify($input['password'], $user['password'])) {
+        error_log("Login failed: Password mismatch for email - " . $input['email']);
         throw new Exception('Invalid email or password', 401);
     }
 

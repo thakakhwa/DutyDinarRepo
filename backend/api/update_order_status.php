@@ -6,8 +6,7 @@ session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['userId'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
-    exit;
+    print_response(false, 'Unauthorized: Please login.');
 }
 
 $sellerId = $_SESSION['userId'];
@@ -15,8 +14,7 @@ $sellerId = $_SESSION['userId'];
 // Get input data
 $data = json_decode(file_get_contents('php://input'), true);
 if (!isset($data['order_id']) || !isset($data['status'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing order_id or status']);
-    exit;
+    print_response(false, 'Missing order_id or status');
 }
 
 $orderId = intval($data['order_id']);
@@ -25,8 +23,7 @@ $status = $data['status'];
 // Validate status
 $validStatuses = ['processing', 'shipped', 'delivered', 'cancelled'];
 if (!in_array($status, $validStatuses)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid status value']);
-    exit;
+    print_response(false, 'Invalid status value');
 }
 
 try {
@@ -45,11 +42,10 @@ try {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    if ($row['count'] == 0) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Unauthorized to update this order']);
-        exit;
-    }
+if ($row['count'] == 0) {
+    $conn->rollback();
+    print_response(false, 'Unauthorized to update this order');
+}
     $stmt->close();
 
     // Update order_item_status for the specific order item
@@ -60,11 +56,10 @@ try {
     $stmt = $conn->prepare($updateStatusQuery);
     $stmt->bind_param("sii", $status, $orderId, $sellerId);
     $stmt->execute();
-    if ($stmt->affected_rows === 0) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Order item status not updated']);
-        exit;
-    }
+if ($stmt->affected_rows === 0) {
+    $conn->rollback();
+    print_response(false, 'Order item status not updated');
+}
     $stmt->close();
 
     // If status is processing, decrement stock quantity of products in the order
@@ -90,12 +85,11 @@ try {
 
             $stmtUpdateStock = $conn->prepare($updateStockQuery);
             $stmtUpdateStock->bind_param("ii", $quantityOrdered, $productId);
-            if (!$stmtUpdateStock->execute()) {
-                $conn->rollback();
-                error_log("Failed to update stock for product ID $productId");
-                echo json_encode(['success' => false, 'message' => 'Failed to update product stock']);
-                exit;
-            }
+if (!$stmtUpdateStock->execute()) {
+    $conn->rollback();
+    error_log("Failed to update stock for product ID $productId");
+    print_response(false, 'Failed to update product stock');
+}
             $stmtUpdateStock->close();
         }
         $stmtProd->close();
@@ -103,10 +97,10 @@ try {
 
     $conn->commit();
 
-    echo json_encode(['success' => true, 'message' => 'Order status updated successfully']);
+print_response(true, 'Order status updated successfully');
 } catch (Exception $e) {
     $conn->rollback();
     error_log("Error updating order status: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Failed to update order status']);
+print_response(false, 'Failed to update order status');
 }
 ?>

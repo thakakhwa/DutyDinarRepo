@@ -22,8 +22,7 @@ session_start();
 function check_authentication() {
     if (!isset($_SESSION['userId'])) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session']);
-        exit;
+        print_response(false, 'Unauthorized: No active session');
     }
     return ['id' => $_SESSION['userId']];
 }
@@ -35,8 +34,7 @@ try {
     $inputData = json_decode(file_get_contents("php://input"), true);
 
     if (empty($inputData['product_id']) || !isset($inputData['quantity'])) {
-        echo json_encode(['success' => false, 'message' => 'Product ID and quantity are required for adding to cart.']);
-        exit;
+        print_response(false, 'Product ID and quantity are required for adding to cart.');
     }
     $product_id = $inputData['product_id'];
     $quantity = $inputData['quantity'];
@@ -44,15 +42,13 @@ try {
     // Check MOQ from products table
     $moq_stmt = $conn->prepare("SELECT minOrderQuantity FROM products WHERE id = ?");
     if (!$moq_stmt) {
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare MOQ query.']);
-        exit;
+        print_response(false, 'Failed to prepare MOQ query.');
     }
     $moq_stmt->bind_param("i", $product_id);
     $moq_stmt->execute();
     $moq_result = $moq_stmt->get_result();
     if ($moq_result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'Product not found.']);
-        exit;
+        print_response(false, 'Product not found.');
     }
     $moq_row = $moq_result->fetch_assoc();
     $moq = (int)$moq_row['minOrderQuantity'];
@@ -66,8 +62,7 @@ try {
     // Check if item already in cart
     $check_stmt = $conn->prepare("SELECT quantity FROM cart WHERE buyer_id = ? AND product_id = ?");
     if (!$check_stmt) {
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare check cart query.']);
-        exit;
+        print_response(false, 'Failed to prepare check cart query.');
     }
     $check_stmt->bind_param("ii", $user_id, $product_id);
     $check_stmt->execute();
@@ -77,36 +72,33 @@ try {
         // Update quantity
         $existing = $check_result->fetch_assoc();
         $new_quantity = $existing['quantity'] + $quantity;
-        if ($new_quantity < $moq) {
-            echo json_encode(['success' => false, 'message' => "Total quantity must be at least the minimum order quantity ($moq)."]);
-            exit;
-        }
+    if ($new_quantity < $moq) {
+        print_response(false, "Total quantity must be at least the minimum order quantity ($moq).");
+    }
         $update_stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE buyer_id = ? AND product_id = ?");
         if (!$update_stmt) {
-            echo json_encode(['success' => false, 'message' => 'Failed to prepare update cart query.']);
-            exit;
+            print_response(false, 'Failed to prepare update cart query.');
         }
         $update_stmt->bind_param("iii", $new_quantity, $user_id, $product_id);
         if ($update_stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Cart updated successfully.']);
+            print_response(true, 'Cart updated successfully.');
         } else {
             error_log("Add Cart Update Error: " . $update_stmt->error);
-            echo json_encode(['success' => false, 'message' => 'Failed to update cart.']);
+            print_response(false, 'Failed to update cart.');
         }
         $update_stmt->close();
     } else {
         // Insert new item
         $insert_stmt = $conn->prepare("INSERT INTO cart (buyer_id, product_id, quantity) VALUES (?, ?, ?)");
         if (!$insert_stmt) {
-            echo json_encode(['success' => false, 'message' => 'Failed to prepare insert cart query.']);
-            exit;
+            print_response(false, 'Failed to prepare insert cart query.');
         }
         $insert_stmt->bind_param("iii", $user_id, $product_id, $quantity);
         if ($insert_stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Product added to cart successfully.']);
+            print_response(true, 'Product added to cart successfully.');
         } else {
             error_log("Add Cart Insert Error: " . $insert_stmt->error);
-            echo json_encode(['success' => false, 'message' => 'Failed to add product to cart.']);
+            print_response(false, 'Failed to add product to cart.');
         }
         $insert_stmt->close();
     }
@@ -114,6 +106,6 @@ try {
 
 } catch (Exception $e) {
     error_log("Add Cart API error: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Internal server error.']);
+    print_response(false, 'Internal server error.');
 }
 ?>

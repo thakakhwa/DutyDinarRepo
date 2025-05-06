@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingBag, Heart, Clock, Package } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import RecommendedProducts from "../components/RecommendedProducts";
 
 const API_BASE_URL = "http://localhost/DutyDinarRepo/backend/api";
 
@@ -248,27 +249,15 @@ const BuyerDashboard = () => {
                   View Favorites
                 </button>
                 </Link>
-                <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
-                  Track Orders
-                </button>
+                {/* Removed Track Orders button */}
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-4">
-                Recommended Suppliers
+                Recommended Products
               </h3>
-              <div className="space-y-4">
-                {[1, 2, 3].map((supplier) => (
-                  <div key={supplier} className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
-                    <div>
-                      <h4 className="font-medium">Supplier Name {supplier}</h4>
-                      <div className="text-sm text-gray-600">Electronics</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <RecommendedProducts />
             </div>
           </div>
         </div>

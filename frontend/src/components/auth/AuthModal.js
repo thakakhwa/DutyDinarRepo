@@ -130,34 +130,36 @@ const AuthModal = ({
     setIsForgetPasswordOpen(false);
   };
 
-  const handleForgetPasswordSubmit = async (e) => {
-    e.preventDefault();
-    setForgetPasswordError("");
-    setForgetPasswordSuccess("");
+    const handleForgetPasswordSubmit = async (e) => {
+        e.preventDefault();
+        setForgetPasswordError("");
+        setForgetPasswordSuccess("");
 
-    if (!forgetPasswordEmail) {
-      setForgetPasswordError("Please enter your email address.");
-      return;
-    }
+        if (!forgetPasswordEmail) {
+          setForgetPasswordError("Please enter your email address.");
+          return;
+        }
 
-    try {
-      const response = await fetch("http://localhost/DutyDinarRepo/backend/api/forgot_password.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: forgetPasswordEmail }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        setForgetPasswordSuccess(data.message);
-      } else {
-        setForgetPasswordError(data.message || "Failed to send reset instructions.");
-      }
-    } catch (error) {
-      setForgetPasswordError("An error occurred. Please try again.");
-    }
-  };
+        try {
+          const response = await fetch("http://localhost/DutyDinarRepo/backend/api/forgot_password.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: forgetPasswordEmail }),
+          });
+          const data = await response.json();
+          console.log("Forgot Password API response:", data);
+          if (data.success) {
+            setForgetPasswordSuccess(data.message);
+          } else {
+            setForgetPasswordError(data.message || "Failed to send reset instructions.");
+          }
+        } catch (error) {
+          console.error("Forgot Password API error:", error);
+          setForgetPasswordError("An error occurred. Please try again.");
+        }
+      };
 
   if (!isOpen && !isForgetPasswordOpen) return null;
 
@@ -171,7 +173,7 @@ const AuthModal = ({
           aria-labelledby="auth-modal-title"
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50"
         >
-          <div className="w-full max-w-md relative">
+          <div className="w-full max-w-full sm:max-w-md max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={onClose}
               className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 z-50"
@@ -378,7 +380,7 @@ const AuthModal = ({
           aria-labelledby="forget-password-modal-title"
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50"
         >
-          <div className="w-full max-w-md relative">
+          <div className="w-full max-w-full sm:max-w-md max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={closeForgetPasswordModal}
               className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 z-50"
