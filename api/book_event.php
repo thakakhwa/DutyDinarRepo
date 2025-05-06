@@ -1,45 +1,65 @@
 <?php
+// this file helps people book events on our website
+// it does many things like check if user is logged in, book tickets, update database, make wallet pass and send emails
+
+// these lines help us see errors when something goes wrong
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/book_event_error.log');
 
+// these headers let the frontend talk to this api
+// cors headers - they say which websites can use this api
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
+// this handles special OPTIONS requests from browsers
+// they check if api exists before sending real requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
+// get our database connection info
 require_once 'config.php'; // Database connection
 
-// Try to load Google Wallet functionality but don't fail if it's not available
+// try to connect to google wallet but don't stop everything if it fails
+// input: none
+// output: boolean that says if google wallet is working
 try {
     require_once 'google_wallet_pass.php'; // Google Wallet Pass generation
     $google_wallet_available = function_exists('createGoogleWalletPass');
 } catch (Exception $e) {
+    // write error to log file
     error_log("Error loading Google Wallet functionality: " . $e->getMessage());
     $google_wallet_available = false;
 }
 
-// Try to load email functionality but don't fail if it's not available
+// try to setup email sending but don't stop everything if it fails
+// input: none
+// output: boolean that says if email is working
 try {
     require_once '../controller/email_cred.php'; // Email credentials
     require_once 'send_email.php'; // Email functionality
     $email_available = function_exists('sendEmail');
 } catch (Exception $e) {
+    // write error to log file
     error_log("Error loading email functionality: " . $e->getMessage());
     $email_available = false;
 }
 
+// start the session so we can check if user is logged in
 session_start();
 
+// this function checks if user is logged in
+// input: none (uses session)
+// output: array with user id if logged in, or stops with error if not logged in
 function check_authentication() {
     if (!isset($_SESSION['userId'])) {
+        // if not logged in, send error response
         http_response_code(401);
         echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session']);
         exit;
@@ -47,18 +67,21 @@ function check_authentication() {
     return ['id' => $_SESSION['userId']];
 }
 
-// Function to send booking confirmation email with Google Wallet link
+// this function sends email after booking with google wallet link
+// input: user id, event id, booking id, wallet url
+// output: success or error message
 function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl) {
     global $conn, $email_available;
     
-    // If email functionality is not available, return failure without causing an error
+    // if email not working, return error
     if (!$email_available || !function_exists('sendEmail')) {
         error_log("Email functionality not available");
         return ['success' => false, 'message' => 'Email functionality not available'];
     }
     
     try {
-        // Get user and event details
+        // get user and event info from database
+        // we need this to make nice email with details
         $query = "
             SELECT u.email, u.name as user_name, e.name as event_name, e.event_date, e.location 
             FROM users u
@@ -66,26 +89,31 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl)
             WHERE u.id = ?
         ";
         
+        // prepare sql query to avoid sql injection attacks
         $stmt = $conn->prepare($query);
         if (!$stmt) {
             error_log("Email preparation error: " . $conn->error);
             return ['success' => false, 'message' => 'Database error'];
         }
         
+        // add parameters to query
         $stmt->bind_param("ii", $eventId, $userId);
         $stmt->execute();
         $result = $stmt->get_result();
         
+        // check if we found user and event
         if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'User or event not found'];
         }
         
+        // get data and close statement
         $data = $result->fetch_assoc();
         $stmt->close();
         
-        // Format email
+        // make email subject line
         $subject = "Your DutyDinar Event Booking Confirmation: " . $data['event_name'];
         
+        // create pretty html email body with styling
         $body = "
         <html>
         <head>
@@ -133,28 +161,36 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl)
         </html>
         ";
         
+        // send email using our function from send_email.php
         return sendEmail($data['email'], $subject, $body);
     } catch (Exception $e) {
+        // if something goes wrong, log error
         error_log("Error in sendBookingConfirmationEmail: " . $e->getMessage());
         return ['success' => false, 'message' => 'Error sending email: ' . $e->getMessage()];
     }
 }
 
+// main code starts here - all the above was just setting up functions
+
 try {
+    // check if user is logged in
     $user = check_authentication();
     $user_id = $user['id'];
 
+    // get data sent from frontend (json format)
     $inputData = json_decode(file_get_contents("php://input"), true);
 
+    // check if we have event_id and quantity in data
     if (empty($inputData['event_id']) || empty($inputData['quantity'])) {
         echo json_encode(['success' => false, 'message' => 'Event ID and quantity are required.']);
         exit;
     }
 
+    // convert to numbers to be safe
     $event_id = (int)$inputData['event_id'];
     $quantity = (int)$inputData['quantity'];
 
-    // Check event availability and price
+    // check if event exists and has tickets available
     $event_stmt = $conn->prepare("SELECT available_tickets FROM events WHERE id = ?");
     if (!$event_stmt) {
         echo json_encode(['success' => false, 'message' => 'Failed to prepare event query.']);
@@ -171,15 +207,17 @@ try {
     $available_tickets = (int)$event['available_tickets'];
     $event_stmt->close();
 
+    // check if enough tickets are available
     if ($quantity > $available_tickets) {
         echo json_encode(['success' => false, 'message' => 'Not enough tickets available.']);
         exit;
     }
 
-    // Start transaction
+    // start database transaction - this makes sure all changes happen together
+    // if something fails, we can undo all changes
     $conn->begin_transaction();
 
-    // Insert into orders table
+    // create order in database
     $order_stmt = $conn->prepare("INSERT INTO orders (buyer_id, order_type, total_amount, status) VALUES (?, 'event', ?, 'pending')");
     if (!$order_stmt) {
         $conn->rollback();
@@ -196,7 +234,7 @@ try {
     $order_id = $conn->insert_id;
     $order_stmt->close();
 
-    // Insert into order_items table
+    // add items to order
     $item_stmt = $conn->prepare("INSERT INTO order_items (order_id, event_id, quantity, price) VALUES (?, ?, ?, ?)");
     if (!$item_stmt) {
         $conn->rollback();
@@ -212,7 +250,7 @@ try {
     }
     $item_stmt->close();
 
-    // Update available tickets
+    // update number of available tickets
     $update_stmt = $conn->prepare("UPDATE events SET available_tickets = available_tickets - ? WHERE id = ?");
     if (!$update_stmt) {
         $conn->rollback();
@@ -227,7 +265,8 @@ try {
     }
     $update_stmt->close();
 
-    // Check if user already booked this event
+    // check if user already booked this event
+    // users can only book once per event
     $check_stmt = $conn->prepare("SELECT quantity FROM event_bookings WHERE user_id = ? AND event_id = ?");
     if (!$check_stmt) {
         $conn->rollback();

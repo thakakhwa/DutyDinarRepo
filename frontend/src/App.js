@@ -1,3 +1,5 @@
+// this is the main app file for the whole website, it controls all the pages
+// import section - here we get all the tools we need
 import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
@@ -5,6 +7,10 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+// react-router-dom - this helps us make different pages in our website
+// input: none
+// output: tools for making pages with urls
+
 import Navbar from "./components/layout/Navbar";
 import HomePage from "./pages/HomePage";
 import CategoriesPage from "./pages/CategoriesPage";
@@ -33,67 +39,91 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
 import MessagePopup from "./components/MessagePopup";
 
+// this is the main part that shows all the pages and routes
 const AppRoutes = () => {
+  // we get the user info from AuthContext so we know if someone is logged in
   const { user, loading } = useContext(AuthContext);
 
-  // Private Route to protect authenticated user routes
+  // PrivateRoute - makes sure only logged in users can see some pages
+  // input: children (the page content)
+  // output: either the page or redirect to home if not logged in
   const PrivateRoute = ({ children }) => {
     if (loading) {
+      // if still loading, show loading message
       return <div>Loading...</div>;
     }
     if (!user) {
+      // if no user is logged in, go to homepage
       return <Navigate to="/" replace />;
     }
+    // if user is logged in, show the page
     return children;
   };
 
-  // Admin Route to restrict admin pages
+  // AdminRoute - only admins can see these pages
+  // input: children (the page content)
+  // output: either the page or redirect if not admin
   const AdminRoute = ({ children }) => {
     if (loading) {
       return <div>Loading...</div>;
     }
     if (!user || user.userType !== "admin") {
+      // if not admin, go to homepage
       return <Navigate to="/" replace />;
     }
     return children;
   };
 
-  // Seller Route to restrict seller pages
+  // SellerRoute - only sellers can see these pages
+  // input: children (the page content)
+  // output: either the page or redirect if not seller
   const SellerRoute = ({ children }) => {
     if (loading) {
       return <div>Loading...</div>;
     }
     if (!user || user.userType !== "seller") {
+      // if not seller, go to homepage
       return <Navigate to="/" replace />;
     }
     return children;
   };
 
-  // Buyer Route to restrict buyer pages
+  // BuyerRoute - only buyers can see these pages
+  // input: children (the page content)
+  // output: either the page or redirect if not buyer
   const BuyerRoute = ({ children }) => {
     if (loading) {
       return <div>Loading...</div>;
     }
     if (!user || user.userType !== "buyer") {
+      // if not buyer, go to homepage
       return <Navigate to="/" replace />;
     }
     return children;
   };
 
+  // this is for shopping cart, we remember how many items are in it
   const [cartItems, setCartItems] = React.useState(3);
+  // this is for message popup, we remember if its open or closed
   const [isMessageOpen, setIsMessageOpen] = React.useState(false);
 
+  // this function opens and closes the message popup
+  // input: none
+  // output: none (but it changes isMessageOpen)
   const toggleMessagePopup = () => {
     setIsMessageOpen(!isMessageOpen);
   };
 
   return (
+    // Router makes the whole website work with different pages
     <Router>
+      {/* WishlistProvider lets us save favorite items */}
       <WishlistProvider>
         <div className="min-h-screen bg-gray-50">
+          {/* Navbar is the menu at top of website */}
           <Navbar user={user} loading={loading} cartItems={cartItems} />
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes - everyone can see these, even without login */}
             <Route path="/" element={<HomePage />} />
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/events" element={<EventsPage />} />
@@ -141,7 +171,7 @@ const AppRoutes = () => {
               }
             />
 
-            {/* Protected User Dashboard */}
+            {/* Protected User Dashboard - different for each user type */}
             <Route
               path="/dashboard"
               element={
@@ -200,11 +230,14 @@ const AppRoutes = () => {
                 </AdminRoute>
               }
             />
-            {/* Redirect unknown routes to Home */}
+            {/* Redirect unknown routes to Home - if someone types wrong url */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          {/* MessageButton is the chat button users can click */}
           <MessageButton onClick={toggleMessagePopup} />
+          {/* MessagePopup is the chat window that appears when button clicked */}
           {isMessageOpen && <MessagePopup onClose={toggleMessagePopup} />}
+          {/* Footer is the bottom part of website with links */}
           <Footer />
         </div>
       </WishlistProvider>
@@ -212,6 +245,8 @@ const AppRoutes = () => {
   );
 };
 
+// this is the main App component that wraps everything
+// it provides authentication to all pages
 const App = () => {
   return (
     <AuthProvider>
@@ -220,4 +255,5 @@ const App = () => {
   );
 };
 
+// we export App so other files can use it
 export default App;
