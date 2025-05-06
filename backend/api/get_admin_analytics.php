@@ -62,12 +62,47 @@ try {
         $monthlyRevenue[$row['month']] = floatval($row['revenue']);
     }
     $stmt->close();
+    
+    // Monthly orders for last 6 months
+    $monthlyOrdersQuery = "
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS order_count
+        FROM orders
+        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        GROUP BY month
+        ORDER BY month ASC
+    ";
+    $stmt = $conn->prepare($monthlyOrdersQuery);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $monthlyOrders = [];
+    while ($row = $result->fetch_assoc()) {
+        $monthlyOrders[$row['month']] = intval($row['order_count']);
+    }
+    $stmt->close();
+    
+    // Monthly users for last 6 months
+    $monthlyUsersQuery = "
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS user_count
+        FROM users
+        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        GROUP BY month
+        ORDER BY month ASC
+    ";
+    $stmt = $conn->prepare($monthlyUsersQuery);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $monthlyUsers = [];
+    while ($row = $result->fetch_assoc()) {
+        $monthlyUsers[$row['month']] = intval($row['user_count']);
+    }
+    $stmt->close();
 
     // Top products by sales count and revenue
     $topProductsQuery = "
         SELECT p.name, SUM(oi.quantity) AS sales, SUM(oi.price * oi.quantity) AS amount
         FROM order_items oi
         JOIN products p ON oi.product_id = p.id
+        WHERE oi.product_id IS NOT NULL
         GROUP BY p.id
         ORDER BY sales DESC
         LIMIT 5
@@ -85,8 +120,28 @@ try {
     }
     $stmt->close();
 
-    // Top countries - Not available in DB, so return empty array
-    $topCountries = [];
+    // Top events by bookings and revenue
+    $topEventsQuery = "
+        SELECT e.name, COUNT(eb.id) AS sales, SUM(oi.price) AS amount
+        FROM events e
+        LEFT JOIN event_bookings eb ON e.id = eb.event_id
+        LEFT JOIN order_items oi ON e.id = oi.event_id
+        GROUP BY e.id
+        ORDER BY sales DESC
+        LIMIT 5
+    ";
+    $stmt = $conn->prepare($topEventsQuery);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $topEvents = [];
+    while ($row = $result->fetch_assoc()) {
+        $topEvents[] = [
+            'name' => $row['name'],
+            'sales' => intval($row['sales']),
+            'amount' => floatval($row['amount']) ?: 0
+        ];
+    }
+    $stmt->close();
 
     echo json_encode([
         'success' => true,
@@ -95,8 +150,10 @@ try {
             'totalOrders' => $totalOrders,
             'totalUsers' => $totalUsers,
             'monthlyRevenue' => $monthlyRevenue,
+            'monthlyOrders' => $monthlyOrders,
+            'monthlyUsers' => $monthlyUsers,
             'topProducts' => $topProducts,
-            'topCountries' => $topCountries
+            'topEvents' => $topEvents
         ]
     ]);
 } catch (Exception $e) {

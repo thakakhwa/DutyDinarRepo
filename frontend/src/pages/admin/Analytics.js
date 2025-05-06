@@ -56,24 +56,53 @@ const AnalyticsPage = () => {
   );
 
   const RevenueChart = () => {
-    if (!analyticsData || !analyticsData.monthlyRevenue) return null;
+    if (!analyticsData) return null;
 
-    const monthlyRevenueValues = Object.values(analyticsData.monthlyRevenue);
-    const maxRevenue = Math.max(...monthlyRevenueValues);
+    let dataValues = [], dataKeys = [], maxData = 0;
+    
+    switch (selectedChart) {
+      case 'orders':
+        if (analyticsData.monthlyOrders) {
+          dataValues = Object.values(analyticsData.monthlyOrders);
+          dataKeys = Object.keys(analyticsData.monthlyOrders);
+        }
+        break;
+      case 'users':
+        if (analyticsData.monthlyUsers) {
+          dataValues = Object.values(analyticsData.monthlyUsers);
+          dataKeys = Object.keys(analyticsData.monthlyUsers);
+        }
+        break;
+      case 'revenue':
+      default:
+        if (analyticsData.monthlyRevenue) {
+          dataValues = Object.values(analyticsData.monthlyRevenue);
+          dataKeys = Object.keys(analyticsData.monthlyRevenue);
+        }
+        break;
+    }
+    
+    if (dataValues.length > 0) {
+      maxData = Math.max(...dataValues);
+    }
 
-    return (
+    return dataValues.length > 0 ? (
       <div className="h-64 mt-4">
         <div className="w-full h-full bg-gray-50 rounded-lg flex items-end p-4">
-          {monthlyRevenueValues.map((value, index) => (
+          {dataValues.map((value, index) => (
             <div key={index} className="h-full flex-1 flex flex-col justify-end items-center">
               <div 
                 className="w-4/5 bg-green-500 rounded-t-sm" 
-                style={{ height: `${(value / maxRevenue) * 100}%` }}
+                style={{ height: `${(value / maxData) * 100}%` }}
               />
-              <span className="text-xs mt-2">{Object.keys(analyticsData.monthlyRevenue)[index]}</span>
+              <span className="text-xs mt-2">{dataKeys[index]}</span>
             </div>
           ))}
         </div>
+      </div>
+    ) : (
+      <div className="h-64 mt-4 flex justify-center items-center bg-gray-50 rounded-lg">
+        <p className="text-gray-500">No data available for {selectedChart}</p>
       </div>
     );
   };
@@ -97,6 +126,18 @@ const AnalyticsPage = () => {
       ['Month', 'Revenue'],
       ...Object.entries(analyticsData.monthlyRevenue)
     ];
+    
+    // Monthly Orders sheet data
+    const monthlyOrdersData = [
+      ['Month', 'Orders'],
+      ...Object.entries(analyticsData.monthlyOrders || {})
+    ];
+    
+    // Monthly Users sheet data
+    const monthlyUsersData = [
+      ['Month', 'Users'],
+      ...Object.entries(analyticsData.monthlyUsers || {})
+    ];
 
     // Top Products sheet data
     const topProductsData = [
@@ -104,10 +145,10 @@ const AnalyticsPage = () => {
       ...analyticsData.topProducts.map(p => [p.name, p.sales, p.amount])
     ];
 
-    // Top Countries sheet data
-    const topCountriesData = [
-      ['Country', 'Sales', 'Amount'],
-      ...analyticsData.topCountries.map(c => [c.name, c.sales, c.amount])
+    // Top Events sheet data
+    const topEventsData = [
+      ['Event Name', 'Bookings', 'Amount'],
+      ...(analyticsData.topEvents || []).map(e => [e.name, e.sales, e.amount])
     ];
 
     // Create workbook and sheets
@@ -118,15 +159,85 @@ const AnalyticsPage = () => {
 
     const monthlyRevenueSheet = XLSX.utils.aoa_to_sheet(monthlyRevenueData);
     XLSX.utils.book_append_sheet(workbook, monthlyRevenueSheet, 'Monthly Revenue');
+    
+    const monthlyOrdersSheet = XLSX.utils.aoa_to_sheet(monthlyOrdersData);
+    XLSX.utils.book_append_sheet(workbook, monthlyOrdersSheet, 'Monthly Orders');
+    
+    const monthlyUsersSheet = XLSX.utils.aoa_to_sheet(monthlyUsersData);
+    XLSX.utils.book_append_sheet(workbook, monthlyUsersSheet, 'Monthly Users');
 
     const topProductsSheet = XLSX.utils.aoa_to_sheet(topProductsData);
     XLSX.utils.book_append_sheet(workbook, topProductsSheet, 'Top Products');
 
-    const topCountriesSheet = XLSX.utils.aoa_to_sheet(topCountriesData);
-    XLSX.utils.book_append_sheet(workbook, topCountriesSheet, 'Top Countries');
+    const topEventsSheet = XLSX.utils.aoa_to_sheet(topEventsData);
+    XLSX.utils.book_append_sheet(workbook, topEventsSheet, 'Top Events');
 
     // Write file
     XLSX.writeFile(workbook, 'analytics_report.xlsx');
+  };
+
+  const TopProducts = () => {
+    if (!analyticsData || !analyticsData.topProducts) return null;
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-semibold">Top Products</h2>
+          <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
+            View All <ArrowRight size={16} className="ml-1" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          {analyticsData.topProducts.map((product, index) => (
+            <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
+                  <span>{index + 1}</span>
+                </div>
+                <div>
+                  <h3 className="font-medium">{product.name}</h3>
+                  <p className="text-sm text-gray-500">{product.sales} sales</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-medium">${product.amount.toLocaleString()}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const TopEvents = () => {
+    if (!analyticsData || !analyticsData.topEvents) return null;
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-semibold">Top Events</h2>
+          <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
+            View All <ArrowRight size={16} className="ml-1" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          {analyticsData.topEvents.map((event, index) => (
+            <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
+                  <span>{index + 1}</span>
+                </div>
+                <div>
+                  <h3 className="font-medium">{event.name}</h3>
+                  <p className="text-sm text-gray-500">{event.sales} sales</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-medium">${event.amount.toLocaleString()}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -195,63 +306,13 @@ const AnalyticsPage = () => {
             <RevenueChart />
           </div>
 
-          {/* Top Products and Countries */}
+          {/* Top Products and Events */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Top Products */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">Top Products</h2>
-                <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
-                  View All <ArrowRight size={16} className="ml-1" />
-                </button>
-              </div>
-              <div className="space-y-4">
-                {analyticsData.topProducts.map((product, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
-                        <span>{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{product.name}</h3>
-                        <p className="text-sm text-gray-500">{product.sales} sales</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">${product.amount.toLocaleString()}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <TopProducts />
 
-            {/* Top Countries */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">Top Countries</h2>
-                <button className="text-sm text-green-600 hover:text-green-700 flex items-center">
-                  View All <ArrowRight size={16} className="ml-1" />
-                </button>
-              </div>
-              <div className="space-y-4">
-                {analyticsData.topCountries.map((country, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gray-200 rounded-lg mr-3 flex items-center justify-center">
-                        <span>{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{country.name}</h3>
-                        <p className="text-sm text-gray-500">{country.sales} orders</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">${country.amount.toLocaleString()}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Top Events */}
+            <TopEvents />
           </div>
         </>
       ) : (
