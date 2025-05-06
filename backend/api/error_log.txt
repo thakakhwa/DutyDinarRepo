@@ -1,0 +1,12 @@
+[06-May-2025 14:21:24 UTC] PHP Warning:  require_once(../controller/connection.php): Failed to open stream: No such file or directory in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php on line 5
+[06-May-2025 14:21:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '../controller/connection.php' (include_path='.:/opt/homebrew/Cellar/php/8.4.6/share/php/pear') in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php:5
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/test_email.php(10): require_once()
+#1 {main}
+  thrown in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php on line 5
+[06-May-2025 14:49:34 UTC] PHP Warning:  require_once(../controller/connection.php): Failed to open stream: No such file or directory in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php on line 5
+[06-May-2025 14:49:34 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '../controller/connection.php' (include_path='.:/opt/homebrew/Cellar/php/8.4.6/share/php/pear') in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php:5
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/test_event_email.php(10): require_once()
+#1 {main}
+  thrown in /Applications/XAMPP/xamppfiles/htdocs/DutyDinarRepo/backend/api/config.php on line 5
