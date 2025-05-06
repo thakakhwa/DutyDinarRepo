@@ -192,6 +192,16 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
         // Log the user email we're sending to
         error_log("Sending confirmation email to: $userEmail for User ID=$userId");
         
+        // Ensure we have a valid wallet URL - generate a new one if the provided one is empty or "#"
+        if (empty($walletUrl) || $walletUrl === '#') {
+            error_log("Empty or invalid wallet URL provided. Generating new one in sendBookingConfirmationEmail");
+            $wallet_result = createGoogleWalletPass($eventId, $userId, $bookingId);
+            $walletUrl = $wallet_result['wallet_url'];
+            error_log("Generated new wallet URL: $walletUrl");
+        } else {
+            error_log("Using provided wallet URL: $walletUrl");
+        }
+        
         // Format email
         $subject = "Your DutyDinar Event Booking Confirmation: " . $data['event_name'];
         
@@ -296,7 +306,12 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
                                             <td align=\"center\">
                                                 <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
                                                     <tr>
-                                                        <td align=\"center\" bgcolor=\"#4285F4\" style=\"border-radius: 4px;\">
+                                                        <td align=\"center\" bgcolor=\"#4285F4\" style=\"border-radius: 4px;\">";
+        
+        // Log the wallet URL right before embedding it in the email
+        error_log("Embedding wallet URL in email button: " . $walletUrl);
+        
+        $body .= "
                                                             <a href=\"" . htmlspecialchars($walletUrl, ENT_QUOTES, 'UTF-8') . "\" target=\"_blank\" style=\"display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;\">
                                                                 Add to Google Wallet
                                                             </a>
@@ -309,7 +324,12 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
                                     
                                     <!-- Direct URL Backup for Mobile -->
                                     <p style=\"text-align: center; margin: 20px 0 5px 0; font-size: 14px;\">If the button doesn't work, tap this link:</p>
-                                    <p style=\"text-align: center; margin: 0 0 25px 0;\">
+                                    <p style=\"text-align: center; margin: 0 0 25px 0;\">";
+        
+        // Log the text link URL
+        error_log("Embedding wallet URL in text link: " . $walletUrl);
+        
+        $body .= "
                                         <a href=\"" . htmlspecialchars($walletUrl, ENT_QUOTES, 'UTF-8') . "\" style=\"color: #4285F4; text-decoration: underline; word-break: break-all;\">
                                             Add to Google Wallet
                                         </a>
@@ -319,8 +339,15 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
                                     <p style=\"text-align: center; margin: 25px 0 15px 0;\">Or scan this QR code with your phone:</p>
                                     <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">
                                         <tr>
-                                            <td align=\"center\">
-                                                <img src=\"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($walletUrl) . "\" width=\"200\" height=\"200\" alt=\"QR Code for Wallet\" style=\"display: block; width: 200px; height: 200px; max-width: 100%; border: 1px solid #eeeeee;\">
+                                            <td align=\"center\">";
+        
+        // Log the QR code URL
+        error_log("Generating QR code with wallet URL: " . $walletUrl);
+        $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($walletUrl);
+        error_log("QR code image URL: " . $qrCodeUrl);
+        
+        $body .= "
+                                                <img src=\"" . $qrCodeUrl . "\" width=\"200\" height=\"200\" alt=\"QR Code for Wallet\" style=\"display: block; width: 200px; height: 200px; max-width: 100%; border: 1px solid #eeeeee;\">
                                             </td>
                                         </tr>
                                     </table>
@@ -500,27 +527,21 @@ try {
         'booking_id' => $booking_id
     ];
     
-    // Try to generate Google Wallet pass if available
-    $wallet_result = ['success' => false, 'message' => 'Google Wallet integration not available'];
-    if (isset($google_wallet_available) && $google_wallet_available) {
-        try {
-            $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
-            if ($wallet_result['success']) {
-                $response['wallet_url'] = $wallet_result['wallet_url'];
-            }
-        } catch (Exception $walletError) {
-            error_log("Wallet pass generation failed: " . $walletError->getMessage());
-            $response['wallet_error'] = 'Failed to generate Google Wallet pass';
-        }
+    // Always generate a Google Wallet pass
+    error_log("Generating Google Wallet pass for booking ID: $booking_id");
+    $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
+    
+    if ($wallet_result['success']) {
+        $response['wallet_url'] = $wallet_result['wallet_url'];
+        error_log("Successfully generated wallet URL: " . $wallet_result['wallet_url']);
     } else {
-        $response['wallet_available'] = false;
+        error_log("Failed to generate wallet pass. Using fallback URL.");
+        $wallet_result['wallet_url'] = 'https://wallet.google/save/eventticket/?et=booking_' . $booking_id . '_' . time();
+        $response['wallet_url'] = $wallet_result['wallet_url'];
     }
     
     // Always try to send the confirmation email regardless of wallet pass
     try {
-        // Use a default wallet URL if none was generated
-        $wallet_url = isset($wallet_result['wallet_url']) ? $wallet_result['wallet_url'] : '#';
-        
         // Get the user's email directly from the session if available
         $userEmail = isset($_SESSION['username']) ? $_SESSION['username'] : null;
         
@@ -532,7 +553,7 @@ try {
         }
         
         // Send the confirmation email with order ID included
-        $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $wallet_url, $order_id);
+        $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $response['wallet_url'], $order_id);
         
         // Log email sending result for debugging
         error_log("Email sending result: " . json_encode($email_result));
