@@ -16,6 +16,14 @@ const MessagePopup = ({ onClose }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
 
+  // Animation state
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Animation styles
+  const popupAnimationStyle = {
+    animation: isClosing ? 'fadeSlideOut 0.4s ease forwards' : 'fadeSlideIn 0.4s ease forwards',
+  };
+
   useEffect(() => {
     fetchConversations();
   }, []);
@@ -129,7 +137,7 @@ const MessagePopup = ({ onClose }) => {
   return (
     <>
       <div
-        onClick={onClose}
+        onClick={() => setIsClosing(true)}
         style={{
           position: 'fixed',
           top: 0,
@@ -152,6 +160,12 @@ const MessagePopup = ({ onClose }) => {
           zIndex: 1000,
           display: 'flex',
           flexDirection: 'column',
+          ...popupAnimationStyle,
+        }}
+        onAnimationEnd={() => {
+          if (isClosing) {
+            onClose();
+          }
         }}
       >
         <div
@@ -343,4 +357,33 @@ cursor: 'pointer',
   );
 };
 
+const styleSheet = `
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes fadeSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.8);
+  }
+}
+`;
+
 export default MessagePopup;
+
+if (typeof document !== 'undefined') {
+  const styleTag = document.createElement('style');
+  styleTag.innerHTML = styleSheet;
+  document.head.appendChild(styleTag);
+}
