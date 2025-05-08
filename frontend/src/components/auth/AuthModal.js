@@ -100,6 +100,8 @@ const AuthModal = ({
         } else {
           navigate("/dashboard");
         }
+        // Force reload to update user state and UI
+        window.location.reload();
       } else {
         setError(response.message || "Something went wrong. Please try again.");
       }
