@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, MessageCircle, Phone, ArrowRight } from "lucide-react";
+import { fastScrollToTop } from '../utils/scrollToTop';
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -32,10 +33,7 @@ const FAQ = () => {
   ];
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    fastScrollToTop(700);
   }, []);
 
   return (
@@ -132,3 +130,4 @@ const FAQ = () => {
 };
 
 export default FAQ;
+

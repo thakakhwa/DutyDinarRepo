@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Globe, Send, ArrowRight } from "lucide-react";
+import { fastScrollToTop } from '../utils/scrollToTop';
 
 const ContactUs = () => {
     useEffect(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
+        fastScrollToTop(700);
       }, []);
       
   return (

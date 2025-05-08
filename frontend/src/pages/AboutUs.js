@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Users, Globe, Shield, Package, ArrowRight } from "lucide-react";
+import { fastScrollToTop } from '../utils/scrollToTop';
 
 // Rest of your component...
 
 const AboutUs = () => {
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    fastScrollToTop(700);
   }, []);
   return (
     <div className="min-h-screen bg-white">
