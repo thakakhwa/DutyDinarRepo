@@ -245,8 +245,8 @@ const MessagePopup = ({ onClose }) => {
                   style={{
                     padding: '8px',
                     cursor: 'pointer',
-                    backgroundColor: conv.id === selectedConversationId ? '#3b82f6' : 'transparent',
-                    color: conv.id === selectedConversationId ? 'white' : 'black',
+backgroundColor: conv.id === selectedConversationId ? '#22c55e' : 'transparent',
+color: conv.id === selectedConversationId ? 'white' : 'black',
                     borderRadius: '4px',
                     marginBottom: '4px',
                   }}
@@ -279,8 +279,8 @@ const MessagePopup = ({ onClose }) => {
                       key={msg.id}
                       style={{
                         alignSelf: isSender ? 'flex-end' : 'flex-start',
-                        backgroundColor: isSender ? '#3b82f6' : '#d3d3d3',
-                        color: isSender ? 'white' : 'black',
+backgroundColor: isSender ? '#22c55e' : '#bbf7d0',
+color: isSender ? 'white' : 'black',
                         padding: '8px 12px',
                         borderRadius: '16px',
                         maxWidth: '80%',
@@ -326,12 +326,12 @@ const MessagePopup = ({ onClose }) => {
             <button
               onClick={handleSendMessage}
               style={{
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '8px 12px',
-                cursor: 'pointer',
+backgroundColor: '#22c55e',
+color: 'white',
+border: 'none',
+borderRadius: '4px',
+padding: '8px 12px',
+cursor: 'pointer',
               }}
             >
               Send
