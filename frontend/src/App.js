@@ -62,7 +62,7 @@ const pageVariants = {
 const pageTransition = {
   type: "tween",
   ease: "anticipate",
-  duration: 0.25,
+  duration: 0.1,
 };
 
 // this is the main part that shows all the pages and routes
