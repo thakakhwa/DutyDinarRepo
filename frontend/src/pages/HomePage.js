@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { motion } from 'framer-motion';
+import { AuthContext } from '../context/AuthContext';
 import { Package } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCategories } from '../api/get_categories';
@@ -8,10 +10,32 @@ import EventPreview from '../components/events/EventPreview';
 import AuthModal from '../components/auth/AuthModal';
 import axios from 'axios';
 
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+  },
+  in: {
+    opacity: 1,
+    y: 0,
+  },
+  out: {
+    opacity: 0,
+    y: -20,
+  },
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.5,
+};
+
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { user } = useContext(AuthContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
   const [initialUserType, setInitialUserType] = useState('buyer');
@@ -28,11 +52,13 @@ const HomePage = () => {
       top: 0,
       behavior: "smooth",
     });
-    
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (loggedIn) {
+
+    if (user) {
       setIsLoggedIn(true);
-      setUserType(localStorage.getItem('userType'));
+      setUserType(user.userType);
+    } else {
+      setIsLoggedIn(false);
+      setUserType(null);
     }
 
     // Fetch quick stats
@@ -53,7 +79,7 @@ const HomePage = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -90,7 +116,15 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div
+      key={user ? 'loggedin' : 'loggedout'}
+      className="min-h-screen bg-gray-50"
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
       {/* Conditional Hero Section */}
       {!isLoggedIn && (
         <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-16 relative overflow-hidden">
@@ -177,7 +211,7 @@ const HomePage = () => {
 
       <FeaturedProducts />
       <EventPreview />
-    </div>
+    </motion.div>
   );
 };
 
