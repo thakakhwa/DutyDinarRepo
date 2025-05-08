@@ -6,7 +6,9 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 // react-router-dom - this helps us make different pages in our website
 // input: none
 // output: tools for making pages with urls
@@ -38,6 +40,30 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
 import MessagePopup from "./components/MessagePopup";
+
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    x: 0,
+    y: 20,
+  },
+  in: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+  },
+  out: {
+    opacity: 0,
+    x: 0,
+    y: -20,
+  },
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.5,
+};
 
 // this is the main part that shows all the pages and routes
 const AppRoutes = () => {
@@ -114,75 +140,235 @@ const AppRoutes = () => {
     setIsMessageOpen(!isMessageOpen);
   };
 
+  const location = useLocation();
+
   return (
-    // Router makes the whole website work with different pages
-    <Router>
-      {/* WishlistProvider lets us save favorite items */}
-      <WishlistProvider>
-        <div className="min-h-screen bg-gray-50">
-          {/* Navbar is the menu at top of website */}
-          <Navbar user={user} loading={loading} cartItems={cartItems} />
-          <Routes>
-            {/* Public Routes - everyone can see these, even without login */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/categories" element={<CategoriesPage />} />
-            <Route path="/events" element={<EventsPage />} />
-            <Route path="/product/:productId" element={<ProductPage />} />
-            <Route path="/event/:eventId" element={<EventDetailsPage />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/tos" element={<TOS />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/Privacy" element={<Privacypolicy />} />
+    <WishlistProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar user={user} loading={loading} cartItems={cartItems} />
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <HomePage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/categories"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <CategoriesPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/events"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <EventsPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/product/:productId"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <ProductPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/event/:eventId"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <EventDetailsPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <AboutUs />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/tos"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <TOS />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/faq"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <FAQ />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <ContactUs />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/Privacy"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <Privacypolicy />
+                </motion.div>
+              }
+            />
             <Route
               path="/profile"
               element={
-                <AccountProfile />
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <AccountProfile />
+                </motion.div>
               }
             />
-
-            {/* Protected Cart Route for Buyers */}
             <Route
               path="/cart"
               element={
                 <BuyerRoute>
-                  <Cart />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <Cart />
+                  </motion.div>
                 </BuyerRoute>
               }
             />
-
-            {/* Protected Favorites Route for Buyers */}
             <Route
               path="/favorites"
               element={
                 <BuyerRoute>
-                  <FavoritesPage />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <FavoritesPage />
+                  </motion.div>
                 </BuyerRoute>
               }
             />
-
-            {/* Protected Booked Events Route for Buyers */}
             <Route
               path="/booked-events"
               element={
                 <BuyerRoute>
-                  <BookedEventsPage />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <BookedEventsPage />
+                  </motion.div>
                 </BuyerRoute>
               }
             />
-
-            {/* Protected User Dashboard - different for each user type */}
             <Route
               path="/dashboard"
               element={
                 <PrivateRoute>
-                  {user && user.userType === "admin" ? (
-                    <Navigate to="/admin" replace />
-                  ) : user && user.userType === "seller" ? (
-                    <SellerDashboard />
-                  ) : (
-                    <BuyerDashboard />
-                  )}
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    {user && user.userType === "admin" ? (
+                      <Navigate to="/admin" replace />
+                    ) : user && user.userType === "seller" ? (
+                      <SellerDashboard />
+                    ) : (
+                      <BuyerDashboard />
+                    )}
+                  </motion.div>
                 </PrivateRoute>
               }
             />
@@ -190,58 +376,103 @@ const AppRoutes = () => {
               path="/checkout"
               element={
                 <BuyerRoute>
-                  <Checkout />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <Checkout />
+                  </motion.div>
                 </BuyerRoute>
               }
             />
-            {/* Protected Seller Add Event Page */}
             <Route
               path="/add-events"
               element={
                 <SellerRoute>
-                  <AddEvents />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <AddEvents />
+                  </motion.div>
                 </SellerRoute>
               }
             />
-            {/* Protected Seller Add Products Page */}
             <Route
               path="/add-products"
               element={
                 <SellerRoute>
-                  <AddProducts />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <AddProducts />
+                  </motion.div>
                 </SellerRoute>
               }
             />
-            {/* Protected Seller Inventory Page */}
             <Route
               path="/inventory"
               element={
                 <SellerRoute>
-                  <InventoryPage />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <InventoryPage />
+                  </motion.div>
                 </SellerRoute>
               }
             />
-            {/* Protected Admin Routes */}
             <Route
               path="/admin/*"
               element={
                 <AdminRoute>
-                  <AdminRoutes />
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <AdminRoutes />
+                  </motion.div>
                 </AdminRoute>
               }
             />
-            {/* Redirect unknown routes to Home - if someone types wrong url */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route
+              path="*"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <Navigate to="/" replace />
+                </motion.div>
+              }
+            />
           </Routes>
-          {/* MessageButton is the chat button users can click */}
-          <MessageButton onClick={toggleMessagePopup} />
-          {/* MessagePopup is the chat window that appears when button clicked */}
-          {isMessageOpen && <MessagePopup onClose={toggleMessagePopup} />}
-          {/* Footer is the bottom part of website with links */}
-          <Footer />
-        </div>
-      </WishlistProvider>
-    </Router>
+        </AnimatePresence>
+        <MessageButton onClick={toggleMessagePopup} />
+        {isMessageOpen && <MessagePopup onClose={toggleMessagePopup} />}
+        <Footer />
+      </div>
+    </WishlistProvider>
   );
 };
 
@@ -250,7 +481,9 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <Router>
+        <AppRoutes />
+      </Router>
     </AuthProvider>
   );
 };
