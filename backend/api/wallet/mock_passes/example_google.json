@@ -1,0 +1,72 @@
+{
+  "eventTicketObjects": [
+    {
+      "id": "demo_event_ticket_object_id",
+      "classId": "demo_event_ticket_class_id",
+      "state": "ACTIVE",
+      "heroImage": {
+        "sourceUri": {
+          "uri": "https://dutydinar.com/images/event-hero.jpg"
+        }
+      },
+      "textModulesData": [
+        {
+          "header": "Event",
+          "body": "DutyDinar Demo Event"
+        },
+        {
+          "header": "Location",
+          "body": "DutyDinar Event Center"
+        },
+        {
+          "header": "Date & Time",
+          "body": "January 1, 2023 at 7:00 PM"
+        },
+        {
+          "header": "Ticket Type",
+          "body": "General Admission"
+        }
+      ],
+      "linksModuleData": {
+        "uris": [
+          {
+            "uri": "https://dutydinar.com/events/demo",
+            "description": "Event Details"
+          },
+          {
+            "uri": "tel:+15551234567",
+            "description": "Event Support"
+          }
+        ]
+      },
+      "imageModulesData": [
+        {
+          "mainImage": {
+            "sourceUri": {
+              "uri": "https://dutydinar.com/images/event-qr.png"
+            }
+          }
+        }
+      ],
+      "barcode": {
+        "type": "QR_CODE",
+        "value": "DutyDinar-Event-123456789"
+      },
+      "locations": [
+        {
+          "latitude": 25.2048,
+          "longitude": 55.2708,
+          "name": "DutyDinar Event Center"
+        }
+      ],
+      "validTimeInterval": {
+        "start": {
+          "date": "2023-01-01T19:00:00Z"
+        },
+        "end": {
+          "date": "2023-01-01T23:00:00Z"
+        }
+      }
+    }
+  ]
+} 

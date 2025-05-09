@@ -1,0 +1,3 @@
+This is a mock .pkpass file for demonstration purposes only.
+In a real implementation, this would be a properly formatted and signed .pkpass file
+according to Apple's PassKit specifications. 

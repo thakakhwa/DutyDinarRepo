@@ -7839,3 +7839,1197 @@ Stack trace:
 [09-May-2025 13:50:20 Europe/Berlin] Number of products fetched: 12
 [09-May-2025 13:50:20 Europe/Berlin] get_cart.php called for userId: 29
 [09-May-2025 13:50:20 Europe/Berlin] get_cart.php called for userId: 29
+[09-May-2025 13:53:30 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:30 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:53:30 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:30 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:53:30 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:30 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:53:30 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:30 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:30 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:53:48 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:48 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:48 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:53:48 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:53:48 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:53:48 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:00 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:00 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:03 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:03 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:03 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:03 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:03 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:03 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:03 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:03 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:11 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:11 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:22 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => zaidabuelhaija@gmail.com
+    [password] => Zaid2123
+)
+
+[09-May-2025 13:54:22 Europe/Berlin] Login failed: Password mismatch for email - zaidabuelhaija@gmail.com
+[09-May-2025 13:54:28 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => zaidabuelhaija@gmail.com
+    [password] => Zaid2123
+)
+
+[09-May-2025 13:54:28 Europe/Berlin] Login failed: Password mismatch for email - zaidabuelhaija@gmail.com
+[09-May-2025 13:54:46 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => zaidabuelhaija@gmail.com
+    [password] => Zaid@123
+)
+
+[09-May-2025 13:54:46 Europe/Berlin] Session created for user: 28
+[09-May-2025 13:54:46 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:46 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:46 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:46 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:46 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:46 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:46 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:46 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:54:48 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:48 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:48 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:54:48 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:54:48 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:54:48 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:55:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:55:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:55:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:55:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:55:12 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:55:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:55:12 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:55:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:55:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:56:16 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:56:16 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:56:18 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:56:18 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:56:20 Europe/Berlin] Loaded email credentials: username=dinarduty@gmail.com, host=smtp.gmail.com
+[09-May-2025 13:56:20 Europe/Berlin] Authenticated user email: zaidabuelhaija@gmail.com
+[09-May-2025 13:56:20 Europe/Berlin] Generating Google Wallet pass for booking ID: 53
+[09-May-2025 13:56:20 Europe/Berlin] Generated Google Wallet URL: https://wallet.google/save/eventticket/?et=booking_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Successfully generated Google wallet URL: https://wallet.google/save/eventticket/?et=booking_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Generating Apple Wallet pass for booking ID: 53
+[09-May-2025 13:56:20 Europe/Berlin] Generated Apple Wallet URL: https://dutydinar.com/apple-wallet/passes/event_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Successfully generated Apple wallet URL: https://dutydinar.com/apple-wallet/passes/event_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Using session email for confirmation: zaidabuelhaija@gmail.com
+[09-May-2025 13:56:20 Europe/Berlin] Using email from session: zaidabuelhaija@gmail.com
+[09-May-2025 13:56:20 Europe/Berlin] Sending confirmation email to: zaidabuelhaija@gmail.com for User ID=28
+[09-May-2025 13:56:20 Europe/Berlin] Embedding Google wallet URL in email button: https://wallet.google/save/eventticket/?et=booking_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Embedding Apple wallet URL in email button: https://dutydinar.com/apple-wallet/passes/event_53_1746791780
+[09-May-2025 13:56:20 Europe/Berlin] Sending real event booking email to: zaidabuelhaija@gmail.com, Subject: Your DutyDinar Event Booking Confirmation: Music Festival
+[09-May-2025 13:56:20 Europe/Berlin] Sending email to: zaidabuelhaija@gmail.com, Subject: Your DutyDinar Event Booking Confirmation: Music Festival
+[09-May-2025 13:56:20 Europe/Berlin] Email config: username=dinarduty@gmail.com, host=smtp.gmail.com, port=587
+[09-May-2025 13:56:20 Europe/Berlin] Gmail detected, using smtp.gmail.com with TLS
+[09-May-2025 13:56:20 Europe/Berlin] Email configuration: username=dinarduty@gmail.com, host=smtp.gmail.com, port=587, secure=tls
+[09-May-2025 13:56:20 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:20 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: EHLO localhost
+
+[09-May-2025 13:56:20 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [176.28.133.72]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+[09-May-2025 13:56:20 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: STARTTLS
+
+[09-May-2025 13:56:20 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: EHLO localhost
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [176.28.133.72]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: AUTH LOGIN
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: [credentials hidden]
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: [credentials hidden]
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 235 2.7.0 Accepted
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: MAIL FROM:<dinarduty@gmail.com>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.1.0 OK ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: RCPT TO:<zaidabuelhaija@gmail.com>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.1.5 OK ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: DATA
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 354 Go ahead ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Date: Fri, 9 May 2025 13:56:20 +0200
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: To: zaidabuelhaija@gmail.com
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: From: Duty Dinar <dinarduty@gmail.com>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Reply-To: Duty Dinar Support <dinarduty@gmail.com>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Subject: Your DutyDinar Event Booking Confirmation: Music Festival
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Message-ID: <7fa9cKjTRGLeCnG1fGlsiAH7Dnp6Ilrdwt2xP9G7mQ@localhost>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: X-Mailer: PHPMailer 6.10.0 (https://github.com/PHPMailer/PHPMailer)
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: MIME-Version: 1.0
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <html>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <head>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <meta charset="utf-8">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <title>Event Booking Confirmation</title>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <style type="text/css">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 /* Base styles */
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 body, html {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     margin: 0;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     padding: 0;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     font-family: Arial, Helvetica, sans-serif;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     font-size: 16px;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     line-height: 1.5;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 * {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     -ms-text-size-adjust: 100%;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     -webkit-text-size-adjust: 100%;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 table {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     border-spacing: 0;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     mso-table-lspace: 0pt;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     mso-table-rspace: 0pt;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 table td {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     border-collapse: collapse;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     width: 100%;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass,
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass p,
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass span,
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass font,
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass td,
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass div {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     line-height: 100%;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 /* Mobile specific styles */
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 @media only screen and (max-width: 600px) {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .container {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .content {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         padding: 15px !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .button-container {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .button {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         padding: 15px 0 !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     img {
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         max-width: 100% !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         height: auto !important;
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             </style>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </head>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <body style="margin: 0; padding: 0; background-color: #f7f7f7;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <!-- Email Container -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     <td align="center" style="padding: 20px 0;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         <!-- Email Content Container -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 5px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <!-- Header -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 <td align="center" bgcolor="#4CAF50" style="padding: 20px; border-radius: 5px 5px 0 0; color: white;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <h1 style="margin: 0; font-size: 24px;">Event Booking Confirmation</h1>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <!-- Content -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 <td style="padding: 30px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p>Hello Zaid Abu El Haija,</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p>Thank you for booking a ticket for <strong>Music Festival</strong>!</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Event Details -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f9f9f9; border-left: 4px solid #4CAF50; margin: 20px 0; padding: 15px; border-radius: 5px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <h3 style="margin-top: 0;">Event Details:</h3>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Event:</strong> Music Festival</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Date:</strong> November 25, 2023, 6:00 pm</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Location:</strong> Austin, TX</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Booking ID:</strong> 53</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p style="margin-bottom: 0;"><strong>Order ID:</strong> 87</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Wallet Buttons Section -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p style="text-align: center; margin: 25px 0 15px 0;">Add this event ticket to your digital wallet:</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Google Wallet Button -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 15px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td align="center">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <table border="0" cellpadding="0" cellspacing="0">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" bgcolor="#4285F4" style="border-radius: 4px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <a href="https://wallet.google/save/eventticket/?et=booking_53_1746791780" target="_blank" style="display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                                 Add to Google Wallet
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             </a>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Apple Wallet Button -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 25px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td align="center">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <table border="0" cellpadding="0" cellspacing="0">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" bgcolor="#000000" style="border-radius: 4px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <a href="https://dutydinar.com/apple-wallet/passes/event_53_1746791780" target="_blank" style="display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                                 Add to Apple Wallet
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             </a>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Direct URL Backup for Mobile -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p style="text-align: center; margin: 20px 0 5px 0; font-size: 14px;">If buttons don't work, use these links:</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p style="text-align: center; margin: 0 0 5px 0;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <a href="https://wallet.google/save/eventticket/?et=booking_53_1746791780" style="color: #4285F4; text-decoration: underline; word-break: break-all;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             Add to Google Wallet
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </a>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p style="text-align: center; margin: 0 0 25px 0;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <a href="https://dutydinar.com/apple-wallet/passes/event_53_1746791780" style="color: #000000; text-decoration: underline; word-break: break-all;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             Add to Apple Wallet
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </a>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- QR Codes Section -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td style="padding: 10px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p style="text-align: center; margin: 15px 0 10px 0;">Or scan these QR codes with your phone:</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" width="50%" valign="top" style="padding: 10px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <p style="text-align: center; margin-bottom: 10px; font-weight: bold;">Google Wallet</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwallet.google%2Fsave%2Feventticket%2F%3Fet%3Dbooking_53_1746791780" width="150" height="150" alt="QR Code for Google Wallet" style="display: block; width: 150px; height: 150px; max-width: 100%; border: 1px solid #eeeeee;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" width="50%" valign="top" style="padding: 10px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <p style="text-align: center; margin-bottom: 10px; font-weight: bold;">Apple Wallet</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fdutydinar.com%2Fapple-wallet%2Fpasses%2Fevent_53_1746791780" width="150" height="150" alt="QR Code for Apple Wallet" style="display: block; width: 150px; height: 150px; max-width: 100%; border: 1px solid #eeeeee;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Footer -->
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px; border-top: 1px solid #eeeeee; padding-top: 20px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td style="color: #666666; font-size: 14px;">
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p>We look forward to seeing you at the event!</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p>Best regards,<br>The DutyDinar Team</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p style="font-size: 12px;">If you have any questions about your booking, please contact us at support@dutydinar.com</p>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     </td>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 </tr>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             </table>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </body>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </html>
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:56:21 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: .
+
+[09-May-2025 13:56:22 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.0.0 OK  1746791781 ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:22 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: QUIT
+
+[09-May-2025 13:56:22 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 221 2.0.0 closing connection ffacd0b85a97d-3a1f5a4c5f6sm3003553f8f.86 - gsmtp
+
+[09-May-2025 13:56:22 Europe/Berlin] Email sent successfully to zaidabuelhaija@gmail.com
+[09-May-2025 13:56:22 Europe/Berlin] Email sending result: {"success":true,"message":"Email sent successfully."}
+[09-May-2025 13:58:48 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:48 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:50 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:50 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:52 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:52 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:54 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:54 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:58:55 Europe/Berlin] Loaded email credentials: username=dinarduty@gmail.com, host=smtp.gmail.com
+[09-May-2025 13:58:55 Europe/Berlin] Authenticated user email: zaidabuelhaija@gmail.com
+[09-May-2025 13:58:55 Europe/Berlin] Generating Google Wallet pass for booking ID: 54
+[09-May-2025 13:58:55 Europe/Berlin] Generated Google Wallet URL: https://wallet.google/save/eventticket/?et=booking_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Successfully generated Google wallet URL: https://wallet.google/save/eventticket/?et=booking_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Generating Apple Wallet pass for booking ID: 54
+[09-May-2025 13:58:55 Europe/Berlin] Generated Apple Wallet URL: https://dutydinar.com/apple-wallet/passes/event_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Successfully generated Apple wallet URL: https://dutydinar.com/apple-wallet/passes/event_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Using session email for confirmation: zaidabuelhaija@gmail.com
+[09-May-2025 13:58:55 Europe/Berlin] Using email from session: zaidabuelhaija@gmail.com
+[09-May-2025 13:58:55 Europe/Berlin] Sending confirmation email to: zaidabuelhaija@gmail.com for User ID=28
+[09-May-2025 13:58:55 Europe/Berlin] Embedding Google wallet URL in email button: https://wallet.google/save/eventticket/?et=booking_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Embedding Apple wallet URL in email button: https://dutydinar.com/apple-wallet/passes/event_54_1746791935
+[09-May-2025 13:58:55 Europe/Berlin] Sending real event booking email to: zaidabuelhaija@gmail.com, Subject: Your DutyDinar Event Booking Confirmation: Tech Conference 2023
+[09-May-2025 13:58:55 Europe/Berlin] Sending email to: zaidabuelhaija@gmail.com, Subject: Your DutyDinar Event Booking Confirmation: Tech Conference 2023
+[09-May-2025 13:58:55 Europe/Berlin] Email config: username=dinarduty@gmail.com, host=smtp.gmail.com, port=587
+[09-May-2025 13:58:55 Europe/Berlin] Gmail detected, using smtp.gmail.com with TLS
+[09-May-2025 13:58:55 Europe/Berlin] Email configuration: username=dinarduty@gmail.com, host=smtp.gmail.com, port=587, secure=tls
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: EHLO localhost
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [176.28.133.72]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: STARTTLS
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: EHLO localhost
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [176.28.133.72]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: AUTH LOGIN
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: [credentials hidden]
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: [credentials hidden]
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 235 2.7.0 Accepted
+
+[09-May-2025 13:58:56 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: MAIL FROM:<dinarduty@gmail.com>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.1.0 OK 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: RCPT TO:<zaidabuelhaija@gmail.com>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.1.5 OK 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: DATA
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 354 Go ahead 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Date: Fri, 9 May 2025 13:58:55 +0200
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: To: zaidabuelhaija@gmail.com
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: From: Duty Dinar <dinarduty@gmail.com>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Reply-To: Duty Dinar Support <dinarduty@gmail.com>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Subject: Your DutyDinar Event Booking Confirmation: Tech Conference 2023
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Message-ID: <Z6S0FoyJRD7F0JQMpieyTHMZnqGVaPHT7mgfkRbQ@localhost>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: X-Mailer: PHPMailer 6.10.0 (https://github.com/PHPMailer/PHPMailer)
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: MIME-Version: 1.0
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <html>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <head>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <meta charset="utf-8">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <title>Event Booking Confirmation</title>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <style type="text/css">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 /* Base styles */
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 body, html {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     margin: 0;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     padding: 0;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     font-family: Arial, Helvetica, sans-serif;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     font-size: 16px;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     line-height: 1.5;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 * {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     -ms-text-size-adjust: 100%;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     -webkit-text-size-adjust: 100%;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 table {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     border-spacing: 0;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     mso-table-lspace: 0pt;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     mso-table-rspace: 0pt;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 table td {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     border-collapse: collapse;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     width: 100%;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass,
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass p,
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass span,
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass font,
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass td,
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 .ExternalClass div {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     line-height: 100%;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 /* Mobile specific styles */
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 @media only screen and (max-width: 600px) {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .container {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .content {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         padding: 15px !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .button-container {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     .button {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         width: 100% !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         padding: 15px 0 !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     img {
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         max-width: 100% !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         height: auto !important;
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 }
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             </style>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </head>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         <body style="margin: 0; padding: 0; background-color: #f7f7f7;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <!-- Email Container -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     <td align="center" style="padding: 20px 0;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         <!-- Email Content Container -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 5px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <!-- Header -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 <td align="center" bgcolor="#4CAF50" style="padding: 20px; border-radius: 5px 5px 0 0; color: white;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <h1 style="margin: 0; font-size: 24px;">Event Booking Confirmation</h1>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <!-- Content -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 <td style="padding: 30px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p>Hello Zaid Abu El Haija,</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p>Thank you for booking a ticket for <strong>Tech Conference 2023</strong>!</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Event Details -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f9f9f9; border-left: 4px solid #4CAF50; margin: 20px 0; padding: 15px; border-radius: 5px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <h3 style="margin-top: 0;">Event Details:</h3>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Event:</strong> Tech Conference 2023</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Date:</strong> December 15, 2023, 9:00 am</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Location:</strong> San Francisco, CA</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p><strong>Booking ID:</strong> 54</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p style="margin-bottom: 0;"><strong>Order ID:</strong> 88</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Wallet Buttons Section -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <p style="text-align: center; margin: 25px 0 15px 0;">Add this event ticket to your digital wallet:</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Google Wallet Button -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 15px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td align="center">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <table border="0" cellpadding="0" cellspacing="0">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" bgcolor="#4285F4" style="border-radius: 4px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <a href="https://wallet.google/save/eventticket/?et=booking_54_1746791935" target="_blank" style="display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                                 Add to Google Wallet
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             </a>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Apple Wallet Button -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 25px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td align="center">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <table border="0" cellpadding="0" cellspacing="0">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         <td align="center" bgcolor="#000000" style="border-radius: 4px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             <a href="https://dutydinar.com/apple-wallet/passes/event_54_1746791935" target="_blank" style="display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                                 Add to Apple Wallet
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                             </a>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                         </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                     </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <!-- Footer -->
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px; border-top: 1px solid #eeeeee; padding-top: 20px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         <tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             <td style="color: #666666; font-size: 14px;">
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p>We look forward to seeing you at the event!</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p>Best regards,<br>The DutyDinar Team</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                                 <p style="font-size: 12px;">If you have any questions about your booking, please contact us at support@dutydinar.com</p>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                             </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                         </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                     </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                                 </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                             </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                         </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                     </td>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:                 </tr>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:             </table>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </body>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         </html>
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER:         
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: 
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: .
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 250 2.0.0 OK  1746791936 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [1]: CLIENT -> SERVER: QUIT
+
+[09-May-2025 13:58:57 Europe/Berlin] PHPMailer [2]: SERVER -> CLIENT: 221 2.0.0 closing connection 5b1f17b1804b1-442d67e138asm27107235e9.10 - gsmtp
+
+[09-May-2025 13:58:58 Europe/Berlin] Email sent successfully to zaidabuelhaija@gmail.com
+[09-May-2025 13:58:59 Europe/Berlin] Email sending result: {"success":true,"message":"Email sent successfully."}
+[09-May-2025 14:03:09 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:09 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:10 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:10 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:13 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:13 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:15 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:15 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:03:16 Europe/Berlin] Loaded email credentials: username=dinarduty@gmail.com, host=smtp.gmail.com
+[09-May-2025 14:03:16 Europe/Berlin] Authenticated user email: zaidabuelhaija@gmail.com
+[09-May-2025 14:03:16 Europe/Berlin] Generating Google Wallet pass for booking ID: 55
+[09-May-2025 14:03:16 Europe/Berlin] Generated Google Wallet URL: https://wallet.google/save/eventticket/?et=booking_55_1746792196
+[09-May-2025 14:03:16 Europe/Berlin] Successfully generated Google wallet URL: https://wallet.google/save/eventticket/?et=booking_55_1746792196
+[09-May-2025 14:03:16 Europe/Berlin] Generating Apple Wallet pass for booking ID: 55
+[09-May-2025 14:04:38 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:04:38 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:04:38 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:04:38 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:04:38 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:04:38 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:04:38 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:04:38 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:04:38 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:04:46 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:46 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:48 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:48 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:51 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:51 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:58 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:04:58 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:05:00 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:00 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:02 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:02 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:02 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:02 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:02 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:02 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:05 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:05 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:05 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:05 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:05 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:05 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:07 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:07 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                FROM products p 
+                LEFT JOIN users u ON p.seller_id = u.id 
+                WHERE p.id = ?
+[09-May-2025 14:05:07 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:07 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                FROM products p 
+                LEFT JOIN users u ON p.seller_id = u.id 
+                WHERE p.id = ?
+[09-May-2025 14:05:10 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:10 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                FROM products p 
+                LEFT JOIN users u ON p.seller_id = u.id 
+                WHERE p.id = ?
+[09-May-2025 14:05:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                FROM products p 
+                LEFT JOIN users u ON p.seller_id = u.id 
+                WHERE p.id = ?
+[09-May-2025 14:05:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:19 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:19 Europe/Berlin] get_cart.php called for userId: 28
+[09-May-2025 14:05:23 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:23 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:23 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:23 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:05:24 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:24 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:24 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:24 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:24 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:24 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:05:24 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:05:24 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:05:24 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:05:24 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:16 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:16 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:16 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:16 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:16 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:20 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:20 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:20 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:20 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:20 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:20 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:20 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:20 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:21 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:21 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:21 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:21 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 14:08:21 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 14:08:21 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 14:08:22 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:22 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:25 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:25 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 14:08:27 Europe/Berlin] Loaded email credentials: username=dinarduty@gmail.com, host=smtp.gmail.com
+[09-May-2025 14:08:27 Europe/Berlin] Authenticated user email: zaidabuelhaija@gmail.com
+[09-May-2025 14:08:27 Europe/Berlin] Generating Google Wallet pass for booking ID: 56

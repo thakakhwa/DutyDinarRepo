@@ -23,83 +23,79 @@ function createGoogleWalletPass($eventId, $userId, $bookingId) {
     global $conn;
     
     try {
-        // Get event details to include in the pass
-        $query = "
-            SELECT e.name as event_name, e.event_date, e.location, u.name as user_name
-            FROM events e
-            JOIN users u ON u.id = ?
-            WHERE e.id = ?
-        ";
+        // Include the Google Pass URL generator
+        require_once __DIR__ . '/wallet/create_google_pass_url.php';
         
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            error_log("Error preparing wallet pass query: " . $conn->error);
+        // Use the new function to generate a proper Google Wallet URL
+        $result = createGooglePassUrl($eventId, $userId, $bookingId);
+        
+        if (!$result['success']) {
+            error_log("Error from Google Pass URL generator: " . ($result['message'] ?? 'Unknown error'));
+            // Still return a URL even if there was an error, so the booking can proceed
             return [
                 'success' => true,
-                'wallet_url' => 'https://wallet.google/save/eventticket/?et=booking_' . $bookingId . '_' . time(),
-                'pass_id' => 'mock-pass-' . $eventId . '-' . $bookingId . '-' . time(),
-                'dev_mode' => true
+                'wallet_url' => $result['wallet_url'],
+                'pass_id' => 'mock-pass-google-' . $eventId . '-' . $bookingId . '-' . time(),
+                'dev_mode' => true,
+                'error_details' => $result['message'] ?? 'Unknown error'
             ];
         }
         
-        $stmt->bind_param("ii", $userId, $eventId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows === 0) {
-            error_log("Event or user not found for wallet pass: User ID=$userId, Event ID=$eventId");
-            return [
-                'success' => true,
-                'wallet_url' => 'https://wallet.google/save/eventticket/?et=booking_' . $bookingId . '_' . time(),
-                'pass_id' => 'mock-pass-' . $eventId . '-' . $bookingId . '-' . time(),
-                'dev_mode' => true
-            ];
-        }
-        
-        $data = $result->fetch_assoc();
-        $stmt->close();
-        
-        // Create a more detailed wallet URL with event information
-        // In a real implementation, this would create a proper Google Wallet Pass object
-        // For testing purposes, we'll use the Google Wallet save URL format
-        
-        // Note: In a production environment, you would need to create an actual Google Wallet pass
-        // using the Google Pay API for Passes and get a real save link
-        
-        // Format: https://wallet.google/save/{issuer_id}/{pass_class_id}/{object_id}
-        $issuer_id = 'dutydinar';
-        $pass_class_id = 'event_' . $eventId;
-        $object_id = 'booking_' . $bookingId . '_' . time();
-        
-        // Create a direct Google Wallet URL that's more likely to work
-        // Using the eventticket format which is more appropriate for event bookings
-        $walletUrl = 'https://wallet.google/save/eventticket/?et=' . $object_id;
-        
-        // Log the wallet URL being created
-        error_log("Generated Google Wallet URL: $walletUrl");
-        
+        // Return the result from the URL generator
         return [
             'success' => true,
-            'wallet_url' => $walletUrl,
-            'pass_id' => 'mock-pass-' . $eventId . '-' . $bookingId . '-' . time(),
-            'dev_mode' => true,
-            'details' => [
-                'eventName' => $data['event_name'],
-                'eventDate' => $data['event_date'],
-                'location' => $data['location'],
-                'attendee' => $data['user_name'],
-                'bookingId' => $bookingId,
-                'eventId' => $eventId,
-                'userId' => $userId,
-                'timestamp' => time()
-            ]
+            'wallet_url' => $result['wallet_url'],
+            'pass_id' => $result['pass_id'],
+            'dev_mode' => $result['dev_mode'] ?? true
         ];
     } catch (Exception $e) {
         error_log("Error creating Google Wallet pass: " . $e->getMessage());
         return [
             'success' => true, // Still return success to allow booking to proceed
             'wallet_url' => 'https://wallet.google/save/eventticket/?et=error_' . time(),
-            'pass_id' => 'mock-pass-' . $eventId . '-' . $bookingId . '-' . time(),
+            'pass_id' => 'mock-pass-google-' . $eventId . '-' . $bookingId . '-' . time(),
+            'dev_mode' => true,
+            'error' => $e->getMessage()
+        ];
+    }
+}
+
+// New function for Apple Wallet Pass
+function createAppleWalletPass($eventId, $userId, $bookingId) {
+    global $conn;
+    
+    try {
+        // Include the Apple Pass URL generator
+        require_once __DIR__ . '/wallet/create_apple_pass_url.php';
+        
+        // Use the new function to generate a proper Apple Wallet URL
+        $result = createApplePassUrl($eventId, $userId, $bookingId);
+        
+        if (!$result['success']) {
+            error_log("Error from Apple Pass URL generator: " . ($result['message'] ?? 'Unknown error'));
+            // Still return a URL even if there was an error, so the booking can proceed
+            return [
+                'success' => true,
+                'wallet_url' => $result['wallet_url'],
+                'pass_id' => 'mock-pass-apple-' . $eventId . '-' . $bookingId . '-' . time(),
+                'dev_mode' => true,
+                'error_details' => $result['message'] ?? 'Unknown error'
+            ];
+        }
+        
+        // Return the result from the URL generator
+        return [
+            'success' => true,
+            'wallet_url' => $result['wallet_url'],
+            'pass_id' => $result['pass_id'],
+            'dev_mode' => $result['dev_mode'] ?? true
+        ];
+    } catch (Exception $e) {
+        error_log("Error creating Apple Wallet pass: " . $e->getMessage());
+        return [
+            'success' => true, // Still return success to allow booking to proceed
+            'wallet_url' => 'http://localhost/DutyDinarRepo/backend/api/wallet/download_pass.php?error=exception',
+            'pass_id' => 'mock-pass-apple-' . $eventId . '-' . $bookingId . '-' . time(),
             'dev_mode' => true,
             'error' => $e->getMessage()
         ];
@@ -134,8 +130,8 @@ function check_authentication() {
     return $userData;
 }
 
-// Function to send booking confirmation email with Google Wallet link
-function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl, $orderId) {
+// Function to send booking confirmation email with wallet links
+function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletData, $orderId) {
     global $conn;
     
     try {
@@ -192,14 +188,22 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
         // Log the user email we're sending to
         error_log("Sending confirmation email to: $userEmail for User ID=$userId");
         
-        // Ensure we have a valid wallet URL - generate a new one if the provided one is empty or "#"
-        if (empty($walletUrl) || $walletUrl === '#') {
-            error_log("Empty or invalid wallet URL provided. Generating new one in sendBookingConfirmationEmail");
+        // Ensure we have valid wallet URLs
+        $googleWalletUrl = $walletData['google_wallet_url'] ?? '';
+        $appleWalletUrl = $walletData['apple_wallet_url'] ?? '';
+        
+        if (empty($googleWalletUrl) || $googleWalletUrl === '#') {
+            error_log("Empty or invalid Google wallet URL provided. Generating new one in sendBookingConfirmationEmail");
             $wallet_result = createGoogleWalletPass($eventId, $userId, $bookingId);
-            $walletUrl = $wallet_result['wallet_url'];
-            error_log("Generated new wallet URL: $walletUrl");
-        } else {
-            error_log("Using provided wallet URL: $walletUrl");
+            $googleWalletUrl = $wallet_result['wallet_url'];
+            error_log("Generated new Google wallet URL: $googleWalletUrl");
+        }
+        
+        if (empty($appleWalletUrl) || $appleWalletUrl === '#') {
+            error_log("Empty or invalid Apple wallet URL provided. Generating new one in sendBookingConfirmationEmail");
+            $wallet_result = createAppleWalletPass($eventId, $userId, $bookingId);
+            $appleWalletUrl = $wallet_result['wallet_url'];
+            error_log("Generated new Apple wallet URL: $appleWalletUrl");
         }
         
         // Format email
@@ -299,20 +303,22 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
                                         </tr>
                                     </table>
                                     
+                                    <!-- Wallet Buttons Section -->
+                                    <p style=\"text-align: center; margin: 25px 0 15px 0;\">Add this event ticket to your digital wallet:</p>
+                                    
                                     <!-- Google Wallet Button -->
-                                    <p style=\"text-align: center; margin: 25px 0 15px 0;\">Add this event ticket to Google Wallet for easy access:</p>
-                                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"margin-bottom: 25px;\">
+                                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"margin-bottom: 15px;\">
                                         <tr>
                                             <td align=\"center\">
                                                 <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
                                                     <tr>
                                                         <td align=\"center\" bgcolor=\"#4285F4\" style=\"border-radius: 4px;\">";
         
-        // Log the wallet URL right before embedding it in the email
-        error_log("Embedding wallet URL in email button: " . $walletUrl);
+        // Log the Google wallet URL right before embedding it in the email
+        error_log("Embedding Google wallet URL in email button: " . $googleWalletUrl);
         
         $body .= "
-                                                            <a href=\"" . htmlspecialchars($walletUrl, ENT_QUOTES, 'UTF-8') . "\" target=\"_blank\" style=\"display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;\">
+                                                            <a href=\"" . htmlspecialchars($googleWalletUrl, ENT_QUOTES, 'UTF-8') . "\" target=\"_blank\" style=\"display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;\">
                                                                 Add to Google Wallet
                                                             </a>
                                                         </td>
@@ -322,32 +328,24 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
                                         </tr>
                                     </table>
                                     
-                                    <!-- Direct URL Backup for Mobile -->
-                                    <p style=\"text-align: center; margin: 20px 0 5px 0; font-size: 14px;\">If the button doesn't work, tap this link:</p>
-                                    <p style=\"text-align: center; margin: 0 0 25px 0;\">";
-        
-        // Log the text link URL
-        error_log("Embedding wallet URL in text link: " . $walletUrl);
-        
-        $body .= "
-                                        <a href=\"" . htmlspecialchars($walletUrl, ENT_QUOTES, 'UTF-8') . "\" style=\"color: #4285F4; text-decoration: underline; word-break: break-all;\">
-                                            Add to Google Wallet
-                                        </a>
-                                    </p>
-                                    
-                                    <!-- QR Code -->
-                                    <p style=\"text-align: center; margin: 25px 0 15px 0;\">Or scan this QR code with your phone:</p>
-                                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">
+                                    <!-- Apple Wallet Button -->
+                                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"margin-bottom: 25px;\">
                                         <tr>
-                                            <td align=\"center\">";
+                                            <td align=\"center\">
+                                                <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+                                                    <tr>
+                                                        <td align=\"center\" bgcolor=\"#000000\" style=\"border-radius: 4px;\">";
         
-        // Log the QR code URL
-        error_log("Generating QR code with wallet URL: " . $walletUrl);
-        $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($walletUrl);
-        error_log("QR code image URL: " . $qrCodeUrl);
+        // Log the Apple wallet URL right before embedding it in the email
+        error_log("Embedding Apple wallet URL in email button: " . $appleWalletUrl);
         
         $body .= "
-                                                <img src=\"" . $qrCodeUrl . "\" width=\"200\" height=\"200\" alt=\"QR Code for Wallet\" style=\"display: block; width: 200px; height: 200px; max-width: 100%; border: 1px solid #eeeeee;\">
+                                                            <a href=\"" . htmlspecialchars($appleWalletUrl, ENT_QUOTES, 'UTF-8') . "\" target=\"_blank\" style=\"display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-align: center; padding: 15px 30px; border-radius: 4px;\">
+                                                                Add to Apple Wallet
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
                                         </tr>
                                     </table>
@@ -517,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $conn->commit();
         
-        // Complete the booking with optional Google Wallet pass and email
+        // Complete the booking with optional wallet passes and email
         $response = [
             'success' => true, 
             'message' => 'Event booked successfully.', 
@@ -525,18 +523,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'booking_id' => $booking_id
         ];
         
-        // Always generate a Google Wallet pass
+        // Generate Google Wallet pass
         error_log("Generating Google Wallet pass for booking ID: $booking_id");
-        $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
+        $google_wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
         
-        if ($wallet_result['success']) {
-            $response['wallet_url'] = $wallet_result['wallet_url'];
-            error_log("Successfully generated wallet URL: " . $wallet_result['wallet_url']);
+        if ($google_wallet_result['success']) {
+            $response['google_wallet_url'] = $google_wallet_result['wallet_url'];
+            error_log("Successfully generated Google wallet URL: " . $google_wallet_result['wallet_url']);
         } else {
-            error_log("Failed to generate wallet pass. Using fallback URL.");
-            $wallet_result['wallet_url'] = 'https://wallet.google/save/eventticket/?et=booking_' . $booking_id . '_' . time();
-            $response['wallet_url'] = $wallet_result['wallet_url'];
+            error_log("Failed to generate Google wallet pass. Using fallback URL.");
+            $google_wallet_result['wallet_url'] = 'https://wallet.google/save/eventticket/?et=booking_' . $booking_id . '_' . time();
+            $response['google_wallet_url'] = $google_wallet_result['wallet_url'];
         }
+        
+        // Generate Apple Wallet pass
+        error_log("Generating Apple Wallet pass for booking ID: $booking_id");
+        $apple_wallet_result = createAppleWalletPass($event_id, $user_id, $booking_id);
+        
+        if ($apple_wallet_result['success']) {
+            $response['apple_wallet_url'] = $apple_wallet_result['wallet_url'];
+            error_log("Successfully generated Apple wallet URL: " . $apple_wallet_result['wallet_url']);
+        } else {
+            error_log("Failed to generate Apple wallet pass. Using fallback URL.");
+            $apple_wallet_result['wallet_url'] = 'https://dutydinar.com/apple-wallet/passes/event_' . $booking_id . '_' . time();
+            $response['apple_wallet_url'] = $apple_wallet_result['wallet_url'];
+        }
+        
+        // For backward compatibility with existing frontend code
+        $response['wallet_url'] = $response['google_wallet_url'];
         
         // Always try to send the confirmation email regardless of wallet pass
         try {
@@ -551,7 +565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             // Send the confirmation email with order ID included
-            $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $response['wallet_url'], $order_id);
+            $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $response, $order_id);
             
             // Log email sending result for debugging
             error_log("Email sending result: " . json_encode($email_result));

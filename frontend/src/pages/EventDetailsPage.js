@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Users, Package, Wallet, Mail, X } from 'lucide-react';
+import { Calendar, MapPin, Users, Package, Wallet, Mail, X, Apple } from 'lucide-react';
 import { getFullImageUrl } from '../utils/imageUtils';
 import { handleAuthError } from '../utils/authUtils';
 
@@ -14,6 +14,7 @@ const EventDetailsPage = () => {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [walletUrl, setWalletUrl] = useState(null);
+  const [appleWalletUrl, setAppleWalletUrl] = useState(null);
 
   useEffect(() => {
     window.scrollTo({
@@ -85,6 +86,12 @@ const EventDetailsPage = () => {
         if (data.wallet_url) {
           setWalletUrl(data.wallet_url);
         }
+        if (data.google_wallet_url) {
+          setWalletUrl(data.google_wallet_url);
+        }
+        if (data.apple_wallet_url) {
+          setAppleWalletUrl(data.apple_wallet_url);
+        }
         // Update the event to show as booked
         setEvent(prev => ({
           ...prev,
@@ -129,17 +136,33 @@ const EventDetailsPage = () => {
             </div>
             <p className="mb-4">Your ticket for {event.name} has been booked successfully.</p>
             <p className="mb-4">A confirmation email has been sent to your email address.</p>
-            {walletUrl && (
-              <a 
-                href={walletUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 mb-3"
-              >
-                <Wallet size={18} className="mr-2" />
-                Add to Google Wallet
-              </a>
-            )}
+            
+            <div className="space-y-3 mb-4">
+              {walletUrl && (
+                <a 
+                  href={walletUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center bg-[#4285F4] text-white py-2 px-4 rounded-lg hover:bg-[#3367d6] w-full"
+                >
+                  <Wallet size={18} className="mr-2" />
+                  Add to Google Wallet
+                </a>
+              )}
+              
+              {appleWalletUrl && (
+                <a 
+                  href={appleWalletUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center bg-black text-white py-2 px-4 rounded-lg hover:bg-[#333] w-full"
+                >
+                  <Apple size={18} className="mr-2" />
+                  Add to Apple Wallet
+                </a>
+              )}
+            </div>
+            
             <button 
               onClick={closeBookingSuccess} 
               className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300"
