@@ -6602,3 +6602,1129 @@ Stack trace:
                     FROM products p 
                     LEFT JOIN users u ON p.seller_id = u.id
 [09-May-2025 12:59:33 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:04:37 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:04:37 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:04:37 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:04:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:04:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:04:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:32 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:32 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:32 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:32 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:32 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:32 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:41 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:44 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:44 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:44 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:44 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:44 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:44 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:44 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:44 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:44 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:44 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:44 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:44 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:45 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:45 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:45 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:50 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:50 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:50 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:50 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:50 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:50 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:50 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:50 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:50 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:50 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:50 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:50 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:50 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:50 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:50 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:53 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:53 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:53 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:54 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:54 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:54 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:54 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:54 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:54 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:55 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:55 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:55 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:56 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:56 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:56 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:06:56 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:06:56 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:06:56 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:09 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:09 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:09 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:09 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:09 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:09 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:09 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:09 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:09 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:10 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:10 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:10 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:12 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:12 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:12 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:13 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:13 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:13 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:13 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:13 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:13 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:13 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:13 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:13 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:58 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:58 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:58 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:07:58 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:07:58 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:07:58 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:08:36 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:08:36 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:08:36 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:08:40 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:08:40 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:08:40 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:09:43 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:09:43 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:09:43 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:00 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:00 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:00 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:01 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:01 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:01 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:04 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:04 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:04 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:05 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:05 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:05 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:07 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:07 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:07 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:19 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:19 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:19 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:10:19 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:10:19 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:10:19 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:13 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:13 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:15 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:15 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:15 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:15 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:15 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:15 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:15 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:19 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:19 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:19 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:19 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:19 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:19 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:20 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:20 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:21 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:21 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:21 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:21 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:21 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:21 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:23 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:23 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:23 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:23 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:23 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:23 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:12:23 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:12:23 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:12:23 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:13 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Buyer3@gmail.com
+    [password] => Buyer@123
+)
+
+[09-May-2025 13:15:13 Europe/Berlin] Session created for user: 25
+[09-May-2025 13:15:18 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:18 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:18 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:18 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:18 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:18 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:35 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:35 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:35 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:35 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:35 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:35 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:35 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:35 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:35 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:45 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Buyer1@gmail.com
+    [password] => Buyer2123
+)
+
+[09-May-2025 13:15:46 Europe/Berlin] Login failed: Password mismatch for email - Buyer1@gmail.com
+[09-May-2025 13:15:57 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Buyer1@gmail.com
+    [password] => Buyer@123
+)
+
+[09-May-2025 13:15:57 Europe/Berlin] Session created for user: 17
+[09-May-2025 13:15:57 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:15:57 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:15:57 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:57 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:57 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:57 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:57 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:57 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:58 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:58 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:58 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:15:58 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:15:58 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:15:58 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:11 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:11 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:11 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:11 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:40 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Seller1@gmail.com
+    [password] => Seller2123
+)
+
+[09-May-2025 13:16:40 Europe/Berlin] Login failed: Password mismatch for email - Seller1@gmail.com
+[09-May-2025 13:16:49 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Seller1@gmail.com
+    [password] => Seller@123
+)
+
+[09-May-2025 13:16:49 Europe/Berlin] Session created for user: 18
+[09-May-2025 13:16:49 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:16:49 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:16:49 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:49 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:49 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:49 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:16:49 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:16:49 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API called for sellerId: 18
+[09-May-2025 13:16:50 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:16:50 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:18:07 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:18:07 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:18:07 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:18:07 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:18:07 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:18:07 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:19:00 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:19:00 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:19:00 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:19:00 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:19:00 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:19:00 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:19:00 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:19:00 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:19:00 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:23:03 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Seller2@gmail.com
+    [password] => Seller@123
+)
+
+[09-May-2025 13:23:03 Europe/Berlin] Session created for user: 26
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API called for sellerId: 26
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API called for sellerId: 26
+[09-May-2025 13:23:09 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API called for sellerId: 26
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API called for sellerId: 26
+[09-May-2025 13:23:09 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:23:09 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:23:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:23:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:23:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:23:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:23:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:23:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:23:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:23:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:23:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:23:39 Europe/Berlin] get_products.php called with myProducts: false, seller_id: 
+[09-May-2025 13:23:39 Europe/Berlin] Executing SQL: SELECT p.id, p.name, p.description, p.price, p.stock, p.category, p.image_url, p.minOrderQuantity, u.companyName 
+                    FROM products p 
+                    LEFT JOIN users u ON p.seller_id = u.id
+[09-May-2025 13:23:39 Europe/Berlin] Number of products fetched: 12
+[09-May-2025 13:23:39 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:23:39 Europe/Berlin] get_events.php called with myEvents: false, seller_id: 
+[09-May-2025 13:25:22 Europe/Berlin] Login attempt with input: Array
+(
+    [email] => Seller3@gmail.com
+    [password] => Seller@123
+)
+
+[09-May-2025 13:25:22 Europe/Berlin] Session created for user: 27
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API called for sellerId: 27
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API called for sellerId: 27
+[09-May-2025 13:25:27 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API recentOrders count: 0
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API called for sellerId: 27
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API called for sellerId: 27
+[09-May-2025 13:25:27 Europe/Berlin] PHP Warning:  file_put_contents(/tmp/debug_error_log.txt): Failed to open stream: No such file or directory in C:\xampp\htdocs\DutyDinarRepo\backend\api\get_seller_dashboard_data.php on line 39
+[09-May-2025 13:25:27 Europe/Berlin] SellerDashboard API recentOrders count: 0

@@ -83,8 +83,29 @@ const CategoriesPage = () => {
   };
 
   const handlePriceChange = (e) => {
-    const value = parseInt(e.target.value);
-    setPriceRange((prev) => ({ ...prev, max: value }));
+    const { name, value } = e.target;
+    // Ensure the value is at least 0
+    const newValue = Math.max(0, parseInt(value) || 0);
+    
+    // Make sure min doesn't exceed max and max isn't less than min
+    if (name === 'min' && newValue > priceRange.max) {
+      setPriceRange((prev) => ({ ...prev, min: prev.max }));
+    } else if (name === 'max' && newValue < priceRange.min) {
+      setPriceRange((prev) => ({ ...prev, max: prev.min }));
+    } else {
+      setPriceRange((prev) => ({ ...prev, [name]: newValue }));
+    }
+  };
+
+  const handleMinOrderChange = (e) => {
+    const value = e.target.value;
+    // If the field is empty, set to -1 (which means no filter)
+    if (value === '') {
+      setMinOrderQuantity(-1);
+    } else {
+      // Otherwise use the parsed integer value, ensuring it's not negative
+      setMinOrderQuantity(Math.max(0, parseInt(value) || 0));
+    }
   };
 
   const selectedCategoryName = selectedCategory 
@@ -151,33 +172,45 @@ const CategoriesPage = () => {
 
               <hr className="my-4" />
 
-              <h3 className="font-semibold mb-4">Price Range ($)</h3>
-              <div className="space-y-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="99999"
-                  value={priceRange.max}
-                  onChange={handlePriceChange}
-                  className="w-full"
-                />
+              <h3 className="font-semibold mb-4">Price Range (JOD)</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-gray-600 block mb-1">Min Price:</label>
+                  <input
+                    type="number"
+                    min="0"
+                    name="min"
+                    value={priceRange.min}
+                    onChange={handlePriceChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Minimum price"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-600 block mb-1">Max Price:</label>
+                  <input
+                    type="number"
+                    min="0"
+                    name="max"
+                    value={priceRange.max}
+                    onChange={handlePriceChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Maximum price"
+                  />
+                </div>
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>${priceRange.min}</span>
-                  <span>${priceRange.max}</span>
+                  <span>Current range:</span>
+                  <span>{priceRange.min} - {priceRange.max} JOD</span>
                 </div>
               </div>
 
               <hr className="my-4" />
 
-              <h3 className="font-semibold mb-4">Minimum Order</h3>
+              <h3 className="font-semibold mb-4">Minimum Order Quantity</h3>
               <input
                 type="number"
-                value={minOrderQuantity < 0 ? 0 : minOrderQuantity}
-                onChange={(e) =>
-                  setMinOrderQuantity(
-                    Math.max(0, parseInt(e.target.value) || 0)
-                  )
-                }
+                value={minOrderQuantity < 0 ? '' : minOrderQuantity}
+                onChange={handleMinOrderChange}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="Enter MOQ"
                 min="0"
@@ -256,7 +289,7 @@ const CategoriesPage = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <div className="text-green-600 font-semibold">
-                            ${product.price}
+                            {product.price} JOD
                           </div>
                           <button
                             onClick={() => handleSeeProduct(product.id)}
