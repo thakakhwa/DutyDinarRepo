@@ -117,10 +117,13 @@ const EventDetailsPage = () => {
     <div className="min-h-screen bg-gray-50">
       {bookingSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full relative">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Booking Successful!</h2>
-              <button onClick={closeBookingSuccess} className="p-1">
+              <button 
+                onClick={closeBookingSuccess} 
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
                 <X size={20} />
               </button>
             </div>

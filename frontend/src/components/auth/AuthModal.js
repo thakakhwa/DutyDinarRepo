@@ -21,6 +21,7 @@ const AuthModal = ({
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
     name: "",
     companyName: "",
     userType: initialUserType,
@@ -76,6 +77,13 @@ const AuthModal = ({
       if (isLogin) {
         response = await handleLogin(formData.email, formData.password);
       } else {
+        // Check if passwords match for signup
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match");
+          setIsAnimating(false);
+          return;
+        }
+        
         // Password validation on signup
         const { validatePassword } = await import("../../utils/passwordValidation");
         const { valid, errors } = validatePassword(formData.password);
@@ -85,7 +93,11 @@ const AuthModal = ({
           return;
         }
 
-        response = await signupUser(formData);
+        // Create a new object without confirmPassword for API submission
+        const signupData = { ...formData };
+        delete signupData.confirmPassword;
+        
+        response = await signupUser(signupData);
         if (response.status === "success") {
           response = await handleLogin(formData.email, formData.password);
         }
@@ -139,6 +151,7 @@ const AuthModal = ({
       setFormData({
         email: "",
         password: "",
+        confirmPassword: "",
         name: "",
         companyName: "",
         userType: initialUserType,
@@ -302,20 +315,30 @@ const AuthModal = ({
           <div className="w-full max-w-full sm:max-w-md max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={onClose}
-              className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 z-50"
+              className="absolute right-1 top-1 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 z-50"
               aria-label="Close authentication modal"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
             <div className={`bg-white rounded-lg shadow-xl relative overflow-hidden transition-all duration-300 transform ${isAnimating ? 'scale-95 opacity-80' : 'scale-100 opacity-100'}`}>
               <div className="p-6">
-                <div className="flex justify-center mb-6">
-                  <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-2xl font-bold">DD</span>
-                  </div>
+                <div className="flex justify-center mb-8">
+                  <img 
+                    src="/logo.png" 
+                    alt="Duty Dinar Logo" 
+                    className="h-24 w-auto" 
+                    onError={(e) => {
+                      // Fallback if logo image fails to load
+                      e.target.parentNode.innerHTML = `
+                        <div class="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center">
+                          <span class="text-white text-3xl font-bold">DD</span>
+                        </div>
+                      `;
+                    }}
+                  />
                 </div>
 
                 <h1 id="auth-modal-title" className="text-2xl font-bold text-gray-900 text-center mb-2">
@@ -446,6 +469,27 @@ const AuthModal = ({
                     )}
                   </div>
 
+                  {/* Confirm Password Field for Signup */}
+                  {!isLogin && (
+                    <div className="space-y-2">
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                        <input
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                          value={formData.confirmPassword}
+                          onChange={handleInputChange}
+                          required
+                          autoComplete="new-password"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Forget Password Link */}
                   {isLogin && (
                     <div className="text-right text-sm mt-1">
@@ -509,10 +553,10 @@ const AuthModal = ({
           <div className="w-full max-w-full sm:max-w-md max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={closeForgetPasswordModal}
-              className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 z-50"
+              className="absolute right-1 top-1 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 z-50"
               aria-label="Close forget password modal"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
