@@ -94,12 +94,22 @@ const AuthModal = ({
       if (response.success) {
         onClose();
 
-        // Redirect without full page refresh
-        if (response.userType === "admin") {
-          navigate("/admin");
+        // Check if there is a redirect path stored
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          // Clear the stored path
+          localStorage.removeItem('redirectAfterLogin');
+          // Navigate to the stored path
+          navigate(redirectPath);
         } else {
-          navigate("/dashboard");
+          // Default redirect based on user type
+          if (response.userType === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/dashboard");
+          }
         }
+        
         // Force reload to update user state and UI
         window.location.reload();
       } else {

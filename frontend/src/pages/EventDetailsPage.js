@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Package, Wallet, Mail, X } from 'lucide-react';
 import { getFullImageUrl } from '../utils/imageUtils';
+import { handleAuthError } from '../utils/authUtils';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
@@ -58,6 +59,17 @@ const EventDetailsPage = () => {
       // Handle non-200 responses
       if (!response.ok) {
         console.error(`Error response: ${response.status} ${response.statusText}`);
+        
+        // Check if this is an auth error
+        if (response.status === 401) {
+          const data = await response.json();
+          if (data.auth_required) {
+            handleAuthError({ response: { data } }, navigate);
+            setBookingLoading(false);
+            return;
+          }
+        }
+        
         if (response.status === 500) {
           alert('Server error occurred. Please try again later.');
         } else {

@@ -1,27 +1,36 @@
 // api/wishlistApi.js
 
 import axios from 'axios';
+import { handleAuthError } from '../utils/authUtils';
 
 const API_URL = 'http://localhost/DutyDinarRepo/backend/api';
 
 // Get all wishlist items for the current user
-export const getWishlistItems = async () => {
+export const getWishlistItems = async (navigate) => {
   try {
     const response = await axios.get(`${API_URL}/get_favorites.php`);
     return response.data;
   } catch (error) {
+    if (error.response?.data?.auth_required && navigate) {
+      handleAuthError(error, navigate);
+      return { success: false, auth_required: true };
+    }
     console.error('Error fetching wishlist items:', error);
     throw error;
   }
 };
 
 // Add item to wishlist
-export const addToWishlist = async (type, itemId) => {
+export const addToWishlist = async (type, itemId, navigate) => {
   try {
     const payload = type === 'product' ? { product_id: itemId } : { event_id: itemId };
     const response = await axios.post(`${API_URL}/add_to_wishlist.php`, payload);
     return response.data;
   } catch (error) {
+    if (error.response?.data?.auth_required && navigate) {
+      handleAuthError(error, navigate);
+      return { success: false, auth_required: true };
+    }
     console.error('Error adding item to wishlist:', error);
     throw error;
   }

@@ -120,7 +120,7 @@ session_start();
 function check_authentication() {
     if (!isset($_SESSION['userId'])) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session']);
+        echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session', 'auth_required' => true]);
         exit;
     }
     
@@ -380,221 +380,220 @@ function sendBookingConfirmationEmail($userId, $eventId, $bookingId, $walletUrl,
     }
 }
 
-try {
-    // Mock user ID for testing without login
-    if (!isset($_SESSION['userId'])) {
-        $_SESSION['userId'] = 1; // Testing only
-        $_SESSION['username'] = 'dinarduty@gmail.com'; // Set a default email for testing
-        error_log("Using mock user ID and email for testing");
-    }
-    
-    $user = check_authentication();
-    $user_id = $user['id'];
-    
-    // Log the user's email from session
-    if (isset($user['email'])) {
-        error_log("Authenticated user email: " . $user['email']);
-    } else {
-        error_log("No email found in user session");
-    }
+// Ensure user is authenticated
+$userData = check_authentication();
 
-    $inputData = json_decode(file_get_contents("php://input"), true);
+// Now proceed with booking logic
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        // Get the authenticated user's ID
+        $user_id = $userData['id'];
+        
+        // Log the user's email from session
+        if (isset($userData['email'])) {
+            error_log("Authenticated user email: " . $userData['email']);
+        } else {
+            error_log("No email found in user session");
+        }
 
-    if (empty($inputData['event_id']) || empty($inputData['quantity'])) {
-        echo json_encode(['success' => false, 'message' => 'Event ID and quantity are required.']);
-        exit;
-    }
+        $inputData = json_decode(file_get_contents("php://input"), true);
 
-    $event_id = (int)$inputData['event_id'];
-    $quantity = (int)$inputData['quantity'];
-
-    // Check event availability and price
-    $event_stmt = $conn->prepare("SELECT available_tickets FROM events WHERE id = ?");
-    if (!$event_stmt) {
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare event query.']);
-        exit;
-    }
-    $event_stmt->bind_param("i", $event_id);
-    $event_stmt->execute();
-    $event_result = $event_stmt->get_result();
-    if ($event_result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'Event not found.']);
-        exit;
-    }
-    $event = $event_result->fetch_assoc();
-    $available_tickets = (int)$event['available_tickets'];
-    $event_stmt->close();
-
-    if ($quantity > $available_tickets) {
-        echo json_encode(['success' => false, 'message' => 'Not enough tickets available.']);
-        exit;
-    }
-
-    // Start transaction
-    $conn->begin_transaction();
-
-    // Insert into orders table
-    $order_stmt = $conn->prepare("INSERT INTO orders (buyer_id, order_type, total_amount, status) VALUES (?, 'event', ?, 'pending')");
-    if (!$order_stmt) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare order insert.']);
-        exit;
-    }
-    $total_amount = 0;
-    $order_stmt->bind_param("id", $user_id, $total_amount);
-    if (!$order_stmt->execute()) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to create order.']);
-        exit;
-    }
-    $order_id = $conn->insert_id;
-    $order_stmt->close();
-
-    // Insert into order_items table
-    $item_stmt = $conn->prepare("INSERT INTO order_items (order_id, event_id, quantity, price) VALUES (?, ?, ?, ?)");
-    if (!$item_stmt) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare order item insert.']);
-        exit;
-    }
-    $price = 0;
-    $item_stmt->bind_param("iiid", $order_id, $event_id, $quantity, $price);
-    if (!$item_stmt->execute()) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to add order item.']);
-        exit;
-    }
-    $item_stmt->close();
-
-    // Update available tickets
-    $update_stmt = $conn->prepare("UPDATE events SET available_tickets = available_tickets - ? WHERE id = ?");
-    if (!$update_stmt) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare tickets update.']);
-        exit;
-    }
-    $update_stmt->bind_param("ii", $quantity, $event_id);
-    if (!$update_stmt->execute()) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to update tickets.']);
-        exit;
-    }
-    $update_stmt->close();
-
-    // Check if user already booked this event
-    $check_stmt = $conn->prepare("SELECT quantity FROM event_bookings WHERE user_id = ? AND event_id = ?");
-    if (!$check_stmt) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare booking check.']);
-        exit;
-    }
-    $check_stmt->bind_param("ii", $user_id, $event_id);
-    $check_stmt->execute();
-    $check_result = $check_stmt->get_result();
-    if ($check_result && $check_result->num_rows > 0) {
-        $check_row = $check_result->fetch_assoc();
-        if ((int)$check_row['quantity'] >= 1) {
-            $conn->rollback();
-            echo json_encode(['success' => false, 'message' => 'You have already booked a ticket for this event.']);
+        if (empty($inputData['event_id']) || empty($inputData['quantity'])) {
+            echo json_encode(['success' => false, 'message' => 'Event ID and quantity are required.']);
             exit;
         }
-    }
-    $check_stmt->close();
 
-    // Insert booking record with quantity 1
-    $booking_stmt = $conn->prepare("INSERT INTO event_bookings (user_id, event_id, quantity) VALUES (?, ?, 1)");
-    if (!$booking_stmt) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare event booking insert.']);
-        exit;
-    }
-    $booking_stmt->bind_param("ii", $user_id, $event_id);
-    if (!$booking_stmt->execute()) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => 'Failed to insert event booking.']);
-        exit;
-    }
-    $booking_id = $conn->insert_id;
-    $booking_stmt->close();
+        $event_id = (int)$inputData['event_id'];
+        $quantity = (int)$inputData['quantity'];
 
-    $conn->commit();
-    
-    // Complete the booking with optional Google Wallet pass and email
-    $response = [
-        'success' => true, 
-        'message' => 'Event booked successfully.', 
-        'order_id' => $order_id,
-        'booking_id' => $booking_id
-    ];
-    
-    // Always generate a Google Wallet pass
-    error_log("Generating Google Wallet pass for booking ID: $booking_id");
-    $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
-    
-    if ($wallet_result['success']) {
-        $response['wallet_url'] = $wallet_result['wallet_url'];
-        error_log("Successfully generated wallet URL: " . $wallet_result['wallet_url']);
-    } else {
-        error_log("Failed to generate wallet pass. Using fallback URL.");
-        $wallet_result['wallet_url'] = 'https://wallet.google/save/eventticket/?et=booking_' . $booking_id . '_' . time();
-        $response['wallet_url'] = $wallet_result['wallet_url'];
-    }
-    
-    // Always try to send the confirmation email regardless of wallet pass
-    try {
-        // Get the user's email directly from the session if available
-        $userEmail = isset($_SESSION['username']) ? $_SESSION['username'] : null;
-        
-        // Log the email we're attempting to use
-        if ($userEmail) {
-            error_log("Using session email for confirmation: $userEmail");
-        } else {
-            error_log("No session email found, will try to get from database");
+        // Check event availability and price
+        $event_stmt = $conn->prepare("SELECT available_tickets FROM events WHERE id = ?");
+        if (!$event_stmt) {
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare event query.']);
+            exit;
         }
-        
-        // Send the confirmation email with order ID included
-        $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $response['wallet_url'], $order_id);
-        
-        // Log email sending result for debugging
-        error_log("Email sending result: " . json_encode($email_result));
-        
-        // Add email status to the response
-        if (!empty($email_result['success'])) {
-            $response['email_sent'] = true;
-            $response['email_status'] = 'sent';
-        } else {
-            $response['email_sent'] = false;
-            $response['email_status'] = 'failed';
-            if (!empty($email_result['error'])) {
-                error_log("Email error: " . $email_result['error']);
-                $response['email_error'] = $email_result['error'];
+        $event_stmt->bind_param("i", $event_id);
+        $event_stmt->execute();
+        $event_result = $event_stmt->get_result();
+        if ($event_result->num_rows === 0) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            exit;
+        }
+        $event = $event_result->fetch_assoc();
+        $available_tickets = (int)$event['available_tickets'];
+        $event_stmt->close();
+
+        if ($quantity > $available_tickets) {
+            echo json_encode(['success' => false, 'message' => 'Not enough tickets available.']);
+            exit;
+        }
+
+        // Start transaction
+        $conn->begin_transaction();
+
+        // Insert into orders table
+        $order_stmt = $conn->prepare("INSERT INTO orders (buyer_id, order_type, total_amount, status) VALUES (?, 'event', ?, 'pending')");
+        if (!$order_stmt) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare order insert.']);
+            exit;
+        }
+        $total_amount = 0;
+        $order_stmt->bind_param("id", $user_id, $total_amount);
+        if (!$order_stmt->execute()) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to create order.']);
+            exit;
+        }
+        $order_id = $conn->insert_id;
+        $order_stmt->close();
+
+        // Insert into order_items table
+        $item_stmt = $conn->prepare("INSERT INTO order_items (order_id, event_id, quantity, price) VALUES (?, ?, ?, ?)");
+        if (!$item_stmt) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare order item insert.']);
+            exit;
+        }
+        $price = 0;
+        $item_stmt->bind_param("iiid", $order_id, $event_id, $quantity, $price);
+        if (!$item_stmt->execute()) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to add order item.']);
+            exit;
+        }
+        $item_stmt->close();
+
+        // Update available tickets
+        $update_stmt = $conn->prepare("UPDATE events SET available_tickets = available_tickets - ? WHERE id = ?");
+        if (!$update_stmt) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare tickets update.']);
+            exit;
+        }
+        $update_stmt->bind_param("ii", $quantity, $event_id);
+        if (!$update_stmt->execute()) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to update tickets.']);
+            exit;
+        }
+        $update_stmt->close();
+
+        // Check if user already booked this event
+        $check_stmt = $conn->prepare("SELECT quantity FROM event_bookings WHERE user_id = ? AND event_id = ?");
+        if (!$check_stmt) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare booking check.']);
+            exit;
+        }
+        $check_stmt->bind_param("ii", $user_id, $event_id);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        if ($check_result && $check_result->num_rows > 0) {
+            $check_row = $check_result->fetch_assoc();
+            if ((int)$check_row['quantity'] >= 1) {
+                $conn->rollback();
+                echo json_encode(['success' => false, 'message' => 'You have already booked a ticket for this event.']);
+                exit;
             }
         }
-    } catch (Exception $emailError) {
-        error_log("Email sending failed: " . $emailError->getMessage());
-        $response['email_sent'] = false;
-        $response['email_status'] = 'exception';
-        $response['email_error'] = 'Failed to send email: ' . $emailError->getMessage();
-    }
-    
-    // Send the final response
-    echo json_encode($response);
+        $check_stmt->close();
 
-} catch (Exception $e) {
-    // Rollback transaction if it's active
-    if (isset($conn) && $conn->connect_errno === 0) {
-        try {
+        // Insert booking record with quantity 1
+        $booking_stmt = $conn->prepare("INSERT INTO event_bookings (user_id, event_id, quantity) VALUES (?, ?, 1)");
+        if (!$booking_stmt) {
             $conn->rollback();
-        } catch (Exception $rollbackError) {
-            error_log("Rollback failed: " . $rollbackError->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Failed to prepare event booking insert.']);
+            exit;
         }
+        $booking_stmt->bind_param("ii", $user_id, $event_id);
+        if (!$booking_stmt->execute()) {
+            $conn->rollback();
+            echo json_encode(['success' => false, 'message' => 'Failed to insert event booking.']);
+            exit;
+        }
+        $booking_id = $conn->insert_id;
+        $booking_stmt->close();
+
+        $conn->commit();
+        
+        // Complete the booking with optional Google Wallet pass and email
+        $response = [
+            'success' => true, 
+            'message' => 'Event booked successfully.', 
+            'order_id' => $order_id,
+            'booking_id' => $booking_id
+        ];
+        
+        // Always generate a Google Wallet pass
+        error_log("Generating Google Wallet pass for booking ID: $booking_id");
+        $wallet_result = createGoogleWalletPass($event_id, $user_id, $booking_id);
+        
+        if ($wallet_result['success']) {
+            $response['wallet_url'] = $wallet_result['wallet_url'];
+            error_log("Successfully generated wallet URL: " . $wallet_result['wallet_url']);
+        } else {
+            error_log("Failed to generate wallet pass. Using fallback URL.");
+            $wallet_result['wallet_url'] = 'https://wallet.google/save/eventticket/?et=booking_' . $booking_id . '_' . time();
+            $response['wallet_url'] = $wallet_result['wallet_url'];
+        }
+        
+        // Always try to send the confirmation email regardless of wallet pass
+        try {
+            // Get the user's email directly from the session if available
+            $userEmail = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+            
+            // Log the email we're attempting to use
+            if ($userEmail) {
+                error_log("Using session email for confirmation: $userEmail");
+            } else {
+                error_log("No session email found, will try to get from database");
+            }
+            
+            // Send the confirmation email with order ID included
+            $email_result = sendBookingConfirmationEmail($user_id, $event_id, $booking_id, $response['wallet_url'], $order_id);
+            
+            // Log email sending result for debugging
+            error_log("Email sending result: " . json_encode($email_result));
+            
+            // Add email status to the response
+            if (!empty($email_result['success'])) {
+                $response['email_sent'] = true;
+                $response['email_status'] = 'sent';
+            } else {
+                $response['email_sent'] = false;
+                $response['email_status'] = 'failed';
+                if (!empty($email_result['error'])) {
+                    error_log("Email error: " . $email_result['error']);
+                    $response['email_error'] = $email_result['error'];
+                }
+            }
+        } catch (Exception $emailError) {
+            error_log("Email sending failed: " . $emailError->getMessage());
+            $response['email_sent'] = false;
+            $response['email_status'] = 'exception';
+            $response['email_error'] = 'Failed to send email: ' . $emailError->getMessage();
+        }
+        
+        // Send the final response
+        echo json_encode($response);
+
+    } catch (Exception $e) {
+        // Rollback transaction if it's active
+        if (isset($conn) && $conn->connect_errno === 0) {
+            try {
+                $conn->rollback();
+            } catch (Exception $rollbackError) {
+                error_log("Rollback failed: " . $rollbackError->getMessage());
+            }
+        }
+        
+        error_log("Book Event API error: " . $e->getMessage());
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Internal server error.',
+            'error' => $e->getMessage()
+        ]);
     }
-    
-    error_log("Book Event API error: " . $e->getMessage());
-    echo json_encode([
-        'success' => false, 
-        'message' => 'Internal server error.',
-        'error' => $e->getMessage()
-    ]);
 }
 ?>

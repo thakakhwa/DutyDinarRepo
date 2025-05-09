@@ -2,110 +2,156 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/add_cart_error.log');
+ini_set('error_log', __DIR__ . '/cart_errors.log');
 
+// CORS headers
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
+// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
-require_once 'config.php'; // Database connection
+// Include database connection
+require_once '../controller/connection.php';
 
+// Start session
 session_start();
 
-function check_authentication() {
-    if (!isset($_SESSION['userId'])) {
-        http_response_code(401);
-        print_response(false, 'Unauthorized: No active session');
+// Simple function to output JSON response
+function output_json($success, $message, $auth_required = false, $data = null) {
+    $response = [
+        'success' => $success,
+        'message' => $message,
+        'auth_required' => $auth_required
+    ];
+    
+    if ($data !== null) {
+        $response['data'] = $data;
     }
-    return ['id' => $_SESSION['userId']];
+    
+    echo json_encode($response);
+    exit;
 }
 
+// Check if user is logged in
+if (!isset($_SESSION['userId']) || empty($_SESSION['userId'])) {
+    http_response_code(401);
+    output_json(false, 'You need to be logged in to add items to cart', true);
+}
+
+// Get user ID
+$user_id = (int)$_SESSION['userId'];
+
 try {
-    $user = check_authentication();
-    $user_id = $user['id'];
-
-    $inputData = json_decode(file_get_contents("php://input"), true);
-
-    if (empty($inputData['product_id']) || !isset($inputData['quantity'])) {
-        print_response(false, 'Product ID and quantity are required for adding to cart.');
+    // Parse JSON input
+    $json_data = file_get_contents('php://input');
+    $input_data = json_decode($json_data, true);
+    
+    // Validate input
+    if (!isset($input_data['product_id']) || !isset($input_data['quantity'])) {
+        output_json(false, 'Product ID and quantity are required');
     }
-    $product_id = $inputData['product_id'];
-    $quantity = $inputData['quantity'];
-
-    // Check MOQ from products table
-    $moq_stmt = $conn->prepare("SELECT minOrderQuantity FROM products WHERE id = ?");
-    if (!$moq_stmt) {
-        print_response(false, 'Failed to prepare MOQ query.');
+    
+    // Sanitize and validate input
+    $product_id = (int)$input_data['product_id'];
+    $quantity = (int)$input_data['quantity'];
+    
+    if ($product_id <= 0) {
+        output_json(false, 'Invalid product ID');
     }
-    $moq_stmt->bind_param("i", $product_id);
-    $moq_stmt->execute();
-    $moq_result = $moq_stmt->get_result();
-    if ($moq_result->num_rows === 0) {
-        print_response(false, 'Product not found.');
+    
+    if ($quantity <= 0) {
+        output_json(false, 'Quantity must be greater than zero');
     }
-    $moq_row = $moq_result->fetch_assoc();
-    $moq = (int)$moq_row['minOrderQuantity'];
-    $moq_stmt->close();
-
-    if ($quantity < $moq) {
-        // Automatically set quantity to MOQ if less
-        $quantity = $moq;
+    
+    // Check if product exists and get minimum order quantity
+    $product_query = "SELECT minOrderQuantity FROM products WHERE id = ?";
+    $stmt = $conn->prepare($product_query);
+    
+    if (!$stmt) {
+        output_json(false, 'Database error: ' . $conn->error);
     }
-
-    // Check if item already in cart
-    $check_stmt = $conn->prepare("SELECT quantity FROM cart WHERE buyer_id = ? AND product_id = ?");
-    if (!$check_stmt) {
-        print_response(false, 'Failed to prepare check cart query.');
+    
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows === 0) {
+        output_json(false, 'Product not found');
     }
-    $check_stmt->bind_param("ii", $user_id, $product_id);
-    $check_stmt->execute();
-    $check_result = $check_stmt->get_result();
-
-    if ($check_result->num_rows > 0) {
-        // Update quantity
-        $existing = $check_result->fetch_assoc();
-        $new_quantity = $existing['quantity'] + $quantity;
-    if ($new_quantity < $moq) {
-        print_response(false, "Total quantity must be at least the minimum order quantity ($moq).");
+    
+    $product_data = $result->fetch_assoc();
+    $min_order_quantity = (int)$product_data['minOrderQuantity'];
+    $stmt->close();
+    
+    // Adjust quantity if it's less than minimum order quantity
+    if ($min_order_quantity > 0 && $quantity < $min_order_quantity) {
+        $quantity = $min_order_quantity;
     }
-        $update_stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE buyer_id = ? AND product_id = ?");
-        if (!$update_stmt) {
-            print_response(false, 'Failed to prepare update cart query.');
+    
+    // Check if product is already in cart
+    $check_query = "SELECT quantity FROM cart WHERE buyer_id = ? AND product_id = ?";
+    $stmt = $conn->prepare($check_query);
+    
+    if (!$stmt) {
+        output_json(false, 'Database error: ' . $conn->error);
+    }
+    
+    $stmt->bind_param("ii", $user_id, $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    
+    // If product already in cart, update quantity
+    if ($result->num_rows > 0) {
+        $cart_item = $result->fetch_assoc();
+        $new_quantity = $cart_item['quantity'] + $quantity;
+        
+        $update_query = "UPDATE cart SET quantity = ? WHERE buyer_id = ? AND product_id = ?";
+        $stmt = $conn->prepare($update_query);
+        
+        if (!$stmt) {
+            output_json(false, 'Database error: ' . $conn->error);
         }
-        $update_stmt->bind_param("iii", $new_quantity, $user_id, $product_id);
-        if ($update_stmt->execute()) {
-            print_response(true, 'Cart updated successfully.');
+        
+        $stmt->bind_param("iii", $new_quantity, $user_id, $product_id);
+        
+        if ($stmt->execute()) {
+            output_json(true, 'Cart updated successfully');
         } else {
-            error_log("Add Cart Update Error: " . $update_stmt->error);
-            print_response(false, 'Failed to update cart.');
+            output_json(false, 'Failed to update cart: ' . $stmt->error);
         }
-        $update_stmt->close();
+        
+        $stmt->close();
     } else {
-        // Insert new item
-        $insert_stmt = $conn->prepare("INSERT INTO cart (buyer_id, product_id, quantity) VALUES (?, ?, ?)");
-        if (!$insert_stmt) {
-            print_response(false, 'Failed to prepare insert cart query.');
+        // If product not in cart, add it
+        $insert_query = "INSERT INTO cart (buyer_id, product_id, quantity) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($insert_query);
+        
+        if (!$stmt) {
+            output_json(false, 'Database error: ' . $conn->error);
         }
-        $insert_stmt->bind_param("iii", $user_id, $product_id, $quantity);
-        if ($insert_stmt->execute()) {
-            print_response(true, 'Product added to cart successfully.');
+        
+        $stmt->bind_param("iii", $user_id, $product_id, $quantity);
+        
+        if ($stmt->execute()) {
+            output_json(true, 'Product added to cart successfully');
         } else {
-            error_log("Add Cart Insert Error: " . $insert_stmt->error);
-            print_response(false, 'Failed to add product to cart.');
+            output_json(false, 'Failed to add product to cart: ' . $stmt->error);
         }
-        $insert_stmt->close();
+        
+        $stmt->close();
     }
-    $check_stmt->close();
-
+    
 } catch (Exception $e) {
-    error_log("Add Cart API error: " . $e->getMessage());
-    print_response(false, 'Internal server error.');
+    // Log the error
+    error_log('Add to cart error: ' . $e->getMessage());
+    output_json(false, 'An unexpected error occurred. Please try again later.');
 }
 ?>

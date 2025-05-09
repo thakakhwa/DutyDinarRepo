@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 if (!isset($_SESSION['userId'])) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.']);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized: Please login.', 'auth_required' => true]);
     exit;
 }
 

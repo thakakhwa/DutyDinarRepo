@@ -3,6 +3,7 @@ import { ChevronLeft, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCart } from '../api/get_cart';
 import { getFullImageUrl } from '../utils/imageUtils';
+import { handleAuthError } from '../utils/authUtils';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -47,6 +48,15 @@ const Cart = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product_id: productId }),
       });
+      
+      if (!response.ok && response.status === 401) {
+        const data = await response.json();
+        if (data.auth_required) {
+          handleAuthError({ response: { data } }, navigate);
+          return;
+        }
+      }
+      
       const data = await response.json();
       if (data.success) {
         setCartItems((prev) => prev.filter((item) => item.product_id !== productId));
@@ -71,6 +81,15 @@ const Cart = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product_id: productId, quantity: newQuantity }),
       });
+      
+      if (!response.ok && response.status === 401) {
+        const data = await response.json();
+        if (data.auth_required) {
+          handleAuthError({ response: { data } }, navigate);
+          return;
+        }
+      }
+      
       const data = await response.json();
       if (data.success) {
         setCartItems((prev) =>

@@ -11,6 +11,7 @@ import { getFullImageUrl } from "../utils/imageUtils";
 import AuthModal from "../components/auth/AuthModal";
 import ReviewList from "../components/products/ReviewList";
 import ProductReviews from "../components/products/ProductReviews";
+import { handleAuthError } from '../utils/authUtils';
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -86,7 +87,11 @@ const ProductPage = () => {
           product_id: productId,
           quantity: 1,
         },
-        { withCredentials: true }
+        { 
+          withCredentials: true,
+          // Add timeout to prevent long-hanging requests
+          timeout: 10000 
+        }
       );
 
       console.log("Add to cart response:", response.data);
@@ -95,11 +100,31 @@ const ProductPage = () => {
         alert("Product added to cart!");
         navigate('/cart');
       } else {
-        alert("Failed to add to cart: " + (response.data.message || ""));
+        alert("Failed to add to cart: " + (response.data.message || "Unknown error"));
       }
     } catch (error) {
       console.error("Add to cart error:", error);
-      alert("Error adding to cart. Please try again.");
+      
+      // Handle authentication error
+      if (error.response && error.response.status === 401 && error.response.data?.auth_required) {
+        // User is not authenticated, redirect to login
+        handleAuthError(error, navigate);
+        return;
+      }
+      
+      // Handle other types of errors
+      if (error.code === 'ECONNABORTED') {
+        alert("Request timed out. Please try again.");
+      } else if (error.response) {
+        // The server responded with an error status (e.g., 500)
+        alert("Server error. Please try again later.");
+      } else if (error.request) {
+        // The request was made but no response was received
+        alert("No response from server. Please check your connection.");
+      } else {
+        // Something else happened while setting up the request
+        alert("Error adding to cart. Please try again.");
+      }
     }
   };
 
@@ -206,7 +231,14 @@ const ProductPage = () => {
               </div>
 
               <div className="flex gap-4 items-center mb-6">
-                {(user && user.userType === "buyer") && (
+                {(!user) ? (
+                  <button
+                    onClick={() => handleAuthError({ response: { data: { auth_required: true } } }, navigate)}
+                    className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  >
+                    Login to Add to Cart
+                  </button>
+                ) : (user.userType === "buyer") && (
                   <button
                     onClick={handleAddToCart}
                     className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
@@ -219,7 +251,7 @@ const ProductPage = () => {
                   if (user) {
                     setShowModal(true);
                   } else {
-                    setShowAuthModal(true);
+                    handleAuthError({ response: { data: { auth_required: true } } }, navigate);
                   }
                 }}
                 className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"

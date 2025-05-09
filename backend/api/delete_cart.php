@@ -22,7 +22,7 @@ session_start();
 function check_authentication() {
     if (!isset($_SESSION['userId'])) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session']);
+        echo json_encode(['success' => false, 'message' => 'Unauthorized: No active session', 'auth_required' => true]);
         exit;
     }
     return ['id' => $_SESSION['userId']];
