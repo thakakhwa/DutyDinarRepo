@@ -39,12 +39,20 @@ function check_authentication() {
 function save_base64_image($base64_image, $upload_dir) {
     try {
         // Check if it's already a path
-        if (strpos($base64_image, 'uploads/') !== false) {
+        if (strpos($base64_image, 'uploads/') !== false || strpos($base64_image, '/uploads/') !== false) {
+            // If it contains /uploads/ with a leading slash, normalize it
+            if (strpos($base64_image, '/uploads/') !== false) {
+                return [true, str_replace('/uploads/', 'uploads/', $base64_image)];
+            }
             return [true, $base64_image];
         }
         
         // Extract the image type and base64 data
         if (preg_match('/^data:image\/(\w+);base64,/', $base64_image, $type)) {
+            // Log the length of the base64 string
+            $base64_length = strlen($base64_image);
+            error_log("Processing base64 image, length: " . $base64_length);
+            
             $image_data = substr($base64_image, strpos($base64_image, ',') + 1);
             $image_type = strtolower($type[1]); // jpg, png, gif, etc.
 
@@ -68,8 +76,10 @@ function save_base64_image($base64_image, $upload_dir) {
                 error_log("Failed to save image file at path: " . $file_path);
                 return [false, 'Failed to save image file'];
             }
-
-            return [true, 'uploads/' . $file_name];
+            
+            $result_path = 'uploads/' . $file_name;
+            error_log("Image saved successfully as: " . $result_path);
+            return [true, $result_path];
         } else {
             error_log("Invalid image format: " . substr($base64_image, 0, 50) . "...");
             return [false, 'Invalid image format'];
@@ -120,10 +130,6 @@ try {
         print_response(false, 'Product stock is required');
     }
     
-    if (empty($inputData['image_url'])) {
-        print_response(false, 'Product image is required');
-    }
-    
     if (!isset($inputData['categories']) || !is_array($inputData['categories']) || count($inputData['categories']) === 0) {
         print_response(false, 'At least one category is required');
     }
@@ -142,8 +148,24 @@ try {
     $price = floatval($inputData['price']);
     $stock = intval($inputData['stock']);
     $minOrderQuantity = isset($inputData['minOrderQuantity']) ? intval($inputData['minOrderQuantity']) : 1;
-    $image_url = $inputData['image_url'];
     $category_id = intval($inputData['categories'][0]);
+
+    // First check if the product exists and get the existing image URL
+    $check_stmt = $conn->prepare("SELECT image_url FROM products WHERE id = ?");
+    $check_stmt->bind_param("i", $id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+    $existing_product = $check_result->fetch_assoc();
+    $check_stmt->close();
+    
+    if (!$existing_product) {
+        error_log("Product not found: " . $id);
+        print_response(false, 'Product not found');
+    }
+    
+    // ALWAYS use the existing image URL from the database
+    $image_url = $existing_product['image_url'];
+    error_log("Using existing image URL from database: " . $image_url);
 
     // Get category name from category ID
     $category_name = '';
@@ -163,44 +185,21 @@ try {
         print_response(false, 'Invalid category selected.');
     }
 
-    // Process image if it's a base64 string
-    $upload_dir = dirname(__DIR__) . '/uploads';
-
-    // Ensure upload directory exists
-    if (!is_dir($upload_dir)) {
-        if (!mkdir($upload_dir, 0755, true)) {
-            error_log("Failed to create image upload directory: " . $upload_dir);
-            print_response(false, 'Failed to create image upload directory.');
-        }
-    }
-
-    // Check if the image URL is a base64 string or a file path
-    if (strpos($image_url, 'data:image/') === 0) {
-        // It's a base64 image, save it
-        list($success, $result) = save_base64_image($image_url, $upload_dir);
-        if (!$success) {
-            error_log("Image upload error: " . $result);
-            print_response(false, 'Image upload error: ' . $result);
-        } else {
-            $image_url = $result;
-        }
-    } else if (strpos($image_url, 'uploads/') === false) {
-        // Not a base64 image and not from uploads directory
-        error_log("Invalid image URL format: " . $image_url);
-        print_response(false, 'Invalid image URL format');
-    }
-
     // Begin transaction
     $conn->begin_transaction();
 
     try {
-        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, minOrderQuantity = ?, image_url = ?, category = ?, updated_at = NOW() WHERE id = ?");
+        // Debug log the values being used for update
+        error_log("Updating product with ID: " . $id);
+        error_log("Image URL to be saved: " . $image_url);
+        
+        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, minOrderQuantity = ?, category = ?, updated_at = NOW() WHERE id = ?");
         if (!$stmt) {
             error_log("Failed to prepare update statement: " . $conn->error);
             throw new Exception("Failed to prepare update statement: " . $conn->error);
         }
 
-        $stmt->bind_param("ssdiiisi", $name, $description, $price, $stock, $minOrderQuantity, $image_url, $category_name, $id);
+        $stmt->bind_param("ssdiisi", $name, $description, $price, $stock, $minOrderQuantity, $category_name, $id);
 
         if (!$stmt->execute()) {
             error_log("Failed to execute update statement: " . $stmt->error);
@@ -215,6 +214,16 @@ try {
             error_log("No rows affected. Product ID may not exist: " . $id);
             print_response(false, 'No product updated. The product may not exist or no changes were made.');
         } else {
+            // Verify the update by fetching the product again
+            $verify_stmt = $conn->prepare("SELECT image_url FROM products WHERE id = ?");
+            $verify_stmt->bind_param("i", $id);
+            $verify_stmt->execute();
+            $verify_result = $verify_stmt->get_result();
+            $updated_product = $verify_result->fetch_assoc();
+            $verify_stmt->close();
+            
+            error_log("After update, image_url in database: " . ($updated_product['image_url'] ?? 'null'));
+            
             $conn->commit();
             error_log("Product updated successfully. ID: " . $id);
             print_response(true, 'Product updated successfully.');

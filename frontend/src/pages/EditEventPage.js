@@ -20,6 +20,7 @@ const EditEventPage = () => {
   const [previewImage, setPreviewImage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [originalImageUrl, setOriginalImageUrl] = useState('');
 
   useEffect(() => {
     // Check authentication
@@ -37,6 +38,9 @@ const EditEventPage = () => {
 
     const event = location.state.event;
     console.log("Event data from location state:", event);
+    
+    // Store the original image URL, but only if it's valid
+    setOriginalImageUrl(event.image_url && event.image_url !== '0' ? event.image_url : '');
 
     try {
       // Format date for input field (YYYY-MM-DD)
@@ -54,11 +58,11 @@ const EditEventPage = () => {
         event_date: formattedDate,
         location: event.location || '',
         available_tickets: event.available_tickets || '',
-        image_url: event.image_url || ''
+        image_url: event.image_url && event.image_url !== '0' ? event.image_url : ''
       });
       
-      // Set preview image
-      if (event.image_url) {
+      // Set preview image only if image_url is valid
+      if (event.image_url && event.image_url !== '0') {
         setPreviewImage(event.image_url.startsWith('data:') 
           ? event.image_url 
           : `${process.env.REACT_APP_API_URL || ''}/${event.image_url}`);
@@ -76,18 +80,6 @@ const EditEventPage = () => {
     setEventData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-        setEventData(prev => ({ ...prev, image_url: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -95,8 +87,8 @@ const EditEventPage = () => {
 
     try {
       // Validate form
-      if (!eventData.name || !eventData.description || !eventData.event_date || !eventData.location || !eventData.available_tickets || !eventData.image_url) {
-        setErrorMessage('All fields are required');
+      if (!eventData.name || !eventData.description || !eventData.event_date || !eventData.location || !eventData.available_tickets) {
+        setErrorMessage('All fields except image are required');
         setLoading(false);
         return;
       }
@@ -117,13 +109,28 @@ const EditEventPage = () => {
         return;
       }
 
+      // Debug log to check the originalImageUrl value
+      console.log("Original Image URL before submit:", originalImageUrl);
+      console.log("Type of originalImageUrl:", typeof originalImageUrl);
+      
       // Prepare the data for submission
       const dataToSubmit = {
         ...eventData,
-        available_tickets: availableTickets
+        available_tickets: availableTickets,
+        // Always use the original image URL
+        image_url: originalImageUrl
       };
 
-      console.log("Submitting event data:", dataToSubmit);
+      // Ensure image_url is not empty or '0'
+      if (!dataToSubmit.image_url || dataToSubmit.image_url === '0') {
+        console.error("Warning: image_url is empty or '0'. Using original URL:", originalImageUrl);
+        // Force the original URL if it exists
+        if (originalImageUrl && originalImageUrl !== '0') {
+          dataToSubmit.image_url = originalImageUrl;
+        }
+      }
+
+      console.log("Submitting event data with image_url:", dataToSubmit.image_url);
       const result = await updateEvent(dataToSubmit);
       console.log("Update result:", result);
       
@@ -219,15 +226,10 @@ const EditEventPage = () => {
           />
         </div>
         
-        <div>
-          <label className="block mb-1">Event Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full p-2 border rounded"
-          />
-          {previewImage && (
+        {/* Display event image if available, but don't allow changing it */}
+        {previewImage && (
+          <div>
+            <label className="block mb-1">Event Image</label>
             <div className="mt-2">
               <img 
                 src={previewImage} 
@@ -235,8 +237,11 @@ const EditEventPage = () => {
                 className="h-40 object-contain border rounded"
               />
             </div>
-          )}
-        </div>
+            <p className="text-sm text-gray-500 mt-1">
+              Image cannot be changed in edit mode. Please create a new event to use a different image.
+            </p>
+          </div>
+        )}
         
         <div className="flex space-x-4">
           <button

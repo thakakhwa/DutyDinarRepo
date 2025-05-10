@@ -39,12 +39,20 @@ function check_authentication() {
 function save_base64_image($base64_image, $upload_dir) {
     try {
         // Check if it's already a path
-        if (strpos($base64_image, 'uploads/') !== false) {
+        if (strpos($base64_image, 'uploads/') !== false || strpos($base64_image, '/uploads/') !== false) {
+            // If it contains /uploads/ with a leading slash, normalize it
+            if (strpos($base64_image, '/uploads/') !== false) {
+                return [true, str_replace('/uploads/', 'uploads/', $base64_image)];
+            }
             return [true, $base64_image];
         }
         
         // Extract the image type and base64 data
         if (preg_match('/^data:image\/(\w+);base64,/', $base64_image, $type)) {
+            // Log the length of the base64 string
+            $base64_length = strlen($base64_image);
+            error_log("Processing base64 image, length: " . $base64_length);
+            
             $image_data = substr($base64_image, strpos($base64_image, ',') + 1);
             $image_type = strtolower($type[1]); // jpg, png, gif, etc.
 
@@ -68,8 +76,10 @@ function save_base64_image($base64_image, $upload_dir) {
                 error_log("Failed to save image file at path: " . $file_path);
                 return [false, 'Failed to save image file'];
             }
-
-            return [true, 'uploads/' . $file_name];
+            
+            $result_path = 'uploads/' . $file_name;
+            error_log("Image saved successfully as: " . $result_path);
+            return [true, $result_path];
         } else {
             error_log("Invalid image format: " . substr($base64_image, 0, 50) . "...");
             return [false, 'Invalid image format'];
@@ -130,15 +140,14 @@ try {
         print_response(false, 'Available tickets is required');
     }
     
-    if (empty($inputData['image_url'])) {
-        print_response(false, 'Event image is required');
-    }
-
+    // Image is optional now
+    $image_url = isset($inputData['image_url']) ? $inputData['image_url'] : '';
+    
     // Get the event ID
     $id = intval($inputData['id']);
 
-    // Check if the event exists and belongs to the user
-    $stmt = $conn->prepare("SELECT seller_id FROM events WHERE id = ?");
+    // First check if the event exists and belongs to the user
+    $stmt = $conn->prepare("SELECT seller_id, image_url FROM events WHERE id = ?");
     if (!$stmt) {
         error_log("Failed to prepare query: " . $conn->error);
         print_response(false, 'Failed to prepare query: ' . $conn->error);
@@ -160,13 +169,16 @@ try {
         print_response(false, 'Unauthorized: You can only update your own events');
     }
 
+    // ALWAYS use the existing image URL from the database
+    $image_url = $event['image_url'];
+    error_log("Using existing image URL from database: " . $image_url);
+
     // Prepare the event data from the input
     $name = $inputData['name'];
     $description = $inputData['description'];
     $event_date = $inputData['event_date'];
     $location = $inputData['location'];
     $available_tickets = intval($inputData['available_tickets']);
-    $image_url = $inputData['image_url'];
 
     $upload_dir = dirname(__DIR__) . '/uploads';
 
@@ -179,7 +191,10 @@ try {
     }
 
     // Check if the image URL is a base64 string or a file path
-    if (strpos($image_url, 'data:image/') === 0) {
+    if (empty($image_url) || $image_url === '0') {
+        // No image or invalid image, use a default or empty value
+        $image_url = ''; // or set to a default image path if you have one
+    } else if (strpos($image_url, 'data:image/') === 0) {
         // It's a base64 image, save it
         list($success, $result) = save_base64_image($image_url, $upload_dir);
         if (!$success) {
@@ -188,7 +203,7 @@ try {
         } else {
             $image_url = $result;
         }
-    } else if (strpos($image_url, 'uploads/') === false) {
+    } else if (strpos($image_url, 'uploads/') === false && strpos($image_url, '/uploads/') === false) {
         // Not a base64 image and not from uploads directory
         error_log("Invalid image URL format: " . $image_url);
         print_response(false, 'Invalid image URL format');
@@ -198,14 +213,18 @@ try {
     $conn->begin_transaction();
 
     try {
+        // Debug log the values being used for update
+        error_log("Updating event with ID: " . $id);
+        error_log("Image URL to be saved: " . $image_url);
+        
         // Update event
-        $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, event_date = ?, location = ?, available_tickets = ?, image_url = ?, updated_at = NOW() WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, event_date = ?, location = ?, available_tickets = ?, updated_at = NOW() WHERE id = ?");
         if (!$stmt) {
             error_log("Failed to prepare SQL statement: " . $conn->error);
             throw new Exception("Failed to prepare SQL statement: " . $conn->error);
         }
 
-        $stmt->bind_param("ssssisi", $name, $description, $event_date, $location, $available_tickets, $image_url, $id);
+        $stmt->bind_param("ssssii", $name, $description, $event_date, $location, $available_tickets, $id);
         if (!$stmt->execute()) {
             error_log("Failed to execute statement: " . $stmt->error);
             throw new Exception("Failed to execute statement: " . $stmt->error);
@@ -219,6 +238,16 @@ try {
             error_log("No rows affected. Event ID may not exist: " . $id);
             print_response(false, 'No event updated. The event may not exist or no changes were made.');
         } else {
+            // Verify the update by fetching the event again
+            $verify_stmt = $conn->prepare("SELECT image_url FROM events WHERE id = ?");
+            $verify_stmt->bind_param("i", $id);
+            $verify_stmt->execute();
+            $verify_result = $verify_stmt->get_result();
+            $updated_event = $verify_result->fetch_assoc();
+            $verify_stmt->close();
+            
+            error_log("After update, image_url in database: " . ($updated_event['image_url'] ?? 'null'));
+            
             $conn->commit();
             error_log("Event updated successfully. ID: " . $id);
             print_response(true, 'Event updated successfully.');

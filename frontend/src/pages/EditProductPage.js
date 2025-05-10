@@ -22,6 +22,7 @@ const EditProductPage = () => {
   });
   const [previewImage, setPreviewImage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [originalImageUrl, setOriginalImageUrl] = useState('');
 
   useEffect(() => {
     // Check authentication
@@ -38,6 +39,11 @@ const EditProductPage = () => {
 
     const product = location.state.product;
     console.log("Product data from location state:", product);
+    
+    // Store the original image URL, but only if it's valid
+    const imageUrl = product.image_url && product.image_url !== '0' ? product.image_url : '';
+    console.log("Setting original image URL:", imageUrl);
+    setOriginalImageUrl(imageUrl);
 
     // Load categories and set product data
     const initializeData = async () => {
@@ -81,14 +87,16 @@ const EditProductPage = () => {
             stock: product.stock || '',
             minOrderQuantity: product.minOrderQuantity || 1,
             categories: [categoryId],
-            image_url: product.image_url || ''
+            image_url: imageUrl // Use the same imageUrl we stored in originalImageUrl
           });
           
-          // Set preview image
-          if (product.image_url) {
-            setPreviewImage(product.image_url.startsWith('data:') 
-              ? product.image_url 
-              : `${process.env.REACT_APP_API_URL || ''}/${product.image_url}`);
+          // Set preview image only if image_url is valid
+          if (imageUrl) {
+            const previewUrl = imageUrl.startsWith('data:') 
+              ? imageUrl 
+              : `${process.env.REACT_APP_API_URL || ''}/${imageUrl}`;
+            console.log("Setting preview image URL:", previewUrl);
+            setPreviewImage(previewUrl);
           }
         } else {
           console.error("No categories found in response:", response);
@@ -113,18 +121,6 @@ const EditProductPage = () => {
     setProductData(prev => ({ ...prev, categories: [categoryId] }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-        setProductData(prev => ({ ...prev, image_url: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -132,8 +128,8 @@ const EditProductPage = () => {
 
     try {
       // Validate form
-      if (!productData.name || !productData.description || !productData.price || !productData.stock || !productData.categories.length || !productData.image_url) {
-        setErrorMessage('All fields are required');
+      if (!productData.name || !productData.description || !productData.price || !productData.stock || !productData.categories.length) {
+        setErrorMessage('All fields except image are required');
         setLoading(false);
         return;
       }
@@ -154,15 +150,30 @@ const EditProductPage = () => {
         return;
       }
 
+      // Debug log to check the originalImageUrl value
+      console.log("Original Image URL before submit:", originalImageUrl);
+      console.log("Type of originalImageUrl:", typeof originalImageUrl);
+      
       // Prepare the data for submission
       const dataToSubmit = {
         ...productData,
         price: price,
         stock: stock,
-        minOrderQuantity: parseInt(productData.minOrderQuantity) || 1
+        minOrderQuantity: parseInt(productData.minOrderQuantity) || 1,
+        // Always use the original image URL
+        image_url: originalImageUrl
       };
 
-      console.log("Submitting product data:", dataToSubmit);
+      // Ensure image_url is not empty or '0'
+      if (!dataToSubmit.image_url || dataToSubmit.image_url === '0') {
+        console.error("Warning: image_url is empty or '0'. Using original URL:", originalImageUrl);
+        // Force the original URL if it exists
+        if (originalImageUrl && originalImageUrl !== '0') {
+          dataToSubmit.image_url = originalImageUrl;
+        }
+      }
+
+      console.log("Submitting product data with image_url:", dataToSubmit.image_url);
       const result = await updateProduct(dataToSubmit);
       console.log("Update result:", result);
       
@@ -276,15 +287,10 @@ const EditProductPage = () => {
           </div>
         </div>
         
-        <div>
-          <label className="block mb-1">Product Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full p-2 border rounded"
-          />
-          {previewImage && (
+        {/* Display product image if available, but don't allow changing it */}
+        {previewImage && (
+          <div>
+            <label className="block mb-1">Product Image</label>
             <div className="mt-2">
               <img 
                 src={previewImage} 
@@ -292,8 +298,12 @@ const EditProductPage = () => {
                 className="h-40 object-contain border rounded"
               />
             </div>
-          )}
-        </div>
+            <p className="text-sm text-gray-500 mt-1">
+              Image cannot be changed in edit mode. Please create a new product to use a different image.
+            </p>
+            <input type="hidden" name="image_url" value={originalImageUrl} />
+          </div>
+        )}
         
         <div className="flex space-x-4">
           <button
