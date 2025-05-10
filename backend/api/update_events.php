@@ -60,7 +60,7 @@ function save_base64_image($base64_image, $upload_dir) {
             }
             
             // Generate unique filename
-            $file_name = uniqid('product_', true) . '.' . $image_type;
+            $file_name = uniqid('event_', true) . '.' . $image_type;
             $file_path = $upload_dir . DIRECTORY_SEPARATOR . $file_name;
 
             // Save the image file
@@ -82,7 +82,7 @@ function save_base64_image($base64_image, $upload_dir) {
 
 try {
     // Debug log for request
-    error_log("Received update_products.php request. Method: " . $_SERVER['REQUEST_METHOD']);
+    error_log("Received update_events.php request. Method: " . $_SERVER['REQUEST_METHOD']);
     
     // Get input data
     $input = file_get_contents("php://input");
@@ -99,71 +99,75 @@ try {
         print_response(false, 'Invalid JSON input: ' . json_last_error_msg());
     }
 
+    // Check if the user is logged in by validating the session
+    $user = check_authentication();
+    if (!$user || !in_array($user['userType'], ['seller', 'admin'])) {
+        print_response(false, 'Unauthorized: Only authenticated sellers or admins can update events');
+    }
+
     // Validate required fields
     if (empty($inputData['id'])) {
-        print_response(false, 'Product ID is required');
+        print_response(false, 'Event ID is required');
     }
     
     if (empty($inputData['name'])) {
-        print_response(false, 'Product name is required');
+        print_response(false, 'Event name is required');
     }
     
     if (empty($inputData['description'])) {
-        print_response(false, 'Product description is required');
+        print_response(false, 'Event description is required');
     }
     
-    if (!isset($inputData['price'])) {
-        print_response(false, 'Product price is required');
+    if (empty($inputData['event_date'])) {
+        print_response(false, 'Event date is required');
     }
     
-    if (!isset($inputData['stock'])) {
-        print_response(false, 'Product stock is required');
+    if (empty($inputData['location'])) {
+        print_response(false, 'Event location is required');
+    }
+    
+    if (!isset($inputData['available_tickets'])) {
+        print_response(false, 'Available tickets is required');
     }
     
     if (empty($inputData['image_url'])) {
-        print_response(false, 'Product image is required');
-    }
-    
-    if (!isset($inputData['categories']) || !is_array($inputData['categories']) || count($inputData['categories']) === 0) {
-        print_response(false, 'At least one category is required');
+        print_response(false, 'Event image is required');
     }
 
-    // Check authentication
-    $user = check_authentication();
-    if (!$user) {
-        error_log("Authentication failed");
-        print_response(false, 'Unauthorized: Please login.');
-    }
-
-    // Extract data
+    // Get the event ID
     $id = intval($inputData['id']);
+
+    // Check if the event exists and belongs to the user
+    $stmt = $conn->prepare("SELECT seller_id FROM events WHERE id = ?");
+    if (!$stmt) {
+        error_log("Failed to prepare query: " . $conn->error);
+        print_response(false, 'Failed to prepare query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        print_response(false, 'Event not found');
+    }
+
+    $event = $result->fetch_assoc();
+    $stmt->close();
+
+    // Check if the user is the owner or an admin
+    if ($user['userType'] !== 'admin' && $event['seller_id'] != $user['id']) {
+        print_response(false, 'Unauthorized: You can only update your own events');
+    }
+
+    // Prepare the event data from the input
     $name = $inputData['name'];
     $description = $inputData['description'];
-    $price = floatval($inputData['price']);
-    $stock = intval($inputData['stock']);
-    $minOrderQuantity = isset($inputData['minOrderQuantity']) ? intval($inputData['minOrderQuantity']) : 1;
+    $event_date = $inputData['event_date'];
+    $location = $inputData['location'];
+    $available_tickets = intval($inputData['available_tickets']);
     $image_url = $inputData['image_url'];
-    $category_id = intval($inputData['categories'][0]);
 
-    // Get category name from category ID
-    $category_name = '';
-    $stmtCat = $conn->prepare("SELECT name FROM categories WHERE id = ?");
-    if (!$stmtCat) {
-        error_log("Failed to prepare category query: " . $conn->error);
-        print_response(false, 'Failed to prepare category query: ' . $conn->error);
-    }
-    $stmtCat->bind_param("i", $category_id);
-    $stmtCat->execute();
-    $stmtCat->bind_result($category_name);
-    $stmtCat->fetch();
-    $stmtCat->close();
-
-    if (empty($category_name)) {
-        error_log("Invalid category selected: " . $category_id);
-        print_response(false, 'Invalid category selected.');
-    }
-
-    // Process image if it's a base64 string
     $upload_dir = dirname(__DIR__) . '/uploads';
 
     // Ensure upload directory exists
@@ -194,17 +198,17 @@ try {
     $conn->begin_transaction();
 
     try {
-        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, minOrderQuantity = ?, image_url = ?, category = ?, updated_at = NOW() WHERE id = ?");
+        // Update event
+        $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, event_date = ?, location = ?, available_tickets = ?, image_url = ?, updated_at = NOW() WHERE id = ?");
         if (!$stmt) {
-            error_log("Failed to prepare update statement: " . $conn->error);
-            throw new Exception("Failed to prepare update statement: " . $conn->error);
+            error_log("Failed to prepare SQL statement: " . $conn->error);
+            throw new Exception("Failed to prepare SQL statement: " . $conn->error);
         }
 
-        $stmt->bind_param("ssdiiisi", $name, $description, $price, $stock, $minOrderQuantity, $image_url, $category_name, $id);
-
+        $stmt->bind_param("ssssisi", $name, $description, $event_date, $location, $available_tickets, $image_url, $id);
         if (!$stmt->execute()) {
-            error_log("Failed to execute update statement: " . $stmt->error);
-            throw new Exception("Failed to execute update statement: " . $stmt->error);
+            error_log("Failed to execute statement: " . $stmt->error);
+            throw new Exception("Failed to execute statement: " . $stmt->error);
         }
 
         $affected_rows = $stmt->affected_rows;
@@ -212,20 +216,20 @@ try {
         
         if ($affected_rows === 0) {
             $conn->rollback();
-            error_log("No rows affected. Product ID may not exist: " . $id);
-            print_response(false, 'No product updated. The product may not exist or no changes were made.');
+            error_log("No rows affected. Event ID may not exist: " . $id);
+            print_response(false, 'No event updated. The event may not exist or no changes were made.');
         } else {
             $conn->commit();
-            error_log("Product updated successfully. ID: " . $id);
-            print_response(true, 'Product updated successfully.');
+            error_log("Event updated successfully. ID: " . $id);
+            print_response(true, 'Event updated successfully.');
         }
     } catch (Exception $e) {
         $conn->rollback();
-        error_log("Error updating product: " . $e->getMessage());
-        print_response(false, 'Failed to update product: ' . $e->getMessage());
+        error_log("Error updating event: " . $e->getMessage());
+        print_response(false, 'Failed to update event: ' . $e->getMessage());
     }
 } catch (Exception $e) {
     error_log("Uncaught exception: " . $e->getMessage());
     print_response(false, 'Server error: ' . $e->getMessage());
 }
-?>
+?> 

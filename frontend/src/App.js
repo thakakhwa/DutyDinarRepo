@@ -36,6 +36,8 @@ import FavoritesPage from "./pages/FavoritesPage";
 import BookedEventsPage from "./pages/BookedEventsPage";
 import Checkout from "./pages/Checkout";
 import InventoryPage from "./pages/InventoryPage";
+import EditProductPage from "./pages/EditProductPage";
+import EditEventPage from "./pages/EditEventPage";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import MessageButton from "./components/MessageButton";
@@ -432,6 +434,38 @@ const AppRoutes = () => {
                     transition={pageTransition}
                   >
                     <InventoryPage />
+                  </motion.div>
+                </SellerRoute>
+              }
+            />
+            <Route
+              path="/edit-product"
+              element={
+                <SellerRoute>
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <EditProductPage />
+                  </motion.div>
+                </SellerRoute>
+              }
+            />
+            <Route
+              path="/edit-event"
+              element={
+                <SellerRoute>
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <EditEventPage />
                   </motion.div>
                 </SellerRoute>
               }

@@ -4,13 +4,42 @@ import { deleteProduct } from '../api/delete_products';
 import { deleteEvent } from '../api/delete_events';
 import { getProducts } from '../api/get_products';
 import { getEvents } from '../api/get_events';
+import { updateProduct } from '../api/update_products';
+import { updateEvent } from '../api/events';
+import { useNavigate } from 'react-router-dom';
 
 const InventoryPage = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [editProductId, setEditProductId] = useState(null);
+  const [editEventId, setEditEventId] = useState(null);
+  
+  // State for product edit form
+  const [editProductForm, setEditProductForm] = useState({
+    id: '',
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    category: '',
+    image_url: '',
+    categories: []
+  });
+  
+  // State for event edit form
+  const [editEventForm, setEditEventForm] = useState({
+    id: '',
+    name: '',
+    description: '',
+    event_date: '',
+    location: '',
+    available_tickets: '',
+    image_url: ''
+  });
 
   const fetchProducts = async () => {
     setLoadingProducts(true);
@@ -89,6 +118,50 @@ const InventoryPage = () => {
       alert('Failed to delete event: ' + result.message);
     }
   };
+  
+  const handleEditProduct = (product) => {
+    console.log("Editing product:", product);
+    setEditProductId(product.id);
+    
+    // Make sure we have all the necessary data
+    const productToEdit = {
+      id: product.id,
+      name: product.name || '',
+      description: product.description || '',
+      price: product.price || 0,
+      stock: product.stock || 0,
+      category: product.category || '',
+      category_id: product.category_id || 1,
+      minOrderQuantity: product.minOrderQuantity || 1,
+      image_url: product.image_url || ''
+    };
+    
+    setEditProductForm(productToEdit);
+    
+    // Navigate to edit product page with state
+    navigate('/edit-product', { state: { product: productToEdit } });
+  };
+  
+  const handleEditEvent = (event) => {
+    console.log("Editing event:", event);
+    setEditEventId(event.id);
+    
+    // Make sure we have all the necessary data
+    const eventToEdit = {
+      id: event.id,
+      name: event.name || '',
+      description: event.description || '',
+      event_date: event.event_date || '',
+      location: event.location || '',
+      available_tickets: event.available_tickets || 0,
+      image_url: event.image_url || ''
+    };
+    
+    setEditEventForm(eventToEdit);
+    
+    // Navigate to edit event page with state
+    navigate('/edit-event', { state: { event: eventToEdit } });
+  };
 
   if (!user || user.userType !== 'seller') {
     return <div className="p-6">You must be logged in as a seller to view this page.</div>;
@@ -120,7 +193,13 @@ const InventoryPage = () => {
                   <td className="border border-gray-300 px-4 py-2">${!isNaN(Number(product.price)) ? Number(product.price).toFixed(2) : 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.stock}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.category || 'N/A'}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 space-x-2">
+                    <button
+                      onClick={() => handleEditProduct(product)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDeleteProduct(product.id)}
                       className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
@@ -157,7 +236,13 @@ const InventoryPage = () => {
                   <td className="border border-gray-300 px-4 py-2">{event.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{new Date(event.event_date).toLocaleDateString()}</td>
                   <td className="border border-gray-300 px-4 py-2">{event.location || 'N/A'}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 space-x-2">
+                    <button
+                      onClick={() => handleEditEvent(event)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDeleteEvent(event.id)}
                       className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
